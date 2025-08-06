@@ -1,0 +1,217 @@
+{
+  "colorPalette": {
+    "name": "Tennis Matching App - Dark Mode",
+    "version": "1.0.0",
+    "theme": "dark",
+    "colors": {
+      "primary": {
+        "tennisGreen": {
+          "hex": "#10b981",
+          "rgb": "16, 185, 129",
+          "hsl": "160, 84%, 39%",
+          "usage": "Primary buttons, accent elements, success states"
+        },
+        "courtBlue": {
+          "hex": "#3b82f6",
+          "rgb": "59, 130, 246",
+          "hsl": "217, 91%, 60%",
+          "usage": "Links, info states, secondary actions"
+        },
+        "ballYellow": {
+          "hex": "#f59e0b",
+          "rgb": "245, 158, 11",
+          "hsl": "38, 92%, 50%",
+          "usage": "Warnings, highlights, tennis-themed accents"
+        }
+      },
+      "backgrounds": {
+        "deepDark": {
+          "hex": "#0f1419",
+          "rgb": "15, 20, 25",
+          "hsl": "210, 25%, 8%",
+          "usage": "Main app background, darkest level"
+        },
+        "nightCourt": {
+          "hex": "#1a1f2e",
+          "rgb": "26, 31, 46",
+          "hsl": "225, 28%, 14%",
+          "usage": "Secondary background, content areas"
+        },
+        "cardBackground": {
+          "hex": "#111827",
+          "rgb": "17, 24, 39",
+          "hsl": "220, 39%, 11%",
+          "usage": "Card backgrounds, modal overlays"
+        },
+        "surface": {
+          "hex": "#1f2937",
+          "rgb": "31, 41, 55",
+          "hsl": "220, 28%, 17%",
+          "usage": "Input fields, elevated surfaces"
+        }
+      },
+      "text": {
+        "primary": {
+          "hex": "#ffffff",
+          "rgb": "255, 255, 255",
+          "hsl": "0, 0%, 100%",
+          "usage": "Main text, headings, high emphasis"
+        },
+        "secondary": {
+          "hex": "#e5e7eb",
+          "rgb": "229, 231, 235",
+          "hsl": "220, 9%, 91%",
+          "usage": "Secondary text, subheadings"
+        },
+        "muted": {
+          "hex": "#9ca3af",
+          "rgb": "156, 163, 175",
+          "hsl": "220, 9%, 65%",
+          "usage": "Placeholder text, captions, disabled states"
+        },
+        "disabled": {
+          "hex": "#6b7280",
+          "rgb": "107, 114, 128",
+          "hsl": "220, 9%, 46%",
+          "usage": "Disabled text, very low emphasis"
+        }
+      },
+      "accents": {
+        "matchAlert": {
+          "hex": "#ef4444",
+          "rgb": "239, 68, 68",
+          "hsl": "0, 84%, 60%",
+          "usage": "Error states, urgent notifications, cancellations"
+        },
+        "proLevel": {
+          "hex": "#8b5cf6",
+          "rgb": "139, 92, 246",
+          "hsl": "262, 83%, 66%",
+          "usage": "Premium features, pro badges, special status"
+        },
+        "borderGray": {
+          "hex": "#374151",
+          "rgb": "55, 65, 81",
+          "hsl": "220, 19%, 27%",
+          "usage": "Borders, dividers, subtle separations"
+        },
+        "success": {
+          "hex": "#059669",
+          "rgb": "5, 150, 105",
+          "hsl": "160, 93%, 30%",
+          "usage": "Success states, confirmations, completed actions"
+        }
+      },
+      "semantic": {
+        "error": {
+          "background": "#fef2f2",
+          "border": "#fecaca",
+          "text": "#ef4444",
+          "icon": "#dc2626"
+        },
+        "warning": {
+          "background": "#fffbeb",
+          "border": "#fed7aa",
+          "text": "#f59e0b",
+          "icon": "#d97706"
+        },
+        "success": {
+          "background": "#f0fdf4",
+          "border": "#bbf7d0",
+          "text": "#10b981",
+          "icon": "#059669"
+        },
+        "info": {
+          "background": "#eff6ff",
+          "border": "#bfdbfe",
+          "text": "#3b82f6",
+          "icon": "#2563eb"
+        }
+      },
+      "gradients": {
+        "primaryGradient": {
+          "css": "linear-gradient(45deg, #10b981, #3b82f6)",
+          "usage": "Hero sections, primary CTAs, branding elements"
+        },
+        "backgroundGradient": {
+          "css": "linear-gradient(135deg, #0f1419 0%, #1a1f2e 100%)",
+          "usage": "App background, large surfaces"
+        },
+        "cardGradient": {
+          "css": "linear-gradient(145deg, #1a1f2e, #111827)",
+          "usage": "Card hover states, interactive elements"
+        }
+      }
+    },
+    "shadows": {
+      "small": "0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06)",
+      "medium": "0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)",
+      "large": "0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)",
+      "xl": "0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)",
+      "glow": "0 0 20px rgba(16, 185, 129, 0.3)",
+      "glowBlue": "0 0 20px rgba(59, 130, 246, 0.3)"
+    },
+    "opacity": {
+      "disabled": 0.5,
+      "overlay": 0.8,
+      "hover": 0.9,
+      "pressed": 0.95
+    }
+  },
+  "usage": {
+    "components": {
+      "buttons": {
+        "primary": {
+          "background": "#10b981",
+          "text": "#ffffff",
+          "hover": "#059669"
+        },
+        "secondary": {
+          "background": "#374151",
+          "text": "#e5e7eb",
+          "hover": "#4b5563"
+        },
+        "ghost": {
+          "background": "transparent",
+          "text": "#10b981",
+          "hover": "rgba(16, 185, 129, 0.1)"
+        }
+      },
+      "cards": {
+        "background": "#111827",
+        "border": "#374151",
+        "shadow": "0 4px 6px -1px rgba(0, 0, 0, 0.1)"
+      },
+      "inputs": {
+        "background": "#1f2937",
+        "border": "#374151",
+        "borderFocus": "#10b981",
+        "text": "#ffffff",
+        "placeholder": "#9ca3af"
+      },
+      "navigation": {
+        "background": "#1a1f2e",
+        "border": "#374151",
+        "activeItem": "#10b981",
+        "inactiveItem": "#9ca3af"
+      }
+    },
+    "screens": {
+      "matchList": {
+        "background": "#0f1419",
+        "cardBackground": "#111827",
+        "accentColor": "#10b981"
+      },
+      "profile": {
+        "background": "#0f1419",
+        "cardBackground": "#1a1f2e",
+        "accentColor": "#3b82f6"
+      },
+      "notifications": {
+        "background": "#0f1419",
+        "urgentBackground": "rgba(239, 68, 68, 0.1)",
+        "urgentBorder": "#ef4444"
+      }
+    }
+  }
+}
