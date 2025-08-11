@@ -1,3 +1,120 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Pretendard 폰트 전역 적용 및 최소 폰트 사이즈 설정 */
+* {
+  font-family: "Pretendard Variable", Pretendard, -apple-system,
+    BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+  font-size: max(13px, 1em);
+}
+
+/* 스크롤바로 인한 레이아웃 쉬프트 방지 */
+html {
+  overflow-y: scroll;
+  scrollbar-gutter: stable;
+}
+
+/* 모바일 웹킷 기반 브라우저에서 스크롤바 공간 확보 */
+body {
+  overflow-y: auto;
+  overflow-x: hidden;
+  transition: background-color 0.3s ease;
+}
+
+/* 라이트 모드 배경 */
+body {
+  background-color: #fefffe; /* 테니스공의 아주 밝은 노란-초록색 */
+  background-image: linear-gradient(
+    135deg,
+    #fefffe 0%,
+    #fdfdfc 50%,
+    #fefffd 100%
+  );
+}
+
+/* 다크 모드 배경 */
+body.dark {
+  background-color: #0a0a0a;
+  background-image: linear-gradient(
+    135deg,
+    #0a0a0a 0%,
+    #171717 50%,
+    #262626 100%
+  );
+}
+
+/* 커스텀 스크롤바 스타일 (모바일에서는 숨김) */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.1);
+  border-radius: 3px;
+  transition: background-color 0.2s ease;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+/* 모바일에서 스크롤바 숨김 */
+@media (max-width: 768px) {
+  ::-webkit-scrollbar {
+    width: 0;
+    display: none;
+  }
+
+  /* 모바일에서도 스크롤 공간 확보 */
+  html {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+}
+
+/* 페이지 컨테이너 최적화 */
+.app {
+  min-height: 100vh;
+  overflow-x: hidden;
+  transition: background-color 0.3s ease;
+}
+
+/* Safe Area 지원 */
+:root {
+  --safe-area-inset-top: env(safe-area-inset-top);
+  --safe-area-inset-right: env(safe-area-inset-right);
+  --safe-area-inset-bottom: env(safe-area-inset-bottom);
+  --safe-area-inset-left: env(safe-area-inset-left);
+  
+  /* 테니스 테마 CSS 변수 */
+  --tennis-court-primary: 34 197 94;
+  --tennis-ball-primary: 234 179 8;
+  --tennis-lime-primary: 132 204 22;
+  
+  /* 라이트 모드 색상 변수 */
+  --bg-primary: 254 255 254;
+  --bg-secondary: 248 250 252;
+  --text-primary: 15 23 42;
+  --text-secondary: 51 65 85;
+  --border-primary: 226 232 240;
+}
+
+/* 다크 모드 색상 변수 */
+.dark {
+  --bg-primary: 10 10 10;
+  --bg-secondary: 23 23 23;
+  --text-primary: 248 250 252;
+  --text-secondary: 163 163 163;
+  --border-primary: 38 38 38;
+}
+
+/* 바텀 네비게이션 높이를 고려한 페이지 패딩 */
+.page-content {
+  padding-bottom: calc(5rem + env(safe-area-inset-bottom));
+  transition: background-color 0.3s ease;
+}
