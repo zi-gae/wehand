@@ -1,5 +1,8 @@
+import { NotificationSkeleton } from "@/components/skeletons/NotificationSkeleton";
+import { formatDistanceToNow } from "date-fns";
+import { ko } from "date-fns/locale";
 import { AnimatePresence, motion } from "framer-motion";
-import { useState, useMemo, Suspense } from "react";
+import { Suspense, useMemo, useState } from "react";
 import {
   MdAnnouncement,
   MdArrowBack,
@@ -14,9 +17,8 @@ import {
   MdSportsTennis,
 } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
-import { formatDistanceToNow } from "date-fns";
-import { ko } from "date-fns/locale";
 import { NotificationType } from "../api";
+import { useSuspenseChatRoom } from "../hooks/useChat";
 import {
   useDeleteNotification,
   useMarkAllNotificationsAsRead,
@@ -24,9 +26,7 @@ import {
   useSuspenseNotifications,
   useSuspenseUnreadNotificationCount,
 } from "../hooks/useNotifications";
-import { useSuspenseChatRoom } from "../hooks/useChat";
 import { getThemeClasses } from "../lib/theme";
-import { NotificationSkeleton } from "@/components/skeletons/NotificationSkeleton";
 
 // 스켈레톤 컴포넌트
 
@@ -263,12 +263,10 @@ const NotificationContent = () => {
       latestNotification,
       IconComponent,
       theme,
-      index,
       toggleGroup,
       navigate,
       getNotificationColor,
       getNotificationBorderColor,
-      getNotificationTypeLabel,
       formatTimeAgo,
       NotificationItem,
       NotificationType,

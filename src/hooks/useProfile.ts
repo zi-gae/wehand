@@ -1,9 +1,4 @@
-import {
-  useQuery,
-  useMutation,
-  useQueryClient,
-  useSuspenseQuery,
-} from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { getWeHandTennisAPI, UpdateProfileRequest } from "../api";
 
 // Query Keys

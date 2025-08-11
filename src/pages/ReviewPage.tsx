@@ -1,29 +1,23 @@
-import { motion, AnimatePresence } from "framer-motion";
-import { useNavigate } from "react-router-dom";
-import { useState, useEffect } from "react";
-import {
-  MdArrowBack,
-  MdStar,
-  MdStarBorder,
-  MdStarHalf,
-  MdThumbUp,
-  MdThumbDown,
-  MdSportsTennis,
-  MdSchedule,
-  MdLocationOn,
-  MdGroup,
-  MdCheck,
-  MdClose,
-  MdEdit,
-  MdEmojiEvents,
-  MdChevronRight,
-  MdInfo,
-  MdPerson,
-} from "react-icons/md";
-import { getThemeClasses } from "../lib/theme";
-import { useReviewableMatches, useSubmitReview } from "../hooks/useReview";
 import { format } from "date-fns";
 import { ko } from "date-fns/locale";
+import { AnimatePresence, motion } from "framer-motion";
+import { useState } from "react";
+import {
+  MdArrowBack,
+  MdCheck,
+  MdChevronRight,
+  MdClose,
+  MdEdit,
+  MdGroup,
+  MdInfo,
+  MdLocationOn,
+  MdSportsTennis,
+  MdThumbDown,
+  MdThumbUp,
+} from "react-icons/md";
+import { useNavigate } from "react-router-dom";
+import { useReviewableMatches, useSubmitReview } from "../hooks/useReview";
+import { getThemeClasses } from "../lib/theme";
 
 interface ReviewableMatch {
   id: string;
@@ -220,7 +214,7 @@ const ReviewPage = () => {
                               </span>
                             </div>
                           </div>
-                          
+
                           {/* 리뷰 진행률 시각화 */}
                           <div className="text-center">
                             <div className="relative">
@@ -241,7 +235,11 @@ const ReviewPage = () => {
                                   stroke="currentColor"
                                   strokeWidth="3"
                                   fill="none"
-                                  strokeDasharray={`${((totalParticipants - pendingReviews) / totalParticipants) * 126} 126`}
+                                  strokeDasharray={`${
+                                    ((totalParticipants - pendingReviews) /
+                                      totalParticipants) *
+                                    126
+                                  } 126`}
                                   className={`${
                                     pendingReviews === 0
                                       ? "text-green-500"
@@ -253,7 +251,8 @@ const ReviewPage = () => {
                               </svg>
                               <div className="absolute inset-0 flex items-center justify-center">
                                 <span className="text-xs font-bold text-tennis-court-800 dark:text-tennis-court-200">
-                                  {totalParticipants - pendingReviews}/{totalParticipants}
+                                  {totalParticipants - pendingReviews}/
+                                  {totalParticipants}
                                 </span>
                               </div>
                             </div>
@@ -297,7 +296,7 @@ const ReviewPage = () => {
                               </span>
                             )}
                           </div>
-                          
+
                           <div className="flex items-center gap-2">
                             {/* 참가자 목록 */}
                             <div className="flex-1 flex flex-wrap gap-1">
@@ -317,7 +316,7 @@ const ReviewPage = () => {
                                 </span>
                               ))}
                             </div>
-                            
+
                             {/* 리뷰 버튼 */}
                             <motion.button
                               className={`px-4 py-2 rounded-lg text-xs font-bold transition-all whitespace-nowrap ${
@@ -326,11 +325,16 @@ const ReviewPage = () => {
                                   : "bg-gradient-to-r from-tennis-ball-500 to-tennis-ball-600 text-white shadow-md hover:shadow-lg hover:from-tennis-ball-600 hover:to-tennis-ball-700"
                               }`}
                               disabled={pendingReviews === 0}
-                              whileHover={pendingReviews > 0 ? { scale: 1.05 } : {}}
-                              whileTap={pendingReviews > 0 ? { scale: 0.95 } : {}}
+                              whileHover={
+                                pendingReviews > 0 ? { scale: 1.05 } : {}
+                              }
+                              whileTap={
+                                pendingReviews > 0 ? { scale: 0.95 } : {}
+                              }
                               onClick={(e) => {
                                 e.stopPropagation();
-                                if (pendingReviews > 0) setSelectedMatch(match.id);
+                                if (pendingReviews > 0)
+                                  setSelectedMatch(match.id);
                               }}
                             >
                               {pendingReviews === 0 ? (
@@ -373,7 +377,13 @@ const ReviewPage = () => {
                   리뷰할 참가자 선택
                 </h2>
                 <p className={`text-sm ${theme.text.secondary} mb-4`}>
-                  총 {reviewableMatches.find((m: ReviewableMatch) => m.id === selectedMatch)?.participants.filter((p) => !p.hasReviewed).length}명의 참가자가 리뷰를 기다리고 있습니다
+                  총{" "}
+                  {
+                    reviewableMatches
+                      .find((m: ReviewableMatch) => m.id === selectedMatch)
+                      ?.participants.filter((p) => !p.hasReviewed).length
+                  }
+                  명의 참가자가 리뷰를 기다리고 있습니다
                 </p>
 
                 <div className="space-y-2">
@@ -402,11 +412,13 @@ const ReviewPage = () => {
                               </div>
                               {participant.ntrp && participant.ntrp >= 4.0 && (
                                 <div className="absolute -bottom-1 -right-1 w-5 h-5 bg-yellow-400 rounded-full flex items-center justify-center border-2 border-white dark:border-dark-100">
-                                  <span className="text-[8px] font-bold text-yellow-900">{participant.ntrp}</span>
+                                  <span className="text-[8px] font-bold text-yellow-900">
+                                    {participant.ntrp}
+                                  </span>
                                 </div>
                               )}
                             </div>
-                            
+
                             <div className="flex-1">
                               <p className="font-semibold text-tennis-court-800 dark:text-tennis-court-200">
                                 {participant.nickname || participant.name}
@@ -415,8 +427,10 @@ const ReviewPage = () => {
                                 <div className="flex items-center gap-3 mt-0.5">
                                   <div className="flex items-center gap-1">
                                     <div className="flex items-center">
-                                      <div className={`h-1.5 w-20 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden`}>
-                                        <div 
+                                      <div
+                                        className={`h-1.5 w-20 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden`}
+                                      >
+                                        <div
                                           className={`h-full rounded-full transition-all ${
                                             participant.ntrp >= 4.5
                                               ? "bg-gradient-to-r from-purple-500 to-purple-600"
@@ -426,7 +440,11 @@ const ReviewPage = () => {
                                               ? "bg-gradient-to-r from-green-500 to-green-600"
                                               : "bg-gradient-to-r from-gray-400 to-gray-500"
                                           }`}
-                                          style={{ width: `${(participant.ntrp / 7) * 100}%` }}
+                                          style={{
+                                            width: `${
+                                              (participant.ntrp / 7) * 100
+                                            }%`,
+                                          }}
                                         ></div>
                                       </div>
                                     </div>
@@ -457,7 +475,9 @@ const ReviewPage = () => {
                 <div className="mt-4 p-3 bg-blue-50 dark:bg-blue-900/10 rounded-lg">
                   <div className="flex items-center gap-2 text-xs text-blue-600 dark:text-blue-400">
                     <MdInfo className="w-4 h-4" />
-                    <span>리뷰는 익명으로 처리되며, 상대방의 성장에 도움이 됩니다</span>
+                    <span>
+                      리뷰는 익명으로 처리되며, 상대방의 성장에 도움이 됩니다
+                    </span>
                   </div>
                 </div>
               </motion.div>

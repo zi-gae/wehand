@@ -1,22 +1,20 @@
-import { motion, AnimatePresence } from "framer-motion";
-import { useParams, useNavigate } from "react-router-dom";
+import { AnimatePresence, motion } from "framer-motion";
 import { useState } from "react";
 import {
   MdArrowBack,
-  MdMoreVert,
-  MdThumbUp,
-  MdComment,
-  MdSchedule,
-  MdPerson,
-  MdSend,
-  MdReply,
-  MdFavorite,
-  MdShare,
   MdBookmark,
-  MdThumbUpOffAlt,
-  MdFavoriteBorder,
   MdBookmarkBorder,
+  MdComment,
+  MdMoreVert,
+  MdPerson,
+  MdReply,
+  MdSchedule,
+  MdSend,
+  MdShare,
+  MdThumbUp,
+  MdThumbUpOffAlt,
 } from "react-icons/md";
+import { useNavigate, useParams } from "react-router-dom";
 import { getThemeClasses, tennisGradients } from "../lib/theme";
 
 interface Comment {
@@ -250,7 +248,10 @@ const PostDetailPage = () => {
     return content.split("\n").map((line, index) => {
       if (line.startsWith("**") && line.endsWith("**")) {
         return (
-          <h3 key={index} className={`font-bold ${theme.text.primary} mt-4 mb-2`}>
+          <h3
+            key={index}
+            className={`font-bold ${theme.text.primary} mt-4 mb-2`}
+          >
             {line.replace(/\*\*/g, "")}
           </h3>
         );
@@ -298,7 +299,9 @@ const PostDetailPage = () => {
           </motion.button>
 
           <div className="text-center flex-1">
-            <h1 className={`text-lg font-bold ${theme.text.primary}`}>게시글</h1>
+            <h1 className={`text-lg font-bold ${theme.text.primary}`}>
+              게시글
+            </h1>
             <p className={`text-sm ${theme.text.secondary}`}>자유 게시판</p>
           </div>
 
@@ -334,10 +337,16 @@ const PostDetailPage = () => {
             )}
           </div>
 
-          <h1 className={`text-xl font-bold ${theme.text.primary} mb-4`}>{post.title}</h1>
+          <h1 className={`text-xl font-bold ${theme.text.primary} mb-4`}>
+            {post.title}
+          </h1>
 
-          <div className={`flex items-center justify-between mb-6 pb-4 border-b ${theme.border.primary}`}>
-            <div className={`flex items-center gap-4 text-sm ${theme.text.secondary}`}>
+          <div
+            className={`flex items-center justify-between mb-6 pb-4 border-b ${theme.border.primary}`}
+          >
+            <div
+              className={`flex items-center gap-4 text-sm ${theme.text.secondary}`}
+            >
               <span className="flex items-center gap-1">
                 <MdPerson className="w-4 h-4" />
                 {post.author}
@@ -354,7 +363,9 @@ const PostDetailPage = () => {
           <div className="mb-6">{formatContent(post.content)}</div>
 
           {/* Action Buttons */}
-          <div className={`flex items-center justify-between pt-4 border-t ${theme.border.primary}`}>
+          <div
+            className={`flex items-center justify-between pt-4 border-t ${theme.border.primary}`}
+          >
             <div className="flex items-center gap-4">
               <motion.button
                 className={`flex items-center gap-2 px-4 py-2 rounded-full transition-colors ${
@@ -374,7 +385,9 @@ const PostDetailPage = () => {
                 {post.likes}
               </motion.button>
 
-              <div className={`flex items-center gap-2 ${theme.text.secondary}`}>
+              <div
+                className={`flex items-center gap-2 ${theme.text.secondary}`}
+              >
                 <MdComment className="w-5 h-5" />
                 <span>{post.comments}</span>
               </div>
@@ -458,14 +471,20 @@ const PostDetailPage = () => {
                 >
                   {/* Main Comment */}
                   <div className="flex gap-3">
-                    <div className={`w-10 h-10 ${theme.background.secondary} rounded-full flex items-center justify-center flex-shrink-0`}>
+                    <div
+                      className={`w-10 h-10 ${theme.background.secondary} rounded-full flex items-center justify-center flex-shrink-0`}
+                    >
                       <MdPerson className={`w-5 h-5 ${theme.text.secondary}`} />
                     </div>
 
                     <div className="flex-1 min-w-0">
-                      <div className={`${theme.background.secondary} rounded-2xl p-4 transition-colors`}>
+                      <div
+                        className={`${theme.background.secondary} rounded-2xl p-4 transition-colors`}
+                      >
                         <div className="flex items-center justify-between mb-2">
-                          <span className={`font-semibold ${theme.text.primary}`}>
+                          <span
+                            className={`font-semibold ${theme.text.primary}`}
+                          >
                             {comment.author}
                           </span>
                           <span className={`text-xs ${theme.text.secondary}`}>
@@ -566,21 +585,33 @@ const PostDetailPage = () => {
                           initial={{ x: -10, opacity: 0 }}
                           animate={{ x: 0, opacity: 1 }}
                         >
-                          <div className={`w-8 h-8 ${theme.background.secondary} rounded-full flex items-center justify-center flex-shrink-0`}>
-                            <MdPerson className={`w-4 h-4 ${theme.text.secondary}`} />
+                          <div
+                            className={`w-8 h-8 ${theme.background.secondary} rounded-full flex items-center justify-center flex-shrink-0`}
+                          >
+                            <MdPerson
+                              className={`w-4 h-4 ${theme.text.secondary}`}
+                            />
                           </div>
 
                           <div className="flex-1 min-w-0">
-                            <div className={`${theme.background.tertiary} rounded-2xl p-3 transition-colors`}>
+                            <div
+                              className={`${theme.background.tertiary} rounded-2xl p-3 transition-colors`}
+                            >
                               <div className="flex items-center justify-between mb-1">
-                                <span className={`font-semibold ${theme.text.primary} text-sm`}>
+                                <span
+                                  className={`font-semibold ${theme.text.primary} text-sm`}
+                                >
                                   {reply.author}
                                 </span>
-                                <span className={`text-xs ${theme.text.secondary}`}>
+                                <span
+                                  className={`text-xs ${theme.text.secondary}`}
+                                >
                                   {reply.time}
                                 </span>
                               </div>
-                              <p className={`${theme.text.primary} text-sm leading-relaxed`}>
+                              <p
+                                className={`${theme.text.primary} text-sm leading-relaxed`}
+                              >
                                 <span className="text-tennis-court-600 dark:text-tennis-court-400 font-medium">
                                   @{reply.parentAuthor}
                                 </span>{" "}
@@ -626,13 +657,19 @@ const PostDetailPage = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.5 }}
               >
-                <div className={`w-16 h-16 ${theme.background.secondary} rounded-full flex items-center justify-center mx-auto mb-4`}>
+                <div
+                  className={`w-16 h-16 ${theme.background.secondary} rounded-full flex items-center justify-center mx-auto mb-4`}
+                >
                   <MdComment className={`w-8 h-8 ${theme.text.muted}`} />
                 </div>
-                <h3 className={`text-lg font-semibold ${theme.text.secondary} mb-2`}>
+                <h3
+                  className={`text-lg font-semibold ${theme.text.secondary} mb-2`}
+                >
                   아직 댓글이 없습니다
                 </h3>
-                <p className={`${theme.text.secondary}`}>첫 번째 댓글을 남겨보세요!</p>
+                <p className={`${theme.text.secondary}`}>
+                  첫 번째 댓글을 남겨보세요!
+                </p>
               </motion.div>
             )}
           </div>

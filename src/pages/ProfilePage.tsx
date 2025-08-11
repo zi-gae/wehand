@@ -2,11 +2,9 @@ import { motion } from "framer-motion";
 import { useState } from "react";
 import {
   MdArrowBack,
-  MdCalendarToday,
   MdEdit,
   MdHelp,
   MdHistory,
-  MdLocationOn,
   MdLogout,
   MdNotifications,
   MdRateReview,
@@ -121,7 +119,9 @@ const ProfilePageContent = () => {
     return (
       <div className={`min-h-screen ${theme.background.tennis} page-content`}>
         {/* Header Skeleton */}
-        <div className={`${theme.background.glass} shadow-sm sticky top-0 z-40`}>
+        <div
+          className={`${theme.background.glass} shadow-sm sticky top-0 z-40`}
+        >
           <div className="flex items-center justify-between px-6 py-4">
             <div className="w-10 h-10 bg-gray-200 dark:bg-gray-700 rounded-full animate-pulse" />
             <div className="w-20 h-6 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
@@ -131,7 +131,9 @@ const ProfilePageContent = () => {
 
         <div className="px-2 py-4 space-y-4">
           {/* Profile Card Skeleton */}
-          <div className={`rounded-2xl p-6 border shadow-sm ${theme.surface.card} ${theme.border.primary}`}>
+          <div
+            className={`rounded-2xl p-6 border shadow-sm ${theme.surface.card} ${theme.border.primary}`}
+          >
             <div className="flex items-start gap-4">
               <div className="w-20 h-20 bg-gray-200 dark:bg-gray-700 rounded-full animate-pulse" />
               <div className="flex-1 space-y-3">
@@ -143,7 +145,9 @@ const ProfilePageContent = () => {
           </div>
 
           {/* Tennis Info Card Skeleton */}
-          <div className={`rounded-2xl p-6 border shadow-sm ${theme.surface.card} ${theme.border.primary}`}>
+          <div
+            className={`rounded-2xl p-6 border shadow-sm ${theme.surface.card} ${theme.border.primary}`}
+          >
             <div className="flex items-center gap-2 mb-4">
               <div className="w-5 h-5 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
               <div className="h-6 bg-gray-200 dark:bg-gray-700 rounded w-24 animate-pulse" />
@@ -161,14 +165,19 @@ const ProfilePageContent = () => {
           </div>
 
           {/* Review Card Skeleton */}
-          <div className={`rounded-2xl p-6 border shadow-sm ${theme.surface.card} ${theme.border.primary}`}>
+          <div
+            className={`rounded-2xl p-6 border shadow-sm ${theme.surface.card} ${theme.border.primary}`}
+          >
             <div className="flex items-center gap-2 mb-4">
               <div className="w-5 h-5 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
               <div className="h-6 bg-gray-200 dark:bg-gray-700 rounded w-24 animate-pulse" />
             </div>
             <div className="grid grid-cols-3 gap-4 mb-4">
               {[1, 2, 3].map((i) => (
-                <div key={i} className="bg-gray-100 dark:bg-gray-800 rounded-xl py-4">
+                <div
+                  key={i}
+                  className="bg-gray-100 dark:bg-gray-800 rounded-xl py-4"
+                >
                   <div className="w-6 h-6 bg-gray-200 dark:bg-gray-700 rounded-full mx-auto mb-2 animate-pulse" />
                   <div className="h-8 bg-gray-200 dark:bg-gray-700 rounded w-12 mx-auto mb-1 animate-pulse" />
                   <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-16 mx-auto animate-pulse" />
@@ -179,7 +188,9 @@ const ProfilePageContent = () => {
           </div>
 
           {/* Menu Items Skeleton */}
-          <div className={`rounded-2xl border shadow-sm ${theme.surface.card} ${theme.border.primary}`}>
+          <div
+            className={`rounded-2xl border shadow-sm ${theme.surface.card} ${theme.border.primary}`}
+          >
             <div className={`divide-y ${theme.border.primary}`}>
               {[1, 2, 3, 4].map((i) => (
                 <div key={i} className="flex items-center gap-4 p-4">
@@ -195,7 +206,9 @@ const ProfilePageContent = () => {
           </div>
 
           {/* Logout Button Skeleton */}
-          <div className={`rounded-2xl border shadow-sm ${theme.surface.card} ${theme.border.primary}`}>
+          <div
+            className={`rounded-2xl border shadow-sm ${theme.surface.card} ${theme.border.primary}`}
+          >
             <div className="p-4">
               <div className="h-10 bg-gray-200 dark:bg-gray-700 rounded-xl animate-pulse" />
             </div>

@@ -136,7 +136,7 @@ const MatchDetailContentSuspense = ({ matchId }: { matchId: string }) => {
 
     try {
       // 매치 참가 신청
-      const joinResponse = await joinMatchMutation.mutateAsync({
+      await joinMatchMutation.mutateAsync({
         matchId: matchId,
         data: {
           message: "참가 신청합니다!",

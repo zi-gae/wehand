@@ -22,13 +22,6 @@ const pageVariants = {
   }),
 };
 
-const pageTransition = {
-  type: "spring",
-  damping: 30,
-  stiffness: 300,
-  mass: 0.5,
-};
-
 // 경로 깊이 계산
 const getPathDepth = (pathname: string) =>
   pathname.split("/").filter(Boolean).length;
@@ -42,13 +35,13 @@ const AnimatedLayout = ({ children }: AnimatedLayoutProps) => {
   const direction = useMemo(() => {
     const currentDepth = getPathDepth(location.pathname);
     let dir = 1;
-    
+
     if (navType === "POP") {
       dir = -1;
     } else if (currentDepth < prevDepthRef.current) {
       dir = -1;
     }
-    
+
     prevDepthRef.current = currentDepth;
     return dir;
   }, [location.pathname, navType]);
@@ -64,14 +57,19 @@ const AnimatedLayout = ({ children }: AnimatedLayoutProps) => {
       initial="initial"
       animate="in"
       exit="out"
-      transition={pageTransition}
+      transition={{
+        type: "spring" as const,
+        damping: 30,
+        stiffness: 300,
+        mass: 0.5,
+      }}
       className="w-full min-h-screen"
-      style={{ 
+      style={{
         position: "absolute",
         top: 0,
         left: 0,
         right: 0,
-        willChange: "transform, opacity"
+        willChange: "transform, opacity",
       }}
     >
       {children}
