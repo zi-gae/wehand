@@ -45,6 +45,7 @@ const MatchDetailContentSuspense = ({ matchId }: { matchId: string }) => {
   const joinChatRoomMutation = useJoinChatRoom();
 
   const [isBookmarked, setIsBookmarked] = useState(false);
+  const [isJoining, setIsJoining] = useState(false);
 
   const handleShare = async () => {
     if (!matchDetail) return;
@@ -132,8 +133,9 @@ const MatchDetailContentSuspense = ({ matchId }: { matchId: string }) => {
   };
 
   const handleJoinMatch = async () => {
-    if (!matchDetail || matchDetail.status === "full") return;
+    if (!matchDetail || matchDetail.status === "full" || isJoining) return;
 
+    setIsJoining(true);
     try {
       // 매치 참가 신청
       await joinMatchMutation.mutateAsync({
@@ -154,6 +156,8 @@ const MatchDetailContentSuspense = ({ matchId }: { matchId: string }) => {
     } catch (error) {
       console.error("참가 신청 실패:", error);
       alert("참가 신청에 실패했습니다.");
+    } finally {
+      setIsJoining(false);
     }
   };
 
@@ -220,6 +224,7 @@ const MatchDetailContentSuspense = ({ matchId }: { matchId: string }) => {
             isHost={isHost}
             isParticipant={isParticipant}
             showParticipantsList={showParticipantsList}
+            isJoining={isJoining}
           />
 
           {/* 참가자 목록 - 참가자만 확인 가능 */}
