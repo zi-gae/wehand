@@ -48,6 +48,7 @@ export default defineConfig({
       },
       includeAssets: ['favicon.ico', 'apple-touch-icon.png', 'masked-icon.svg'],
       manifest: {
+        id: 'com.wehand.tennis',
         name: 'WeHand - 함께 치는 테니스',
         short_name: 'WeHand',
         description: '테니스 매칭과 커뮤니티를 한 번에! 함께 치는 테니스',
@@ -60,6 +61,74 @@ export default defineConfig({
         categories: ['sports', 'social', 'health'],
         lang: 'ko',
         dir: 'ltr',
+        launch_handler: {
+          client_mode: ['navigate-existing', 'auto']
+        },
+        iarc_rating_id: 'e84b072d-71b3-4d3e-86ae-31a8ce4e53b7',
+        prefer_related_applications: false,
+        related_applications: [
+          {
+            platform: 'play',
+            url: 'https://play.google.com/store/apps/details?id=com.wehand.tennis',
+            id: 'com.wehand.tennis'
+          },
+          {
+            platform: 'itunes',
+            url: 'https://apps.apple.com/app/wehand-tennis/id1234567890'
+          }
+        ],
+        scope_extensions: [
+          {
+            origin: 'https://wehand-api.zigae.com'
+          },
+          {
+            origin: 'https://wehand.zigae.com'
+          }
+        ],
+        screenshots: [
+          {
+            src: 'screenshots/home.png',
+            sizes: '390x844',
+            type: 'image/png',
+            label: '홈 화면'
+          },
+          {
+            src: 'screenshots/match.png',
+            sizes: '390x844',
+            type: 'image/png',
+            label: '매치 목록'
+          },
+          {
+            src: 'screenshots/board.png',
+            sizes: '390x844',
+            type: 'image/png',
+            label: '게시판'
+          },
+          {
+            src: 'screenshots/profile.png',
+            sizes: '390x844',
+            type: 'image/png',
+            label: '프로필'
+          },
+          {
+            src: 'screenshots/dark_home.png',
+            sizes: '390x844',
+            type: 'image/png',
+            label: '홈 화면 (다크 모드)'
+          },
+          {
+            src: 'screenshots/dark_match.png',
+            sizes: '390x844',
+            type: 'image/png',
+            label: '매치 목록 (다크 모드)'
+          },
+          {
+            src: 'screenshots/dark_profile.png',
+            sizes: '390x844',
+            type: 'image/png',
+            label: '프로필 (다크 모드)'
+          }
+        ],
         icons: [
           {
             src: 'pwa-192x192.png',
