@@ -7,7 +7,10 @@ interface LoadingFallbackProps {
   count?: number;
 }
 
-export const LoadingFallback = ({ type = "list", count = 3 }: LoadingFallbackProps) => {
+export const LoadingFallback = ({
+  type = "list",
+  count = 3,
+}: LoadingFallbackProps) => {
   const theme = getThemeClasses();
 
   if (type === "detail") {
@@ -106,9 +109,9 @@ export const LoadingFallback = ({ type = "list", count = 3 }: LoadingFallbackPro
           ease: "linear",
         }}
       >
-        <MdSportsTennis className={`w-12 h-12 ${theme.text.accent}`} />
+        <MdSportsTennis className={`w-12 h-12 ${theme.text.primary}`} />
       </motion.div>
-      
+
       <motion.h3
         className={`text-lg font-semibold ${theme.text.primary} mb-2`}
         initial={{ opacity: 0, y: 10 }}
@@ -117,7 +120,7 @@ export const LoadingFallback = ({ type = "list", count = 3 }: LoadingFallbackPro
       >
         로딩 중...
       </motion.h3>
-      
+
       <motion.p
         className={`${theme.text.secondary} text-sm`}
         initial={{ opacity: 0, y: 10 }}
