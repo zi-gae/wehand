@@ -663,60 +663,71 @@ const ChatRoomPage = () => {
 
       {/* Messages */}
       <div className="flex-1 overflow-y-auto px-4 py-4 space-y-4">
-        {/* 참가 신청 처리 중 스켈레톤 */}
+        {/* 참가 신청 처리 중 스켈레톤 (일반 로딩과 동일) */}
         {isPendingJoin && (
           <div className="space-y-4">
-            {/* 참가 신청 처리 중 메시지 */}
-            <div className="flex justify-center py-8">
-              <div className="text-center space-y-3">
-                <motion.div
-                  className="w-16 h-16 mx-auto rounded-full bg-tennis-ball-100 dark:bg-tennis-ball-900/30 flex items-center justify-center"
-                  animate={{
-                    scale: [1, 1.1, 1],
-                    rotate: [0, 180, 360],
-                  }}
-                  transition={{
-                    duration: 2,
-                    repeat: Infinity,
-                    ease: "easeInOut"
-                  }}
-                >
-                  <MdSend className="w-8 h-8 text-tennis-ball-600 dark:text-tennis-ball-400" />
-                </motion.div>
-                <div>
-                  <p className={`text-lg font-semibold ${theme.text.primary}`}>
-                    참가 신청 처리 중...
-                  </p>
-                  <p className={`text-sm ${theme.text.secondary} mt-1`}>
-                    호스트와 채팅방을 준비하고 있습니다
-                  </p>
+            {/* 받은 메시지 스켈레톤 */}
+            <div className="flex justify-start">
+              <div className="max-w-xs space-y-2">
+                <div className="flex items-center gap-2">
+                  <div className="w-8 h-8 bg-gray-200 dark:bg-gray-700 rounded-full animate-pulse"></div>
+                  <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-16 animate-pulse"></div>
+                </div>
+                <div className="px-4 py-3 bg-gray-200 dark:bg-gray-700 rounded-2xl animate-pulse">
+                  <div className="h-4 bg-gray-300 dark:bg-gray-600 rounded w-40 mb-2"></div>
+                  <div className="h-4 bg-gray-300 dark:bg-gray-600 rounded w-32"></div>
+                </div>
+                <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-12 ml-3 animate-pulse"></div>
+              </div>
+            </div>
+
+            {/* 보낸 메시지 스켈레톤 */}
+            <div className="flex justify-end">
+              <div className="max-w-xs space-y-2">
+                <div className="px-4 py-3 bg-tennis-ball-200 dark:bg-tennis-ball-800 rounded-2xl animate-pulse">
+                  <div className="h-4 bg-tennis-ball-300 dark:bg-tennis-ball-700 rounded w-36 mb-2"></div>
+                  <div className="h-4 bg-tennis-ball-300 dark:bg-tennis-ball-700 rounded w-28"></div>
+                </div>
+                <div className="flex justify-end items-center gap-2 mr-3">
+                  <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-12 animate-pulse"></div>
+                  <div className="h-3 bg-tennis-ball-200 dark:bg-tennis-ball-700 rounded w-8 animate-pulse"></div>
                 </div>
               </div>
             </div>
-            
-            {/* 스켈레톤 메시지들 */}
-            <div className="space-y-4 opacity-30">
-              {/* 받은 메시지 스켈레톤 */}
-              <div className="flex justify-start">
-                <div className="max-w-xs space-y-2">
-                  <div className="flex items-center gap-2">
-                    <div className="w-8 h-8 bg-gray-200 dark:bg-gray-700 rounded-full animate-pulse"></div>
-                    <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-16 animate-pulse"></div>
-                  </div>
-                  <div className="px-4 py-3 bg-gray-200 dark:bg-gray-700 rounded-2xl animate-pulse">
-                    <div className="h-4 bg-gray-300 dark:bg-gray-600 rounded w-40 mb-2"></div>
-                    <div className="h-4 bg-gray-300 dark:bg-gray-600 rounded w-32"></div>
-                  </div>
+
+            {/* 시스템 메시지 스켈레톤 */}
+            <div className="flex justify-center">
+              <div className="px-3 py-1 bg-gray-200 dark:bg-gray-700 rounded-full animate-pulse">
+                <div className="h-3 bg-gray-300 dark:bg-gray-600 rounded w-32"></div>
+              </div>
+            </div>
+
+            {/* 확정 요청 카드 스켈레톤 */}
+            <div className="flex justify-center">
+              <div className="max-w-sm w-full p-4 bg-gray-100 dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 animate-pulse">
+                <div className="flex items-center gap-2 mb-3">
+                  <div className="w-5 h-5 bg-gray-300 dark:bg-gray-600 rounded-full"></div>
+                  <div className="h-4 bg-gray-300 dark:bg-gray-600 rounded w-24"></div>
+                </div>
+                <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-full mb-2"></div>
+                <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4 mb-3"></div>
+                <div className="h-10 bg-gray-300 dark:bg-gray-600 rounded-lg w-full"></div>
+              </div>
+            </div>
+
+            {/* 추가 메시지 스켈레톤들 */}
+            <div className="flex justify-start">
+              <div className="max-w-xs">
+                <div className="px-4 py-3 bg-gray-200 dark:bg-gray-700 rounded-2xl animate-pulse">
+                  <div className="h-4 bg-gray-300 dark:bg-gray-600 rounded w-48"></div>
                 </div>
               </div>
+            </div>
 
-              {/* 보낸 메시지 스켈레톤 */}
-              <div className="flex justify-end">
-                <div className="max-w-xs space-y-2">
-                  <div className="px-4 py-3 bg-tennis-ball-200 dark:bg-tennis-ball-800 rounded-2xl animate-pulse">
-                    <div className="h-4 bg-tennis-ball-300 dark:bg-tennis-ball-700 rounded w-36 mb-2"></div>
-                    <div className="h-4 bg-tennis-ball-300 dark:bg-tennis-ball-700 rounded w-28"></div>
-                  </div>
+            <div className="flex justify-end">
+              <div className="max-w-xs">
+                <div className="px-4 py-3 bg-tennis-ball-200 dark:bg-tennis-ball-800 rounded-2xl animate-pulse">
+                  <div className="h-4 bg-tennis-ball-300 dark:bg-tennis-ball-700 rounded w-32"></div>
                 </div>
               </div>
             </div>
