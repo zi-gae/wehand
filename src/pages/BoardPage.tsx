@@ -98,42 +98,14 @@ const BoardPage = () => {
         transition={{ delay: 0.1 }}
       >
         <div className="flex items-center justify-between px-6 py-4">
-          <motion.button
-            className={`p-2 -ml-2 rounded-full hover:bg-primary-100 dark:hover:bg-primary-900/20 transition-colors`}
-            onClick={() => navigate(-1)}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            <MdArrowBack className={`w-6 h-6 ${theme.text.secondary}`} />
-          </motion.button>
-
           <div className="text-center flex-1">
             <h1
               className={`text-lg font-bold ${theme.text.primary} flex items-center justify-center gap-2`}
             >
-              {(() => {
-                const CategoryIcon =
-                  categoryMap[selectedCategory as keyof typeof categoryMap]
-                    ?.icon || MdForum;
-                return (
-                  <CategoryIcon className={`w-6 h-6 ${theme.text.tennis}`} />
-                );
-              })()}
               {categoryMap[selectedCategory as keyof typeof categoryMap]
                 ?.label || "게시판"}
             </h1>
-            <p className={`text-sm ${theme.text.secondary}`}>
-              테니스 이야기를 자유롭게 나눠요
-            </p>
           </div>
-
-          <motion.button
-            className={`p-2 -mr-2 rounded-full hover:bg-primary-100 dark:hover:bg-primary-900/20 transition-colors`}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            <MdMoreVert className={`w-6 h-6 ${theme.text.secondary}`} />
-          </motion.button>
         </div>
 
         {/* Category Tabs */}
@@ -191,7 +163,7 @@ const BoardPage = () => {
 
                 {/* 제목 스켈레톤 */}
                 <div className="h-5 bg-gray-200 dark:bg-gray-700 rounded w-3/4 mb-2"></div>
-                
+
                 {/* 내용 스켈레톤 */}
                 <div className="space-y-1 mb-3">
                   <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-full"></div>
