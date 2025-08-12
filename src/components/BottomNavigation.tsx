@@ -30,8 +30,11 @@ const BottomNavigation = () => {
   const navigate = useNavigate();
   const theme = getThemeClasses();
   
-  // iOS 감지
-  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+  // iOS 감지 (PWA 모드 포함)
+  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || 
+    (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1) || // iPad Pro
+    (window.matchMedia('(display-mode: standalone)').matches && /Safari/.test(navigator.userAgent)) || // PWA on iOS
+    ('standalone' in navigator && (navigator as any).standalone === true); // iOS PWA standalone mode
 
   const handleNavClick = (path: string) => {
     navigate(path);

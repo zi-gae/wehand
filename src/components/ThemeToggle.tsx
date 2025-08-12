@@ -2,7 +2,7 @@ import { motion } from "framer-motion";
 import { useEffect } from "react";
 import { MdLightMode, MdDarkMode } from "react-icons/md";
 import { useTheme } from "../contexts/ThemeContext";
-import { getThemeClasses } from "../lib/theme";
+import { getThemeClasses, themeColors } from "../lib/theme";
 
 const ThemeToggle = () => {
   const { isDark, toggle } = useTheme();
@@ -12,31 +12,41 @@ const ThemeToggle = () => {
   useEffect(() => {
     const updateStatusBarColor = () => {
       // iOS Safari status bar
-      let statusBarMeta = document.querySelector('meta[name="apple-mobile-web-app-status-bar-style"]');
+      let statusBarMeta = document.querySelector(
+        'meta[name="apple-mobile-web-app-status-bar-style"]'
+      );
       if (!statusBarMeta) {
-        statusBarMeta = document.createElement('meta');
-        statusBarMeta.setAttribute('name', 'apple-mobile-web-app-status-bar-style');
+        statusBarMeta = document.createElement("meta");
+        statusBarMeta.setAttribute(
+          "name",
+          "apple-mobile-web-app-status-bar-style"
+        );
         document.head.appendChild(statusBarMeta);
       }
-      statusBarMeta.setAttribute('content', isDark ? 'black-translucent' : 'default');
+      statusBarMeta.setAttribute(
+        "content",
+        isDark ? "black-translucent" : "default"
+      );
 
       // theme-color meta tag
       let themeColorMeta = document.querySelector('meta[name="theme-color"]');
       if (!themeColorMeta) {
-        themeColorMeta = document.createElement('meta');
-        themeColorMeta.setAttribute('name', 'theme-color');
+        themeColorMeta = document.createElement("meta");
+        themeColorMeta.setAttribute("name", "theme-color");
         document.head.appendChild(themeColorMeta);
       }
-      themeColorMeta.setAttribute('content', isDark ? '#1f2937' : '#ffffff');
+      themeColorMeta.setAttribute("content", isDark ? themeColors.dark.background.raw : themeColors.light.background.raw);
 
       // msapplication-navbutton-color (Windows Phone)
-      let msNavButtonMeta = document.querySelector('meta[name="msapplication-navbutton-color"]');
+      let msNavButtonMeta = document.querySelector(
+        'meta[name="msapplication-navbutton-color"]'
+      );
       if (!msNavButtonMeta) {
-        msNavButtonMeta = document.createElement('meta');
-        msNavButtonMeta.setAttribute('name', 'msapplication-navbutton-color');
+        msNavButtonMeta = document.createElement("meta");
+        msNavButtonMeta.setAttribute("name", "msapplication-navbutton-color");
         document.head.appendChild(msNavButtonMeta);
       }
-      msNavButtonMeta.setAttribute('content', isDark ? '#1f2937' : '#ffffff');
+      msNavButtonMeta.setAttribute("content", isDark ? themeColors.dark.background.raw : themeColors.light.background.raw);
     };
 
     updateStatusBarColor();
@@ -84,7 +94,7 @@ const ThemeToggle = () => {
           </motion.div>
         )}
       </motion.div>
-      
+
       {/* Decorative background circles */}
       <motion.div
         className="absolute inset-0 rounded-full border-2 border-primary-200/30 dark:border-primary-700/30"
