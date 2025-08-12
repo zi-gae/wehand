@@ -56,6 +56,9 @@ export default defineConfig({
         background_color: '#ffffff',
         display: 'standalone',
         display_override: ['window-controls-overlay', 'standalone'],
+        edge_side_panel: {
+          preferred_width: 480
+        },
         start_url: '/',
         scope: '/',
         orientation: 'portrait-primary',

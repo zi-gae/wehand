@@ -829,7 +829,7 @@ export interface Notification {
 }
 
 /**
- * 디바이스 유형 (필수)
+ * 디바이스 유형 (선택, 기본값: web)
  */
 export type UpdateFcmTokenRequestDeviceType =
   (typeof UpdateFcmTokenRequestDeviceType)[keyof typeof UpdateFcmTokenRequestDeviceType];
@@ -841,19 +841,28 @@ export const UpdateFcmTokenRequestDeviceType = {
   web: "web",
 } as const;
 
+/**
+ * 디바이스 추가 정보 (선택)
+ */
+export type UpdateFcmTokenRequestDeviceInfo = {
+  /** 브라우저 User Agent */
+  userAgent?: string;
+  /** 플랫폼 정보 */
+  platform?: string;
+  /** 언어 설정 */
+  language?: string;
+};
+
 export interface UpdateFcmTokenRequest {
   /**
-   * FCM 토큰 (필수)
+   * Firebase Cloud Messaging 토큰 (필수)
    * @minLength 1
    */
-  fcm_token: string;
-  /** 디바이스 유형 (필수) */
-  device_type: UpdateFcmTokenRequestDeviceType;
-  /**
-   * 디바이스 고유 ID (필수)
-   * @minLength 1
-   */
-  device_id: string;
+  fcmToken: string;
+  /** 디바이스 유형 (선택, 기본값: web) */
+  deviceType?: UpdateFcmTokenRequestDeviceType;
+  /** 디바이스 추가 정보 (선택) */
+  deviceInfo?: UpdateFcmTokenRequestDeviceInfo;
 }
 
 export interface NotificationSettings {
@@ -1561,7 +1570,7 @@ export type GetApiNotificationsUnreadCount200 = {
 
 export type GetApiNotificationsUnreadChatCount200Data = {
   /** 읽지 않은 채팅 메시지 개수 */
-  unreadChatCount?: number;
+  count?: number;
 };
 
 export type GetApiNotificationsUnreadChatCount200 = {
@@ -1581,6 +1590,15 @@ export type GetApiNotificationsUnreadCountByType200Data = {
 export type GetApiNotificationsUnreadCountByType200 = {
   success?: boolean;
   data?: GetApiNotificationsUnreadCountByType200Data;
+};
+
+export type PostApiNotificationsFcmToken200Data = {
+  message?: string;
+};
+
+export type PostApiNotificationsFcmToken200 = {
+  success?: boolean;
+  data?: PostApiNotificationsFcmToken200Data;
 };
 
 export type GetApiNotificationsSettings200 = {
@@ -1685,6 +1703,113 @@ export type GetApiProfileBookmarks200 = {
   success?: boolean;
   data?: MatchBookmark[];
   pagination?: PaginationInfo;
+};
+
+export type PostApiPushSendBodyDataType =
+  (typeof PostApiPushSendBodyDataType)[keyof typeof PostApiPushSendBodyDataType];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const PostApiPushSendBodyDataType = {
+  chat: "chat",
+  match: "match",
+  community: "community",
+  system: "system",
+} as const;
+
+/**
+ * 추가 데이터
+ */
+export type PostApiPushSendBodyData = {
+  type?: PostApiPushSendBodyDataType;
+  targetId?: string;
+};
+
+export type PostApiPushSendBody = {
+  /** 수신자 사용자 ID */
+  userId: string;
+  /** 알림 제목 */
+  title: string;
+  /** 알림 내용 */
+  body: string;
+  /** 알림 아이콘 URL */
+  icon?: string;
+  /** 알림 이미지 URL */
+  image?: string;
+  /** 추가 데이터 */
+  data?: PostApiPushSendBodyData;
+  /** 클릭 시 이동할 경로 */
+  clickAction?: string;
+};
+
+export type PostApiPushSend200Data = {
+  sent?: boolean;
+  message?: string;
+};
+
+export type PostApiPushSend200 = {
+  success?: boolean;
+  data?: PostApiPushSend200Data;
+};
+
+export type PostApiPushChatBody = {
+  /** 수신자 ID */
+  recipientId: string;
+  /** 발신자 이름 */
+  senderName: string;
+  /** 메시지 내용 (미리보기용) */
+  message: string;
+  /** 채팅방 ID */
+  chatRoomId: string;
+};
+
+export type PostApiPushMatchApprovalBody = {
+  /** 승인받은 사용자 ID */
+  userId: string;
+  /** 매치 제목 */
+  matchTitle: string;
+  /** 매치 ID */
+  matchId: string;
+};
+
+export type PostApiPushMatchStartBody = {
+  /** 참가자 ID 목록 */
+  participants: string[];
+  /** 매치 제목 */
+  matchTitle: string;
+  /** 매치 ID */
+  matchId: string;
+  /** 시작 시간 */
+  startTime: string;
+};
+
+/**
+ * 알림 타입
+ */
+export type PostApiPushCommunityBodyType =
+  (typeof PostApiPushCommunityBodyType)[keyof typeof PostApiPushCommunityBodyType];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const PostApiPushCommunityBodyType = {
+  comment: "comment",
+  like: "like",
+} as const;
+
+export type PostApiPushCommunityBody = {
+  /** 알림 받을 사용자 ID */
+  userId: string;
+  /** 알림 타입 */
+  type: PostApiPushCommunityBodyType;
+  /** 액션을 수행한 사용자 이름 */
+  actorName: string;
+  /** 게시글 제목 */
+  postTitle: string;
+  /** 게시글 ID */
+  postId: string;
+};
+
+export type DeleteApiPushTokenBody = {
+  /** 삭제할 FCM 토큰 */
+  token: string;
 };
 
 export type GetApiRegions200DataRegions = { [key: string]: Region };
@@ -2535,13 +2660,32 @@ export const getWeHandTennisAPI = () => {
   };
 
   /**
-   * @summary FCM 토큰 등록/업데이트
-   */
+ * Firebase Cloud Messaging(FCM) 푸시 알림을 위한 토큰을 등록하거나 업데이트합니다.
+
+**사용 시나리오:**
+- 사용자가 푸시 알림 권한을 허용했을 때
+- FCM 토큰이 갱신되었을 때 (24시간마다)
+- 새로운 디바이스에서 로그인했을 때
+
+**토큰 관리:**
+- 같은 토큰이 이미 존재하면 업데이트
+- 새로운 토큰이면 추가
+- 사용자당 여러 디바이스 토큰 지원
+
+**푸시 알림 타입:**
+- 채팅 메시지 알림
+- 매치 참가 승인/거부 알림
+- 매치 시작 알림
+- 커뮤니티 알림 (댓글, 좋아요)
+- 시스템 공지사항
+
+ * @summary FCM 토큰 등록/업데이트
+ */
   const postApiNotificationsFcmToken = (
     updateFcmTokenRequest: UpdateFcmTokenRequest,
     options?: SecondParameter<typeof customAxiosInstance>
   ) => {
-    return customAxiosInstance<SuccessResponse>(
+    return customAxiosInstance<PostApiNotificationsFcmToken200>(
       {
         url: `/api/notifications/fcm-token`,
         method: "POST",
@@ -2680,6 +2824,145 @@ export const getWeHandTennisAPI = () => {
   ) => {
     return customAxiosInstance<GetApiProfileBookmarks200>(
       { url: `/api/profile/bookmarks`, method: "GET", params },
+      options
+    );
+  };
+
+  /**
+ * 특정 사용자에게 커스텀 푸시 알림을 전송합니다.
+
+**주의사항:**
+- 관리자 권한이 필요합니다
+- 사용자가 FCM 토큰을 등록해야 알림이 전송됩니다
+- 사용자의 알림 설정이 활성화되어 있어야 합니다
+
+ * @summary 개별 사용자에게 푸시 알림 전송 (관리자용)
+ */
+  const postApiPushSend = (
+    postApiPushSendBody: PostApiPushSendBody,
+    options?: SecondParameter<typeof customAxiosInstance>
+  ) => {
+    return customAxiosInstance<PostApiPushSend200>(
+      {
+        url: `/api/push/send`,
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        data: postApiPushSendBody,
+      },
+      options
+    );
+  };
+
+  /**
+ * 새로운 채팅 메시지가 도착했을 때 수신자에게 푸시 알림을 전송합니다.
+
+**자동 전송 시점:**
+- 사용자가 오프라인일 때
+- 사용자가 해당 채팅방에 없을 때
+- 백그라운드 상태일 때
+
+ * @summary 채팅 메시지 푸시 알림 전송 (내부용)
+ */
+  const postApiPushChat = (
+    postApiPushChatBody: PostApiPushChatBody,
+    options?: SecondParameter<typeof customAxiosInstance>
+  ) => {
+    return customAxiosInstance<null>(
+      {
+        url: `/api/push/chat`,
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        data: postApiPushChatBody,
+      },
+      options
+    );
+  };
+
+  /**
+ * 매치 호스트가 참가 신청을 승인했을 때 신청자에게 알림을 전송합니다.
+
+ * @summary 매치 참가 승인 알림 전송
+ */
+  const postApiPushMatchApproval = (
+    postApiPushMatchApprovalBody: PostApiPushMatchApprovalBody,
+    options?: SecondParameter<typeof customAxiosInstance>
+  ) => {
+    return customAxiosInstance<null>(
+      {
+        url: `/api/push/match/approval`,
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        data: postApiPushMatchApprovalBody,
+      },
+      options
+    );
+  };
+
+  /**
+ * 매치 시작 시간이 가까워졌을 때 참가자들에게 알림을 전송합니다.
+
+**전송 시점:**
+- 매치 시작 1시간 전
+- 매치 시작 30분 전 (선택)
+
+ * @summary 매치 시작 알림 전송
+ */
+  const postApiPushMatchStart = (
+    postApiPushMatchStartBody: PostApiPushMatchStartBody,
+    options?: SecondParameter<typeof customAxiosInstance>
+  ) => {
+    return customAxiosInstance<null>(
+      {
+        url: `/api/push/match/start`,
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        data: postApiPushMatchStartBody,
+      },
+      options
+    );
+  };
+
+  /**
+ * 게시글에 대한 댓글, 좋아요 등의 알림을 전송합니다.
+
+ * @summary 커뮤니티 알림 전송
+ */
+  const postApiPushCommunity = (
+    postApiPushCommunityBody: PostApiPushCommunityBody,
+    options?: SecondParameter<typeof customAxiosInstance>
+  ) => {
+    return customAxiosInstance<null>(
+      {
+        url: `/api/push/community`,
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        data: postApiPushCommunityBody,
+      },
+      options
+    );
+  };
+
+  /**
+ * 사용자의 FCM 토큰을 삭제/비활성화합니다.
+
+**사용 시점:**
+- 로그아웃 시
+- 푸시 알림 비활성화 시
+- 앱 삭제 시
+
+ * @summary FCM 토큰 삭제
+ */
+  const deleteApiPushToken = (
+    deleteApiPushTokenBody: DeleteApiPushTokenBody,
+    options?: SecondParameter<typeof customAxiosInstance>
+  ) => {
+    return customAxiosInstance<null>(
+      {
+        url: `/api/push/token`,
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        data: deleteApiPushTokenBody,
+      },
       options
     );
   };
@@ -2848,6 +3131,12 @@ export const getWeHandTennisAPI = () => {
     getApiProfileMyMatches,
     getApiProfileMyReviews,
     getApiProfileBookmarks,
+    postApiPushSend,
+    postApiPushChat,
+    postApiPushMatchApproval,
+    postApiPushMatchStart,
+    postApiPushCommunity,
+    deleteApiPushToken,
     getApiRegions,
     getApiReviewsReviewable,
     postApiReviewsMatchesMatchId,
@@ -3184,6 +3473,34 @@ export type GetApiProfileMyReviewsResult = NonNullable<
 export type GetApiProfileBookmarksResult = NonNullable<
   Awaited<
     ReturnType<ReturnType<typeof getWeHandTennisAPI>["getApiProfileBookmarks"]>
+  >
+>;
+export type PostApiPushSendResult = NonNullable<
+  Awaited<ReturnType<ReturnType<typeof getWeHandTennisAPI>["postApiPushSend"]>>
+>;
+export type PostApiPushChatResult = NonNullable<
+  Awaited<ReturnType<ReturnType<typeof getWeHandTennisAPI>["postApiPushChat"]>>
+>;
+export type PostApiPushMatchApprovalResult = NonNullable<
+  Awaited<
+    ReturnType<
+      ReturnType<typeof getWeHandTennisAPI>["postApiPushMatchApproval"]
+    >
+  >
+>;
+export type PostApiPushMatchStartResult = NonNullable<
+  Awaited<
+    ReturnType<ReturnType<typeof getWeHandTennisAPI>["postApiPushMatchStart"]>
+  >
+>;
+export type PostApiPushCommunityResult = NonNullable<
+  Awaited<
+    ReturnType<ReturnType<typeof getWeHandTennisAPI>["postApiPushCommunity"]>
+  >
+>;
+export type DeleteApiPushTokenResult = NonNullable<
+  Awaited<
+    ReturnType<ReturnType<typeof getWeHandTennisAPI>["deleteApiPushToken"]>
   >
 >;
 export type GetApiRegionsResult = NonNullable<

@@ -1349,25 +1349,41 @@
       },
       "UpdateFcmTokenRequest": {
         "type": "object",
-        "required": ["fcm_token", "device_type", "device_id"],
+        "required": ["fcmToken"],
         "properties": {
-          "fcm_token": {
+          "fcmToken": {
             "type": "string",
             "minLength": 1,
-            "example": "dA1B2c3D4e5F6g7H8i9J0...",
-            "description": "FCM 토큰 (필수)"
+            "example": "dA1B2c3D4e5F6g7H8i9J0kLmNoPqRsTuVwXyZ...",
+            "description": "Firebase Cloud Messaging 토큰 (필수)"
           },
-          "device_type": {
+          "deviceType": {
             "type": "string",
             "enum": ["ios", "android", "web"],
-            "example": "ios",
-            "description": "디바이스 유형 (필수)"
+            "example": "web",
+            "default": "web",
+            "description": "디바이스 유형 (선택, 기본값: web)"
           },
-          "device_id": {
-            "type": "string",
-            "minLength": 1,
-            "example": "iPhone_12_Pro_UUID",
-            "description": "디바이스 고유 ID (필수)"
+          "deviceInfo": {
+            "type": "object",
+            "description": "디바이스 추가 정보 (선택)",
+            "properties": {
+              "userAgent": {
+                "type": "string",
+                "example": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)...",
+                "description": "브라우저 User Agent"
+              },
+              "platform": {
+                "type": "string",
+                "example": "MacIntel",
+                "description": "플랫폼 정보"
+              },
+              "language": {
+                "type": "string",
+                "example": "ko-KR",
+                "description": "언어 설정"
+              }
+            }
           }
         }
       },
@@ -1668,7 +1684,8 @@
       "description": "알림 API - 푸시 알림 및 인앱 알림"
     },
     { "name": "Chat", "description": "채팅 API - 실시간 채팅 및 채팅방 관리" },
-    { "name": "Review", "description": "리뷰 API - 매치 리뷰 작성 및 조회" }
+    { "name": "Review", "description": "리뷰 API - 매치 리뷰 작성 및 조회" },
+    { "name": "Push", "description": "푸시 알림 관련 API (내부 서비스용)" }
   ],
   "paths": {
     "/api/auth/login": {
@@ -3759,7 +3776,7 @@
                     "data": {
                       "type": "object",
                       "properties": {
-                        "unreadChatCount": {
+                        "count": {
                           "type": "integer",
                           "description": "읽지 않은 채팅 메시지 개수",
                           "example": 5
@@ -3771,17 +3788,11 @@
                 "examples": {
                   "success": {
                     "summary": "성공적인 응답",
-                    "value": {
-                      "success": true,
-                      "data": { "unreadChatCount": 12 }
-                    }
+                    "value": { "success": true, "data": { "count": 12 } }
                   },
                   "no_unread": {
                     "summary": "읽지 않은 메시지가 없는 경우",
-                    "value": {
-                      "success": true,
-                      "data": { "unreadChatCount": 0 }
-                    }
+                    "value": { "success": true, "data": { "count": 0 } }
                   }
                 }
               }
@@ -4012,13 +4023,42 @@
     "/api/notifications/fcm-token": {
       "post": {
         "summary": "FCM 토큰 등록/업데이트",
+        "description": "Firebase Cloud Messaging(FCM) 푸시 알림을 위한 토큰을 등록하거나 업데이트합니다.\n\n**사용 시나리오:**\n- 사용자가 푸시 알림 권한을 허용했을 때\n- FCM 토큰이 갱신되었을 때 (24시간마다)\n- 새로운 디바이스에서 로그인했을 때\n\n**토큰 관리:**\n- 같은 토큰이 이미 존재하면 업데이트\n- 새로운 토큰이면 추가\n- 사용자당 여러 디바이스 토큰 지원\n\n**푸시 알림 타입:**\n- 채팅 메시지 알림\n- 매치 참가 승인/거부 알림\n- 매치 시작 알림\n- 커뮤니티 알림 (댓글, 좋아요)\n- 시스템 공지사항\n",
         "tags": ["Notifications"],
         "security": [{ "BearerAuth": [] }],
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
-              "schema": { "$ref": "#/components/schemas/UpdateFcmTokenRequest" }
+              "schema": {
+                "$ref": "#/components/schemas/UpdateFcmTokenRequest"
+              },
+              "examples": {
+                "web": {
+                  "summary": "웹 브라우저에서 토큰 등록",
+                  "value": {
+                    "fcmToken": "dA1B2c3D4e5F6g7H8i9J0kLmNoPqRsTuVwXyZ...",
+                    "deviceType": "web",
+                    "deviceInfo": {
+                      "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)...",
+                      "platform": "MacIntel",
+                      "language": "ko-KR"
+                    }
+                  }
+                },
+                "mobile": {
+                  "summary": "모바일 앱에서 토큰 등록",
+                  "value": {
+                    "fcmToken": "fCm_ToKeN_FrOm_MoBiLe_ApP...",
+                    "deviceType": "ios",
+                    "deviceInfo": {
+                      "userAgent": "WeHand/1.0.0 (iPhone; iOS 17.0)",
+                      "platform": "iPhone14,2",
+                      "language": "ko-KR"
+                    }
+                  }
+                }
+              }
             }
           }
         },
@@ -4027,7 +4067,21 @@
             "description": "FCM 토큰 등록/업데이트 성공",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/SuccessResponse" }
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean", "example": true },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "message": {
+                          "type": "string",
+                          "example": "FCM 토큰이 등록/업데이트되었습니다"
+                        }
+                      }
+                    }
+                  }
+                }
               }
             }
           },
@@ -4035,12 +4089,42 @@
             "description": "입력값 오류",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" },
+                "examples": {
+                  "missing_token": {
+                    "summary": "토큰 누락",
+                    "value": {
+                      "success": false,
+                      "error": {
+                        "code": "TOKEN_REQUIRED",
+                        "message": "FCM 토큰이 필요합니다"
+                      }
+                    }
+                  },
+                  "invalid_device_type": {
+                    "summary": "잘못된 디바이스 타입",
+                    "value": {
+                      "success": false,
+                      "error": {
+                        "code": "VALIDATION_ERROR",
+                        "message": "입력값이 올바르지 않습니다"
+                      }
+                    }
+                  }
+                }
               }
             }
           },
           "401": {
             "description": "인증 필요",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ErrorResponse" }
+              }
+            }
+          },
+          "500": {
+            "description": "서버 내부 오류",
             "content": {
               "application/json": {
                 "schema": { "$ref": "#/components/schemas/ErrorResponse" }
@@ -4437,6 +4521,316 @@
               }
             }
           }
+        }
+      }
+    },
+    "/api/push/send": {
+      "post": {
+        "summary": "개별 사용자에게 푸시 알림 전송 (관리자용)",
+        "description": "특정 사용자에게 커스텀 푸시 알림을 전송합니다.\n\n**주의사항:**\n- 관리자 권한이 필요합니다\n- 사용자가 FCM 토큰을 등록해야 알림이 전송됩니다\n- 사용자의 알림 설정이 활성화되어 있어야 합니다\n",
+        "tags": ["Push"],
+        "security": [{ "BearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["userId", "title", "body"],
+                "properties": {
+                  "userId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "수신자 사용자 ID",
+                    "example": "123e4567-e89b-12d3-a456-426614174000"
+                  },
+                  "title": {
+                    "type": "string",
+                    "description": "알림 제목",
+                    "example": "매치 참가가 승인되었습니다"
+                  },
+                  "body": {
+                    "type": "string",
+                    "description": "알림 내용",
+                    "example": "강남 테니스 코트 매치에 참가가 승인되었습니다."
+                  },
+                  "icon": {
+                    "type": "string",
+                    "description": "알림 아이콘 URL",
+                    "example": "/icons/match.png"
+                  },
+                  "image": {
+                    "type": "string",
+                    "description": "알림 이미지 URL",
+                    "example": "https://example.com/match-banner.jpg"
+                  },
+                  "data": {
+                    "type": "object",
+                    "description": "추가 데이터",
+                    "properties": {
+                      "type": {
+                        "type": "string",
+                        "enum": ["chat", "match", "community", "system"],
+                        "example": "match"
+                      },
+                      "targetId": { "type": "string", "example": "match-123" }
+                    }
+                  },
+                  "clickAction": {
+                    "type": "string",
+                    "description": "클릭 시 이동할 경로",
+                    "example": "/matching/123"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "푸시 알림 전송 성공",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean", "example": true },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "sent": { "type": "boolean", "example": true },
+                        "message": {
+                          "type": "string",
+                          "example": "푸시 알림이 전송되었습니다"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": { "description": "잘못된 요청" },
+          "401": { "description": "인증 필요" },
+          "403": { "description": "권한 없음" },
+          "404": { "description": "사용자를 찾을 수 없음" }
+        }
+      }
+    },
+    "/api/push/chat": {
+      "post": {
+        "summary": "채팅 메시지 푸시 알림 전송 (내부용)",
+        "description": "새로운 채팅 메시지가 도착했을 때 수신자에게 푸시 알림을 전송합니다.\n\n**자동 전송 시점:**\n- 사용자가 오프라인일 때\n- 사용자가 해당 채팅방에 없을 때\n- 백그라운드 상태일 때\n",
+        "tags": ["Push"],
+        "security": [{ "BearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "recipientId",
+                  "senderName",
+                  "message",
+                  "chatRoomId"
+                ],
+                "properties": {
+                  "recipientId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "수신자 ID"
+                  },
+                  "senderName": {
+                    "type": "string",
+                    "description": "발신자 이름",
+                    "example": "테니스매니아"
+                  },
+                  "message": {
+                    "type": "string",
+                    "description": "메시지 내용 (미리보기용)",
+                    "example": "내일 경기 잘 부탁드려요!"
+                  },
+                  "chatRoomId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "채팅방 ID"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "알림 전송 성공" },
+          "400": { "description": "잘못된 요청" },
+          "500": { "description": "서버 오류" }
+        }
+      }
+    },
+    "/api/push/match/approval": {
+      "post": {
+        "summary": "매치 참가 승인 알림 전송",
+        "description": "매치 호스트가 참가 신청을 승인했을 때 신청자에게 알림을 전송합니다.\n",
+        "tags": ["Push"],
+        "security": [{ "BearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["userId", "matchTitle", "matchId"],
+                "properties": {
+                  "userId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "승인받은 사용자 ID"
+                  },
+                  "matchTitle": {
+                    "type": "string",
+                    "description": "매치 제목",
+                    "example": "강남 주말 테니스"
+                  },
+                  "matchId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "매치 ID"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": { "200": { "description": "알림 전송 성공" } }
+      }
+    },
+    "/api/push/match/start": {
+      "post": {
+        "summary": "매치 시작 알림 전송",
+        "description": "매치 시작 시간이 가까워졌을 때 참가자들에게 알림을 전송합니다.\n\n**전송 시점:**\n- 매치 시작 1시간 전\n- 매치 시작 30분 전 (선택)\n",
+        "tags": ["Push"],
+        "security": [{ "BearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "participants",
+                  "matchTitle",
+                  "matchId",
+                  "startTime"
+                ],
+                "properties": {
+                  "participants": {
+                    "type": "array",
+                    "items": { "type": "string", "format": "uuid" },
+                    "description": "참가자 ID 목록"
+                  },
+                  "matchTitle": {
+                    "type": "string",
+                    "description": "매치 제목"
+                  },
+                  "matchId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "매치 ID"
+                  },
+                  "startTime": {
+                    "type": "string",
+                    "description": "시작 시간",
+                    "example": "14:00"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": { "200": { "description": "알림 전송 성공" } }
+      }
+    },
+    "/api/push/community": {
+      "post": {
+        "summary": "커뮤니티 알림 전송",
+        "description": "게시글에 대한 댓글, 좋아요 등의 알림을 전송합니다.\n",
+        "tags": ["Push"],
+        "security": [{ "BearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "userId",
+                  "type",
+                  "actorName",
+                  "postTitle",
+                  "postId"
+                ],
+                "properties": {
+                  "userId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "알림 받을 사용자 ID"
+                  },
+                  "type": {
+                    "type": "string",
+                    "enum": ["comment", "like"],
+                    "description": "알림 타입"
+                  },
+                  "actorName": {
+                    "type": "string",
+                    "description": "액션을 수행한 사용자 이름",
+                    "example": "테니스러버"
+                  },
+                  "postTitle": {
+                    "type": "string",
+                    "description": "게시글 제목",
+                    "example": "초보자를 위한 백핸드 팁"
+                  },
+                  "postId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "description": "게시글 ID"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": { "200": { "description": "알림 전송 성공" } }
+      }
+    },
+    "/api/push/token": {
+      "delete": {
+        "summary": "FCM 토큰 삭제",
+        "description": "사용자의 FCM 토큰을 삭제/비활성화합니다.\n\n**사용 시점:**\n- 로그아웃 시\n- 푸시 알림 비활성화 시\n- 앱 삭제 시\n",
+        "tags": ["Push"],
+        "security": [{ "BearerAuth": [] }],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["token"],
+                "properties": {
+                  "token": {
+                    "type": "string",
+                    "description": "삭제할 FCM 토큰"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "토큰 삭제 성공" },
+          "400": { "description": "잘못된 요청" },
+          "401": { "description": "인증 필요" }
         }
       }
     },

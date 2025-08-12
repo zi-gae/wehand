@@ -6,15 +6,37 @@ import { getThemeClasses, tennisGradients } from "../lib/theme";
 interface SplashScreenProps {
   onComplete: () => void;
   prefetchData?: () => Promise<void>;
+  isAuthenticated?: boolean;
 }
 
-const SplashScreen: React.FC<SplashScreenProps> = ({ onComplete, prefetchData }) => {
+const SplashScreen: React.FC<SplashScreenProps> = ({ onComplete, prefetchData, isAuthenticated }) => {
   const [progress, setProgress] = useState(0);
   const [loadingText, setLoadingText] = useState("WeHand 시작하는 중...");
   const theme = getThemeClasses();
 
   useEffect(() => {
     const startApp = async () => {
+      // 인증되지 않은 사용자는 짧은 스플래시만 표시
+      if (isAuthenticated === false) {
+        const quickSteps = [
+          { text: "WeHand 시작하는 중...", duration: 300 },
+          { text: "준비 완료!", duration: 200 }
+        ];
+
+        for (let i = 0; i < quickSteps.length; i++) {
+          const step = quickSteps[i];
+          setLoadingText(step.text);
+          setProgress(((i + 1) / quickSteps.length) * 100);
+          await new Promise(resolve => setTimeout(resolve, step.duration));
+        }
+
+        setTimeout(() => {
+          onComplete();
+        }, 100);
+        return;
+      }
+
+      // 인증된 사용자는 전체 로딩 프로세스
       const steps = [
         { text: "WeHand 시작하는 중...", duration: 400 },
         { text: "사용자 정보 확인 중...", duration: 600 },
@@ -60,7 +82,7 @@ const SplashScreen: React.FC<SplashScreenProps> = ({ onComplete, prefetchData })
     };
 
     startApp();
-  }, [onComplete, prefetchData]);
+  }, [onComplete, prefetchData, isAuthenticated]);
 
   return (
     <div className={`fixed inset-0 z-50 flex items-center justify-center ${theme.background.tennis}`}>

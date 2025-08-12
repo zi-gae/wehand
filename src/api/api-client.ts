@@ -1,7 +1,7 @@
+import { BASE_URL } from "@/constants/env";
 import axios, { AxiosRequestConfig } from "axios";
 
 // API 베이스 URL 설정 - 환경변수로만 관리
-const BASE_URL = import.meta.env.VITE_API_URL;
 
 // Axios 인스턴스 생성
 export const apiClient = axios.create({

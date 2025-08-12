@@ -15,6 +15,26 @@ html {
   scrollbar-gutter: stable;
 }
 
+/* Edge Side Panel 지원 */
+@media (max-width: 500px) {
+  /* 사이드 패널에서 최적화된 레이아웃 */
+  .in-side-panel {
+    /* 좁은 너비에 맞춘 레이아웃 */
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+  
+  .in-side-panel .bottom-navigation {
+    /* 사이드 패널에서는 하단 네비게이션 숨김 */
+    display: none;
+  }
+  
+  .in-side-panel .page-content {
+    /* 하단 네비게이션 공간 제거 */
+    padding-bottom: 0;
+  }
+}
+
 /* Window Controls Overlay 지원 */
 @media (display-mode: window-controls-overlay) {
   /* 타이틀바 영역 활용 */
