@@ -29,6 +29,9 @@ const BottomNavigation = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const theme = getThemeClasses();
+  
+  // iOS 감지
+  const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
 
   const handleNavClick = (path: string) => {
     navigate(path);
@@ -66,7 +69,7 @@ const BottomNavigation = () => {
         transform: "translateZ(0)", // GPU 가속 강제 적용
         backfaceVisibility: "hidden", // 렌더링 최적화
         paddingBottom: "env(safe-area-inset-bottom)",
-        height: "calc(5rem + env(safe-area-inset-bottom))",
+        height: isIOS ? "calc(6rem + env(safe-area-inset-bottom))" : "calc(5rem + env(safe-area-inset-bottom))",
       }}
     >
       <div className="flex justify-around items-center px-4 py-2 max-w-md mx-auto h-20">
