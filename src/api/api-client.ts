@@ -1,22 +1,7 @@
 import axios, { AxiosRequestConfig } from "axios";
 
-// API 베이스 URL 설정 - 환경별 분기
-const getBaseURL = () => {
-  // Vite 환경변수 확인
-  if (import.meta.env.VITE_API_URL) {
-    return import.meta.env.VITE_API_URL;
-  }
-
-  // 배포 환경 감지 (production build)
-  if (import.meta.env.PROD) {
-    return "https://wehand-api.zigae.com";
-  }
-
-  // 로컬 개발 환경
-  return "http://localhost:3000";
-};
-
-const BASE_URL = getBaseURL();
+// API 베이스 URL 설정 - 환경변수로만 관리
+const BASE_URL = import.meta.env.VITE_API_URL;
 
 // Axios 인스턴스 생성
 export const apiClient = axios.create({
