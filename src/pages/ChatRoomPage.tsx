@@ -82,13 +82,17 @@ const ChatRoomPage = () => {
   // 사용자 정보 가져오기
   const { user } = useAuth();
 
-  // 채팅방 정보 조회
-  const { data: roomData } = useChatRoom(roomId || "");
+  // 채팅방 정보 조회 (pending 상태일 때는 비활성화)
+  const { data: roomData } = useChatRoom(roomId || "", { 
+    enabled: !!roomId && !isPendingJoin && !roomId?.startsWith('pending_') 
+  });
   const chatRoom = roomData?.data;
 
-  // 메시지 데이터 조회
+  // 메시지 데이터 조회 (pending 상태일 때는 비활성화)
   const { data: messagesData, isLoading: isMessagesLoading } =
-    useChatAllMessages(roomId || "", { enabled: !!roomId });
+    useChatAllMessages(roomId || "", { 
+      enabled: !!roomId && !isPendingJoin && !roomId?.startsWith('pending_') 
+    });
 
   const sendMessageMutation = useSendMessage();
   const markAsReadMutation = useMarkChatRoomAsRead();
@@ -312,9 +316,9 @@ const ChatRoomPage = () => {
     [roomId, upsertMessages]
   );
 
-  // WebSocket 연결
+  // WebSocket 연결 (pending 상태가 아닐 때만)
   const { isConnected } = useSocket({
-    chatRoomId: roomId,
+    chatRoomId: !isPendingJoin && !roomId?.startsWith('pending_') ? roomId : undefined,
     onNewMessage: handleNewMessage,
     onMessageReadBy: handleMessageReadBy,
     onUserJoined: handleUserJoined,

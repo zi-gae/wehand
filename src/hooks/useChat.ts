@@ -32,13 +32,13 @@ export const useChatRooms = (params?: { page?: number; limit?: number }) => {
 };
 
 // 특정 채팅방 조회 훅
-export const useChatRoom = (roomId: string) => {
+export const useChatRoom = (roomId: string, options?: { enabled?: boolean }) => {
   const api = getWeHandTennisAPI();
 
   return useQuery({
     queryKey: chatQueryKeys.room(roomId),
     queryFn: () => api.getApiChatRoomsChatRoomId(roomId),
-    enabled: !!roomId,
+    enabled: options?.enabled !== undefined ? options.enabled : !!roomId,
   });
 };
 
