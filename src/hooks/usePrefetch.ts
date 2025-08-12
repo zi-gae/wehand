@@ -60,26 +60,6 @@ export const usePrefetch = () => {
   const prefetchSecondaryData = async () => {
     const prefetchPromises = [];
 
-    // 5. 다양한 게임 타입의 매치 목록 미리 로드
-    const gameTypes = [
-      "singles",
-      "mens_doubles",
-      "womens_doubles",
-      "mixed_doubles",
-    ];
-    gameTypes.forEach((gameType) => {
-      prefetchPromises.push(
-        queryClient.prefetchQuery({
-          queryKey: matchQueryKeys.list({ gameType }),
-          queryFn: () =>
-            api
-              .getApiMatches({ game_type: gameType as any })
-              .then((response) => response.data),
-          staleTime: 5 * 60 * 1000,
-        })
-      );
-    });
-
     // 6. 추가 커뮤니티 데이터 prefetch
     prefetchPromises.push(
       queryClient.prefetchQuery({
