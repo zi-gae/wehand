@@ -16,6 +16,7 @@ import {
   MdSportsTennis,
 } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
+import { parseAsString, parseAsFloat, parseAsInteger, parseAsArrayOf, useQueryStates } from "nuqs";
 import BottomSheet from "../components/BottomSheet";
 import LoadingFallback from "../components/LoadingFallback";
 import MatchCard from "../components/MatchCard";
@@ -277,8 +278,6 @@ const MatchingPage = () => {
   const theme = getThemeClasses();
   const [isFilterOpen, setIsFilterOpen] = useState(false);
   const [isSortOpen, setIsSortOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState("all");
-  const [sortBy, setSortBy] = useState("latest");
   const [userLocation, setUserLocation] = useState<{
     latitude: number;
     longitude: number;
@@ -292,18 +291,44 @@ const MatchingPage = () => {
   // 알림 카운트 훅
   const { data: notificationCount } = useUnreadNotificationCount();
   const { data: chatCount } = useUnreadChatNotificationCount();
+  
+  // URL 쿼리 스트링으로 필터 값 관리
+  const [queryFilters, setQueryFilters] = useQueryStates(
+    {
+      search: parseAsString.withDefault(""),
+      region: parseAsString.withDefault(""),
+      gameType: parseAsString.withDefault(""),
+      date: parseAsString.withDefault(""),
+      timeSlots: parseAsArrayOf(parseAsString).withDefault([]),
+      ntrpMin: parseAsFloat.withDefault(1.0),
+      ntrpMax: parseAsFloat.withDefault(7.0),
+      experienceMin: parseAsInteger.withDefault(0),
+      experienceMax: parseAsInteger.withDefault(10),
+      sort: parseAsString.withDefault("latest"),
+      activeTab: parseAsString.withDefault("all"),
+    },
+    {
+      history: "push",
+      scroll: false,
+      clearOnDefault: true,
+    }
+  );
+
   // 실제 적용된 필터 (매칭 리스트에 사용)
-  const [appliedFilters, setAppliedFilters] = useState<MatchingFilters>({
-    search: "",
-    region: "",
-    gameType: "",
-    date: "",
-    timeSlots: [],
-    ntrpMin: 1.0,
-    ntrpMax: 7.0,
-    experienceMin: 0,
-    experienceMax: 10,
-  });
+  const appliedFilters: MatchingFilters = {
+    search: queryFilters.search,
+    region: queryFilters.region,
+    gameType: queryFilters.gameType,
+    date: queryFilters.date,
+    timeSlots: queryFilters.timeSlots,
+    ntrpMin: queryFilters.ntrpMin,
+    ntrpMax: queryFilters.ntrpMax,
+    experienceMin: queryFilters.experienceMin,
+    experienceMax: queryFilters.experienceMax,
+  };
+  
+  const sortBy = queryFilters.sort;
+  const activeTab = queryFilters.activeTab;
 
   // 임시 필터 상태 (모달에서 편집 중)
   const [tempFilters, setTempFilters] = useState<MatchingFilters>({
@@ -335,14 +360,23 @@ const MatchingPage = () => {
   };
 
   const handleSearchChange = (value: string) => {
-    setAppliedFilters((prev) => ({
-      ...prev,
-      search: value,
-    }));
+    setQueryFilters({
+      search: value || null,
+    });
   };
 
   const applyFilters = () => {
-    setAppliedFilters(tempFilters);
+    setQueryFilters({
+      search: tempFilters.search || null,
+      region: tempFilters.region || null,
+      gameType: tempFilters.gameType || null,
+      date: tempFilters.date || null,
+      timeSlots: tempFilters.timeSlots.length > 0 ? tempFilters.timeSlots : null,
+      ntrpMin: tempFilters.ntrpMin !== 1.0 ? tempFilters.ntrpMin : null,
+      ntrpMax: tempFilters.ntrpMax !== 7.0 ? tempFilters.ntrpMax : null,
+      experienceMin: tempFilters.experienceMin !== 0 ? tempFilters.experienceMin : null,
+      experienceMax: tempFilters.experienceMax !== 10 ? tempFilters.experienceMax : null,
+    });
     setIsFilterOpen(false);
   };
 
@@ -461,21 +495,19 @@ const MatchingPage = () => {
   };
 
   const removeFilter = (key: keyof MatchingFilters) => {
-    setAppliedFilters((prev) => ({
-      ...prev,
-      [key]:
-        key === "timeSlots"
-          ? []
-          : key === "ntrpMin"
-          ? 1.0
-          : key === "ntrpMax"
-          ? 7.0
-          : key === "experienceMin"
-          ? 0
-          : key === "experienceMax"
-          ? 10
-          : "",
-    }));
+    const updates: any = {};
+    if (key === "timeSlots") {
+      updates.timeSlots = null;
+    } else if (key === "ntrpMin" || key === "ntrpMax" || key === "ntrp") {
+      updates.ntrpMin = null;
+      updates.ntrpMax = null;
+    } else if (key === "experienceMin" || key === "experienceMax" || key === "experience") {
+      updates.experienceMin = null;
+      updates.experienceMax = null;
+    } else {
+      updates[key] = null;
+    }
+    setQueryFilters(updates);
   };
 
   const getActiveFilters = () => {
@@ -567,7 +599,7 @@ const MatchingPage = () => {
                 <MdNotifications
                   className={`w-5 h-5 ${theme.text.secondary}`}
                 />
-                {notificationCount?.unreadCount &&
+                {notificationCount?.unreadCount !== undefined &&
                   notificationCount.unreadCount > 0 && (
                     <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
                       {notificationCount.unreadCount > 99
@@ -583,7 +615,7 @@ const MatchingPage = () => {
                 whileTap={{ scale: 0.95 }}
               >
                 <MdChat className={`w-5 h-5 ${theme.text.secondary}`} />
-                {chatCount?.count && chatCount.count > 0 && (
+                {chatCount?.count !== undefined && chatCount.count > 0 && (
                   <span className="absolute -top-1 -right-1 w-5 h-5 bg-blue-500 text-white text-xs rounded-full flex items-center justify-center">
                     {chatCount.count > 99 ? "99+" : chatCount.count}
                   </span>
@@ -628,7 +660,7 @@ const MatchingPage = () => {
                   className="hover:bg-primary-200 dark:hover:bg-primary-800/30 rounded-full p-0.5"
                   onClick={() => {
                     if (filter.key === "tab") {
-                      setActiveTab("all");
+                      setQueryFilters({ activeTab: null });
                     } else {
                       removeFilter(filter.key as keyof MatchingFilters);
                     }
@@ -643,18 +675,18 @@ const MatchingPage = () => {
             <motion.button
               className={`${theme.text.secondary} text-sm underline hover:opacity-80`}
               onClick={() => {
-                setAppliedFilters({
-                  search: appliedFilters.search,
-                  region: "",
-                  gameType: "",
-                  date: "",
-                  timeSlots: [],
-                  ntrpMin: 1.0,
-                  ntrpMax: 7.0,
-                  experienceMin: 0,
-                  experienceMax: 10,
+                setQueryFilters({
+                  search: queryFilters.search || null, // 검색어는 유지
+                  region: null,
+                  gameType: null,
+                  date: null,
+                  timeSlots: null,
+                  ntrpMin: null,
+                  ntrpMax: null,
+                  experienceMin: null,
+                  experienceMax: null,
+                  activeTab: null,
                 });
-                setActiveTab("all");
               }}
               whileHover={{ scale: 1.02 }}
               whileTap={{ scale: 0.98 }}
@@ -1367,7 +1399,7 @@ const MatchingPage = () => {
                   if (option.value === "distance" && !userLocation) {
                     await requestLocation();
                   }
-                  setSortBy(option.value);
+                  setQueryFilters({ sort: option.value !== "latest" ? option.value : null });
                   setIsSortOpen(false);
                 }}
                 whileHover={{ scale: 1.02 }}

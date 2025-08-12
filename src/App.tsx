@@ -1,6 +1,7 @@
 import { QueryClientProvider } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import { NuqsAdapter } from "nuqs/adapters/react-router";
 import AuthGuard from "./components/AuthGuard";
 import BottomNavigation from "./components/BottomNavigation";
 import PWAUpdatePrompt, { usePWAUpdate } from "./components/PWAUpdatePrompt";
@@ -72,42 +73,44 @@ const AppContent = () => {
 
   return (
     <Router>
-      <AuthGuard>
-        <div className="app">
-          <main className="main-content relative overflow-hidden">
-            <Routes>
-              <Route path="/" element={<HomePage />} />
-              <Route path="/matching" element={<MatchingPage />} />
-              <Route path="/matching/:id" element={<MatchDetailPage />} />
-              <Route path="/create" element={<CreatePage />} />
-              <Route path="/board" element={<BoardPage />} />
-              <Route path="/board/write" element={<BoardWritePage />} />
-              <Route path="/board/:postId" element={<BoardDetailPage />} />
-              <Route path="/profile" element={<ProfilePage />} />
-              <Route path="/profile/edit" element={<ProfileEditPage />} />
-              <Route path="/notifications" element={<NotificationPage />} />
-              <Route path="/chat" element={<ChatListPage />} />
-              <Route path="/chat/:roomId" element={<ChatRoomPage />} />
-              <Route path="/reviews" element={<ReviewPage />} />
-              <Route path="/signup" element={<SignUpPage />} />
-              <Route
-                path="/auth/kakao/callback"
-                element={<KakaoCallbackPage />}
-              />
-              <Route path="/terms" element={<TermsPage />} />
-              <Route path="/privacy" element={<PrivacyPage />} />
-            </Routes>
-          </main>
-          <BottomNavigation />
+      <NuqsAdapter>
+        <AuthGuard>
+          <div className="app">
+            <main className="main-content relative overflow-hidden">
+              <Routes>
+                <Route path="/" element={<HomePage />} />
+                <Route path="/matching" element={<MatchingPage />} />
+                <Route path="/matching/:id" element={<MatchDetailPage />} />
+                <Route path="/create" element={<CreatePage />} />
+                <Route path="/board" element={<BoardPage />} />
+                <Route path="/board/write" element={<BoardWritePage />} />
+                <Route path="/board/:postId" element={<BoardDetailPage />} />
+                <Route path="/profile" element={<ProfilePage />} />
+                <Route path="/profile/edit" element={<ProfileEditPage />} />
+                <Route path="/notifications" element={<NotificationPage />} />
+                <Route path="/chat" element={<ChatListPage />} />
+                <Route path="/chat/:roomId" element={<ChatRoomPage />} />
+                <Route path="/reviews" element={<ReviewPage />} />
+                <Route path="/signup" element={<SignUpPage />} />
+                <Route
+                  path="/auth/kakao/callback"
+                  element={<KakaoCallbackPage />}
+                />
+                <Route path="/terms" element={<TermsPage />} />
+                <Route path="/privacy" element={<PrivacyPage />} />
+              </Routes>
+            </main>
+            <BottomNavigation />
 
-          {/* PWA 업데이트 프롬프트 */}
-          <PWAUpdatePrompt
-            isVisible={updateAvailable}
-            onUpdate={updateApp}
-            onDismiss={dismissUpdate}
-          />
-        </div>
-      </AuthGuard>
+            {/* PWA 업데이트 프롬프트 */}
+            <PWAUpdatePrompt
+              isVisible={updateAvailable}
+              onUpdate={updateApp}
+              onDismiss={dismissUpdate}
+            />
+          </div>
+        </AuthGuard>
+      </NuqsAdapter>
     </Router>
   );
 };

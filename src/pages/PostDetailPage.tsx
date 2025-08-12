@@ -446,7 +446,7 @@ const PostDetailPage = () => {
                 className={`w-12 h-12 rounded-full flex items-center justify-center transition-colors ${
                   newComment.trim()
                     ? `${tennisGradients.primary} text-white hover:opacity-90`
-                    : `${theme.background.secondary} ${theme.text.muted} cursor-not-allowed`
+                    : `${theme.background.secondary} ${theme.text.secondary} cursor-not-allowed`
                 }`}
                 onClick={handleAddComment}
                 disabled={!newComment.trim()}
@@ -556,7 +556,7 @@ const PostDetailPage = () => {
                               className={`w-8 h-8 rounded-full flex items-center justify-center transition-colors ${
                                 replyContent.trim()
                                   ? `${tennisGradients.primary} text-white hover:opacity-90`
-                                  : `${theme.background.secondary} ${theme.text.muted} cursor-not-allowed`
+                                  : `${theme.background.secondary} ${theme.text.secondary} cursor-not-allowed`
                               }`}
                               onClick={() => handleAddReply(comment.id)}
                               disabled={!replyContent.trim()}
@@ -660,7 +660,7 @@ const PostDetailPage = () => {
                 <div
                   className={`w-16 h-16 ${theme.background.secondary} rounded-full flex items-center justify-center mx-auto mb-4`}
                 >
-                  <MdComment className={`w-8 h-8 ${theme.text.muted}`} />
+                  <MdComment className={`w-8 h-8 ${theme.text.secondary}`} />
                 </div>
                 <h3
                   className={`text-lg font-semibold ${theme.text.secondary} mb-2`}
