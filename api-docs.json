@@ -9,7 +9,7 @@
   },
   "servers": [
     { "url": "http://localhost:3000", "description": "개발 서버" },
-    { "url": "https://api.wehand.tennis", "description": "프로덕션 서버" }
+    { "url": "https://wehand-api.zigae.com", "description": "프로덕션 서버" }
   ],
   "components": {
     "securitySchemes": {
