@@ -101,17 +101,17 @@ const BoardWritePage = () => {
         animate={{ y: 0, opacity: 1 }}
         transition={{ delay: 0.1 }}
       >
-        <div className="flex items-center justify-between px-6 py-4">
+        <div className="flex items-center justify-between px-4 py-3">
           <motion.button
             className={`p-2 -ml-2 rounded-full hover:bg-primary-100 dark:hover:bg-primary-900/20 transition-colors`}
             onClick={() => navigate(-1)}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
-            <MdArrowBack className={`w-6 h-6 ${theme.text.secondary}`} />
+            <MdArrowBack className={`w-5 h-5 ${theme.text.secondary}`} />
           </motion.button>
 
-          <h1 className={`text-lg font-bold ${theme.text.primary}`}>
+          <h1 className={`text-base font-bold ${theme.text.primary}`}>
             게시글 작성
           </h1>
 
@@ -126,7 +126,7 @@ const BoardWritePage = () => {
             whileHover={{ scale: title.trim() && content.trim() && !isSubmitting ? 1.05 : 1 }}
             whileTap={{ scale: title.trim() && content.trim() && !isSubmitting ? 0.95 : 1 }}
           >
-            <MdSend className={`w-6 h-6 ${
+            <MdSend className={`w-5 h-5 ${
               title.trim() && content.trim() && !isSubmitting
                 ? theme.text.tennis
                 : theme.text.secondary
@@ -135,21 +135,21 @@ const BoardWritePage = () => {
         </div>
       </motion.header>
 
-      <div className="px-4 py-4">
+      <div className="px-3 py-3">
         {/* Category Selection */}
         <motion.div
-          className="mb-4"
+          className="mb-3"
           initial={{ x: -20, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
           transition={{ delay: 0.2 }}
         >
-          <label className={`block text-sm font-medium ${theme.text.secondary} mb-2`}>
+          <label className={`block text-[13px] font-medium ${theme.text.secondary} mb-1.5`}>
             카테고리
           </label>
           <select
             value={category}
             onChange={(e) => setCategory(e.target.value as PostCategory)}
-            className={`w-full px-4 py-2 rounded-lg ${theme.surface.card} ${theme.text.primary} ${theme.border.primary} border focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-primary-400`}
+            className={`w-full px-3 py-1.5 rounded-lg text-[13px] ${theme.surface.card} ${theme.text.primary} ${theme.border.primary} border focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-primary-400`}
           >
             {categoryOptions.map((option) => (
               <option key={option.value} value={option.value}>
@@ -161,12 +161,12 @@ const BoardWritePage = () => {
 
         {/* Title Input */}
         <motion.div
-          className="mb-4"
+          className="mb-3"
           initial={{ x: -20, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
           transition={{ delay: 0.3 }}
         >
-          <label className={`block text-sm font-medium ${theme.text.secondary} mb-2`}>
+          <label className={`block text-[13px] font-medium ${theme.text.secondary} mb-1.5`}>
             제목 ({title.length}/200)
           </label>
           <input
@@ -174,43 +174,43 @@ const BoardWritePage = () => {
             value={title}
             onChange={(e) => setTitle(e.target.value.slice(0, 200))}
             placeholder="제목을 입력하세요"
-            className={`w-full px-4 py-3 rounded-lg ${theme.surface.card} ${theme.text.primary} ${theme.border.primary} border focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-primary-400`}
+            className={`w-full px-3 py-2 rounded-lg text-[14px] ${theme.surface.card} ${theme.text.primary} ${theme.border.primary} border focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-primary-400`}
           />
         </motion.div>
 
         {/* Content Textarea */}
         <motion.div
-          className="mb-4"
+          className="mb-3"
           initial={{ x: -20, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
           transition={{ delay: 0.4 }}
         >
-          <label className={`block text-sm font-medium ${theme.text.secondary} mb-2`}>
+          <label className={`block text-[13px] font-medium ${theme.text.secondary} mb-1.5`}>
             내용 ({content.length}/5000)
           </label>
           <textarea
             value={content}
             onChange={(e) => setContent(e.target.value.slice(0, 5000))}
             placeholder="내용을 입력하세요"
-            rows={12}
-            className={`w-full px-4 py-3 rounded-lg ${theme.surface.card} ${theme.text.primary} ${theme.border.primary} border focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-primary-400 resize-none`}
+            rows={10}
+            className={`w-full px-3 py-2 rounded-lg text-[13px] ${theme.surface.card} ${theme.text.primary} ${theme.border.primary} border focus:outline-none focus:ring-2 focus:ring-primary-400 focus:border-primary-400 resize-none`}
           />
         </motion.div>
 
         {/* Image Upload */}
         <motion.div
-          className="mb-4"
+          className="mb-3"
           initial={{ x: -20, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
           transition={{ delay: 0.5 }}
         >
-          <label className={`block text-sm font-medium ${theme.text.secondary} mb-2`}>
+          <label className={`block text-[13px] font-medium ${theme.text.secondary} mb-1.5`}>
             이미지 첨부 ({images.length}/10)
           </label>
           
           {/* Image Preview */}
           {images.length > 0 && (
-            <div className="grid grid-cols-3 gap-2 mb-3">
+            <div className="grid grid-cols-3 gap-1.5 mb-2">
               {images.map((image, index) => (
                 <div key={index} className="relative aspect-square">
                   <img
@@ -222,7 +222,7 @@ const BoardWritePage = () => {
                     onClick={() => removeImage(index)}
                     className="absolute top-1 right-1 p-1 bg-black/50 rounded-full text-white hover:bg-black/70 transition-colors"
                   >
-                    <MdClose className="w-4 h-4" />
+                    <MdClose className="w-3 h-3" />
                   </button>
                 </div>
               ))}
@@ -238,8 +238,8 @@ const BoardWritePage = () => {
                 onChange={handleImageUpload}
                 className="hidden"
               />
-              <div className={`flex items-center justify-center gap-2 px-4 py-3 rounded-lg ${theme.surface.card} ${theme.text.secondary} ${theme.border.primary} border border-dashed hover:border-primary-400 transition-colors`}>
-                <MdImage className="w-5 h-5" />
+              <div className={`flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-[13px] ${theme.surface.card} ${theme.text.secondary} ${theme.border.primary} border border-dashed hover:border-primary-400 transition-colors`}>
+                <MdImage className="w-4 h-4" />
                 <span>이미지 선택</span>
               </div>
             </label>
@@ -248,7 +248,7 @@ const BoardWritePage = () => {
 
         {/* Submit Button */}
         <motion.button
-          className={`w-full py-3 rounded-full font-medium transition-colors ${
+          className={`w-full py-2.5 rounded-full text-[14px] font-medium transition-colors ${
             title.trim() && content.trim() && !isSubmitting
               ? `${tennisGradients.primary} text-white`
               : `${theme.surface.card} ${theme.text.secondary} opacity-50 cursor-not-allowed`

@@ -153,43 +153,40 @@ const BoardPage = () => {
             {[1, 2, 3, 4, 5].map((index) => (
               <div
                 key={index}
-                className={`rounded-2xl p-4 shadow-sm ${theme.surface.card} border ${theme.border.primary} animate-pulse`}
+                className={`rounded-xl p-3 shadow-sm ${theme.surface.card} border ${theme.border.primary} animate-pulse`}
               >
                 {/* 배지 스켈레톤 */}
-                <div className="flex items-center gap-2 mb-2">
-                  <div className="h-5 bg-gray-200 dark:bg-gray-700 rounded-lg w-12"></div>
-                  <div className="h-5 bg-gray-200 dark:bg-gray-700 rounded-lg w-10"></div>
+                <div className="flex items-center gap-1.5 mb-1.5">
+                  <div className="h-3.5 bg-gray-200 dark:bg-gray-700 rounded-md w-10"></div>
+                  <div className="h-3.5 bg-gray-200 dark:bg-gray-700 rounded-md w-8"></div>
                 </div>
 
                 {/* 제목 스켈레톤 */}
-                <div className="h-5 bg-gray-200 dark:bg-gray-700 rounded w-3/4 mb-2"></div>
+                <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4 mb-1"></div>
 
                 {/* 내용 스켈레톤 */}
-                <div className="space-y-1 mb-3">
-                  <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-full"></div>
-                  <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-5/6"></div>
-                </div>
+                <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-5/6 mb-2"></div>
 
                 {/* 하단 정보 스켈레톤 */}
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="flex items-center gap-1">
-                      <div className="w-3 h-3 bg-gray-200 dark:bg-gray-700 rounded"></div>
-                      <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-12"></div>
+                  <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-0.5">
+                      <div className="w-2.5 h-2.5 bg-gray-200 dark:bg-gray-700 rounded"></div>
+                      <div className="h-2.5 bg-gray-200 dark:bg-gray-700 rounded w-10"></div>
                     </div>
-                    <div className="flex items-center gap-1">
-                      <div className="w-3 h-3 bg-gray-200 dark:bg-gray-700 rounded"></div>
-                      <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-16"></div>
+                    <div className="flex items-center gap-0.5">
+                      <div className="w-2.5 h-2.5 bg-gray-200 dark:bg-gray-700 rounded"></div>
+                      <div className="h-2.5 bg-gray-200 dark:bg-gray-700 rounded w-12"></div>
                     </div>
                   </div>
-                  <div className="flex items-center gap-3">
-                    <div className="flex items-center gap-1">
-                      <div className="w-3 h-3 bg-gray-200 dark:bg-gray-700 rounded"></div>
-                      <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-4"></div>
+                  <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-0.5">
+                      <div className="w-2.5 h-2.5 bg-gray-200 dark:bg-gray-700 rounded"></div>
+                      <div className="h-2.5 bg-gray-200 dark:bg-gray-700 rounded w-3"></div>
                     </div>
-                    <div className="flex items-center gap-1">
-                      <div className="w-3 h-3 bg-gray-200 dark:bg-gray-700 rounded"></div>
-                      <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-4"></div>
+                    <div className="flex items-center gap-0.5">
+                      <div className="w-2.5 h-2.5 bg-gray-200 dark:bg-gray-700 rounded"></div>
+                      <div className="h-2.5 bg-gray-200 dark:bg-gray-700 rounded w-3"></div>
                     </div>
                   </div>
                 </div>
@@ -218,7 +215,7 @@ const BoardPage = () => {
                 return (
                   <motion.div
                     key={post.id}
-                    className={`rounded-2xl p-4 shadow-sm cursor-pointer relative ${theme.surface.card} border ${theme.border.primary}`}
+                    className={`rounded-xl p-3 shadow-sm cursor-pointer relative ${theme.surface.card} border ${theme.border.primary}`}
                     initial={{ x: -20, opacity: 0 }}
                     animate={{ x: 0, opacity: 1 }}
                     exit={{ x: 20, opacity: 0 }}
@@ -228,15 +225,15 @@ const BoardPage = () => {
                     whileTap={{ scale: 0.98 }}
                   >
                     {/* Pinned & Hot Badges */}
-                    <div className="flex items-center gap-2 mb-2">
+                    <div className="flex items-center gap-1.5 mb-1.5">
                       {isPinned && (
-                        <span className="bg-secondary-100 text-secondary-700 dark:bg-secondary-900/20 dark:text-secondary-400 px-2 py-1 rounded-lg text-xs font-medium">
+                        <span className="bg-secondary-100 text-secondary-700 dark:bg-secondary-900/20 dark:text-secondary-400 px-1.5 py-0.5 rounded-md text-[13px] font-medium">
                           📌 공지
                         </span>
                       )}
                       {isHot && (
-                        <span className="bg-status-error-100 text-status-error-700 dark:bg-status-error-900/20 dark:text-status-error-400 px-2 py-1 rounded-lg text-xs font-medium flex items-center gap-1">
-                          <MdLocalFireDepartment className="w-3 h-3" />
+                        <span className="bg-status-error-100 text-status-error-700 dark:bg-status-error-900/20 dark:text-status-error-400 px-1.5 py-0.5 rounded-md text-[13px] font-medium flex items-center gap-0.5">
+                          <MdLocalFireDepartment className="w-2.5 h-2.5" />
                           HOT
                         </span>
                       )}
@@ -245,40 +242,40 @@ const BoardPage = () => {
                     <div className="flex items-start">
                       <div className="flex-1 min-w-0">
                         <h3
-                          className={`font-semibold ${theme.text.primary} mb-1 line-clamp-2`}
+                          className={`font-semibold text-[15px] ${theme.text.primary} mb-0.5 line-clamp-1`}
                         >
                           {post.title}
                         </h3>
 
                         <p
-                          className={`text-sm ${theme.text.secondary} mb-3 line-clamp-2`}
+                          className={`text-[13px] ${theme.text.secondary} mb-2 line-clamp-1`}
                         >
                           {post.content}
                         </p>
 
                         <div className="flex items-center justify-between">
                           <div
-                            className={`flex items-center gap-3 text-xs ${theme.text.secondary}`}
+                            className={`flex items-center gap-2 text-[13px] ${theme.text.secondary}`}
                           >
-                            <span className="flex items-center gap-1">
+                            <span className="flex items-center gap-0.5">
                               <MdPerson className="w-3 h-3" />
                               {post.author?.nickname || "익명"}
                             </span>
-                            <span className="flex items-center gap-1">
+                            <span className="flex items-center gap-0.5">
                               <MdSchedule className="w-3 h-3" />
                               {formatTime(post.created_at)}
                             </span>
                           </div>
 
-                          <div className="flex items-center gap-3">
+                          <div className="flex items-center gap-2">
                             <span
-                              className={`flex items-center gap-1 text-xs ${theme.text.secondary}`}
+                              className={`flex items-center gap-0.5 text-[13px] ${theme.text.secondary}`}
                             >
                               <MdThumbUp className="w-3 h-3" />
                               {post.likes_count || 0}
                             </span>
                             <span
-                              className={`flex items-center gap-1 text-xs ${theme.text.secondary}`}
+                              className={`flex items-center gap-0.5 text-[13px] ${theme.text.secondary}`}
                             >
                               <MdComment className="w-3 h-3" />
                               {post.comments_count || 0}
@@ -331,7 +328,7 @@ const BoardPage = () => {
 
       {/* Floating Write Button */}
       <motion.button
-        className={`fixed bottom-24 right-6 w-14 h-14 ${tennisGradients.primary} text-white rounded-full shadow-lg flex items-center justify-center z-30`}
+        className={`fixed bottom-28 right-6 w-12 h-12 ${tennisGradients.primary} text-white rounded-full shadow-lg flex items-center justify-center z-30`}
         initial={{ scale: 0 }}
         animate={{ scale: 1 }}
         transition={{ delay: 0.5, type: "spring", stiffness: 200 }}
