@@ -1460,7 +1460,7 @@ const MatchingPage = () => {
 
       {/* Floating Filter Button */}
       <motion.button
-        className={`fixed bottom-24 right-6 w-14 h-14 ${tennisGradients.primary} text-white rounded-full shadow-lg flex items-center justify-center z-30`}
+        className={`fixed bottom-28 right-6 w-12 h-12 ${tennisGradients.primary} text-white rounded-full shadow-lg flex items-center justify-center z-30`}
         onClick={() => {
           setTempFilters(appliedFilters);
 
