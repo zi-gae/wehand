@@ -118,7 +118,7 @@ const ReviewPage = () => {
       </div>
 
       {/* Content */}
-      <div className="p-4 max-w-2xl mx-auto">
+      <div className="p-4 max-w-2xl mx-auto pb-safe">
         {isLoading ? (
           <div className="space-y-4">
             {/* 일반 카드 모양 스켈레톤 */}

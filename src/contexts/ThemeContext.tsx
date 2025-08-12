@@ -36,6 +36,19 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
       root.classList.remove('dark')
       body.classList.remove('dark')
     }
+    
+    // iOS PWA status bar 및 theme-color 동적 변경
+    const themeColorMeta = document.querySelector('meta[name="theme-color"]')
+    const statusBarMeta = document.querySelector('meta[name="apple-mobile-web-app-status-bar-style"]')
+    
+    if (themeColorMeta) {
+      themeColorMeta.setAttribute('content', isDark ? '#1f2937' : '#6CA344')
+    }
+    
+    if (statusBarMeta) {
+      statusBarMeta.setAttribute('content', isDark ? 'black-translucent' : 'default')
+    }
+    
     localStorage.setItem('theme', isDark ? 'dark' : 'light')
   }, [isDark])
 

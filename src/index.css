@@ -171,3 +171,12 @@ body.dark {
   padding-bottom: calc(5rem + env(safe-area-inset-bottom));
   transition: background-color 0.3s ease;
 }
+
+/* Safe Area 유틸리티 클래스 */
+.pb-safe {
+  padding-bottom: calc(5rem + env(safe-area-inset-bottom, 0.5rem));
+}
+
+.mb-safe {
+  margin-bottom: calc(5rem + env(safe-area-inset-bottom, 1.25rem));
+}
