@@ -18,7 +18,6 @@ interface MatchInfoCardProps {
   isHost: boolean;
   isParticipant: boolean;
   showParticipantsList: boolean;
-  isJoining?: boolean;
 }
 
 const MatchInfoCard = ({
@@ -28,7 +27,6 @@ const MatchInfoCard = ({
   isHost,
   isParticipant,
   showParticipantsList,
-  isJoining = false,
 }: MatchInfoCardProps) => {
   const theme = getThemeClasses();
 
@@ -133,40 +131,29 @@ const MatchInfoCard = ({
       {/* 참가 신청 버튼 - 호스트가 아닌 경우만 표시 */}
       {!isHost && (
         <motion.button
-          className={`w-full mt-4 py-3 rounded-2xl text-base font-bold transition-colors duration-300 flex items-center justify-center gap-2 ${
-            matchDetail.status === "full" || isParticipant || isJoining
+          className={`w-full mt-4 py-3 rounded-2xl text-base font-bold transition-colors duration-300 ${
+            matchDetail.status === "full" || isParticipant
               ? "bg-gray-300 dark:bg-gray-600 text-gray-500 dark:text-gray-400 cursor-not-allowed"
               : "bg-gradient-to-r from-blue-500 to-indigo-600 text-white"
           }`}
-          disabled={matchDetail.status === "full" || isParticipant || isJoining}
+          disabled={matchDetail.status === "full" || isParticipant}
           onClick={onJoinMatch}
           whileHover={
-            matchDetail.status !== "full" && !isParticipant && !isJoining
+            matchDetail.status !== "full" && !isParticipant
               ? { scale: 1.02 }
               : {}
           }
           whileTap={
-            matchDetail.status !== "full" && !isParticipant && !isJoining
+            matchDetail.status !== "full" && !isParticipant
               ? { scale: 0.98 }
               : {}
           }
         >
-          {isJoining ? (
-            <>
-              <motion.div
-                className="w-4 h-4 border-2 border-white border-t-transparent rounded-full"
-                animate={{ rotate: 360 }}
-                transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
-              />
-              참가 신청 중...
-            </>
-          ) : isParticipant ? (
-            "참가 신청 완료"
-          ) : matchDetail.status === "full" ? (
-            "참가 마감"
-          ) : (
-            "참가 신청하기"
-          )}
+          {isParticipant
+            ? "참가 신청 완료"
+            : matchDetail.status === "full"
+            ? "참가 마감"
+            : "참가 신청하기"}
         </motion.button>
       )}
 

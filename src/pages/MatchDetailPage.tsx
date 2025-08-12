@@ -45,7 +45,6 @@ const MatchDetailContentSuspense = ({ matchId }: { matchId: string }) => {
   const joinChatRoomMutation = useJoinChatRoom();
 
   const [isBookmarked, setIsBookmarked] = useState(false);
-  const [isJoining, setIsJoining] = useState(false);
 
   const handleShare = async () => {
     if (!matchDetail) return;
@@ -133,7 +132,7 @@ const MatchDetailContentSuspense = ({ matchId }: { matchId: string }) => {
   };
 
   const handleJoinMatch = async () => {
-    if (!matchDetail || matchDetail.status === "full" || isJoining) return;
+    if (!matchDetail || matchDetail.status === "full") return;
 
     // 임시 채팅방 ID로 즉시 이동 (matchId와 userId 조합)
     const tempChatId = `pending_${matchId}_${user?.id}`;
@@ -229,7 +228,6 @@ const MatchDetailContentSuspense = ({ matchId }: { matchId: string }) => {
             isHost={isHost}
             isParticipant={isParticipant}
             showParticipantsList={showParticipantsList}
-            isJoining={isJoining}
           />
 
           {/* 참가자 목록 - 참가자만 확인 가능 */}
