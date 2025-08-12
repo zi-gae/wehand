@@ -121,39 +121,59 @@ const ReviewPage = () => {
       <div className="p-4 max-w-2xl mx-auto">
         {isLoading ? (
           <div className="space-y-4">
-            {/* 개선된 스켈레톤 디자인 */}
+            {/* 일반 카드 모양 스켈레톤 */}
             {[1, 2, 3].map((index) => (
               <div
                 key={index}
-                className={`${theme.surface.card} rounded-2xl overflow-hidden shadow-sm`}
+                className={`${theme.surface.card} rounded-2xl p-4 shadow-sm border ${theme.border.primary}`}
               >
-                {/* 컬러풀한 상단 바 */}
-                <div className="h-1 bg-gradient-to-r from-tennis-ball-400 to-tennis-ball-600 animate-pulse"></div>
-
-                <div className="p-5">
-                  {/* 매치 정보 스켈레톤 */}
-                  <div className="flex items-start justify-between mb-4">
-                    <div className="space-y-2">
-                      <div className="h-6 bg-gray-200 dark:bg-gray-700 rounded-lg w-40 animate-pulse"></div>
-                      <div className="flex items-center gap-3">
+                <div className="space-y-4">
+                  {/* 제목과 메타정보 스켈레톤 */}
+                  <div className="flex items-start justify-between">
+                    <div className="space-y-2 flex-1">
+                      <div className="h-5 bg-gray-200 dark:bg-gray-700 rounded w-48 animate-pulse"></div>
+                      <div className="flex items-center gap-2">
+                        <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-16 animate-pulse"></div>
                         <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-24 animate-pulse"></div>
-                        <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-32 animate-pulse"></div>
                       </div>
                     </div>
-                    <div className="h-8 w-8 bg-gray-200 dark:bg-gray-700 rounded-lg animate-pulse"></div>
+                    <div className="h-12 w-12 bg-gray-200 dark:bg-gray-700 rounded-full animate-pulse"></div>
                   </div>
 
-                  {/* 참가자 아바타 스켈레톤 */}
-                  <div className="flex -space-x-2">
-                    {[1, 2, 3, 4].map((i) => (
-                      <div
-                        key={i}
-                        className="w-10 h-10 bg-gray-200 dark:bg-gray-700 rounded-full border-2 border-white dark:border-gray-800 animate-pulse"
-                        style={{ animationDelay: `${i * 0.1}s` }}
-                      ></div>
-                    ))}
-                    <div className="w-10 h-10 bg-gray-200 dark:bg-gray-700 rounded-full border-2 border-white dark:border-gray-800 flex items-center justify-center animate-pulse">
-                      <span className="text-xs text-gray-400">...</span>
+                  {/* 위치 정보 스켈레톤 */}
+                  <div className="bg-gray-50 dark:bg-gray-800/30 rounded-lg p-2">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center gap-2">
+                        <div className="h-3.5 w-3.5 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
+                        <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-32 animate-pulse"></div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <div className="h-3.5 w-3.5 bg-gray-200 dark:bg-gray-700 rounded animate-pulse"></div>
+                        <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-16 animate-pulse"></div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* 참가자와 버튼 스켈레톤 */}
+                  <div className="space-y-2">
+                    <div className="flex items-center justify-between">
+                      <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-28 animate-pulse"></div>
+                      <div className="flex items-center gap-1">
+                        <div className="h-2 w-2 bg-gray-200 dark:bg-gray-700 rounded-full animate-pulse"></div>
+                        <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-8 animate-pulse"></div>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <div className="flex-1 flex gap-1">
+                        {[1, 2, 3].map((i) => (
+                          <div
+                            key={i}
+                            className="h-5 bg-gray-200 dark:bg-gray-700 rounded-full w-12 animate-pulse"
+                            style={{ animationDelay: `${i * 0.1}s` }}
+                          ></div>
+                        ))}
+                      </div>
+                      <div className="h-8 bg-gray-200 dark:bg-gray-700 rounded-lg w-16 animate-pulse"></div>
                     </div>
                   </div>
                 </div>
