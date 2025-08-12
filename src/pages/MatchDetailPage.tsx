@@ -135,7 +135,13 @@ const MatchDetailContentSuspense = ({ matchId }: { matchId: string }) => {
   const handleJoinMatch = async () => {
     if (!matchDetail || matchDetail.status === "full" || isJoining) return;
 
-    setIsJoining(true);
+    // 임시 채팅방 ID로 즉시 이동 (matchId와 userId 조합)
+    const tempChatId = `pending_${matchId}_${user?.id}`;
+    
+    // 즉시 채팅방으로 이동 (로딩 상태로)
+    navigate(`/chat/${tempChatId}?pending=true&matchId=${matchId}`);
+
+    // 백그라운드에서 실제 처리
     try {
       // 매치 참가 신청
       await joinMatchMutation.mutateAsync({
@@ -149,15 +155,14 @@ const MatchDetailContentSuspense = ({ matchId }: { matchId: string }) => {
       const chatResponse = await createPrivateChatMutation.mutateAsync(matchId);
 
       if (chatResponse?.chatRoomId) {
-        navigate(`/chat/${chatResponse.chatRoomId}`);
-      } else {
-        alert("참가 신청이 완료되었습니다!");
+        // 실제 채팅방 ID로 리다이렉트
+        navigate(`/chat/${chatResponse.chatRoomId}`, { replace: true });
       }
     } catch (error) {
       console.error("참가 신청 실패:", error);
+      // 에러 발생 시 이전 페이지로 돌아가기
+      navigate(-1);
       alert("참가 신청에 실패했습니다.");
-    } finally {
-      setIsJoining(false);
     }
   };
 

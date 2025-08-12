@@ -10,7 +10,7 @@ import {
   MdSend,
   MdCheckCircle,
 } from "react-icons/md";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams, useSearchParams, useLocation } from "react-router-dom";
 import { useAuth, useMe } from "../hooks";
 import {
   chatQueryKeys,
@@ -57,6 +57,8 @@ const ChatRoomPage = () => {
   const queryClient = useQueryClient();
   const { roomId } = useParams();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const location = useLocation();
   const theme = getThemeClasses();
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -65,6 +67,8 @@ const ChatRoomPage = () => {
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [pendingApprovalParticipantId, setPendingApprovalParticipantId] =
     useState<string | null>(null);
+  const [isPendingJoin, setIsPendingJoin] = useState(false);
+  const [pendingMatchId, setPendingMatchId] = useState<string | null>(null);
 
   // 메시지 병합 관리를 위한 내부 Map (id -> message)
   const messagesMapRef = useRef<Map<string, ChatMessage>>(new Map());
@@ -333,12 +337,24 @@ const ChatRoomPage = () => {
   // 컴포넌트 언마운트 시 채팅방 나가기 - useSocket에서 자동 처리되므로 제거
   // leaveRoom 호출 제거 - useSocket 훅의 cleanup에서 처리됨
 
-  // roomId 바뀌면 메시지와 읽음 추적 초기화
+  // roomId 바뀌거나 pending 상태 확인
   useEffect(() => {
     setMessages([]); // 메시지 초기화
     lastReadMessageIdRef.current = null;
     messagesMapRef.current = new Map(); // 내부 맵 초기화
-  }, [roomId]);
+    
+    // URL 파라미터에서 pending 상태 확인
+    const isPending = searchParams.get('pending') === 'true';
+    const matchId = searchParams.get('matchId');
+    
+    if (isPending && matchId) {
+      setIsPendingJoin(true);
+      setPendingMatchId(matchId);
+    } else {
+      setIsPendingJoin(false);
+      setPendingMatchId(null);
+    }
+  }, [roomId, searchParams]);
 
   // 메시지가 변경될 때마다 읽음 처리 (중복/루프 방지)
   useEffect(() => {
@@ -643,8 +659,68 @@ const ChatRoomPage = () => {
 
       {/* Messages */}
       <div className="flex-1 overflow-y-auto px-4 py-4 space-y-4">
-        {/* 로딩 스켈레톤 */}
-        {isMessagesLoading && (
+        {/* 참가 신청 처리 중 스켈레톤 */}
+        {isPendingJoin && (
+          <div className="space-y-4">
+            {/* 참가 신청 처리 중 메시지 */}
+            <div className="flex justify-center py-8">
+              <div className="text-center space-y-3">
+                <motion.div
+                  className="w-16 h-16 mx-auto rounded-full bg-tennis-ball-100 dark:bg-tennis-ball-900/30 flex items-center justify-center"
+                  animate={{
+                    scale: [1, 1.1, 1],
+                    rotate: [0, 180, 360],
+                  }}
+                  transition={{
+                    duration: 2,
+                    repeat: Infinity,
+                    ease: "easeInOut"
+                  }}
+                >
+                  <MdSend className="w-8 h-8 text-tennis-ball-600 dark:text-tennis-ball-400" />
+                </motion.div>
+                <div>
+                  <p className={`text-lg font-semibold ${theme.text.primary}`}>
+                    참가 신청 처리 중...
+                  </p>
+                  <p className={`text-sm ${theme.text.secondary} mt-1`}>
+                    호스트와 채팅방을 준비하고 있습니다
+                  </p>
+                </div>
+              </div>
+            </div>
+            
+            {/* 스켈레톤 메시지들 */}
+            <div className="space-y-4 opacity-30">
+              {/* 받은 메시지 스켈레톤 */}
+              <div className="flex justify-start">
+                <div className="max-w-xs space-y-2">
+                  <div className="flex items-center gap-2">
+                    <div className="w-8 h-8 bg-gray-200 dark:bg-gray-700 rounded-full animate-pulse"></div>
+                    <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-16 animate-pulse"></div>
+                  </div>
+                  <div className="px-4 py-3 bg-gray-200 dark:bg-gray-700 rounded-2xl animate-pulse">
+                    <div className="h-4 bg-gray-300 dark:bg-gray-600 rounded w-40 mb-2"></div>
+                    <div className="h-4 bg-gray-300 dark:bg-gray-600 rounded w-32"></div>
+                  </div>
+                </div>
+              </div>
+
+              {/* 보낸 메시지 스켈레톤 */}
+              <div className="flex justify-end">
+                <div className="max-w-xs space-y-2">
+                  <div className="px-4 py-3 bg-tennis-ball-200 dark:bg-tennis-ball-800 rounded-2xl animate-pulse">
+                    <div className="h-4 bg-tennis-ball-300 dark:bg-tennis-ball-700 rounded w-36 mb-2"></div>
+                    <div className="h-4 bg-tennis-ball-300 dark:bg-tennis-ball-700 rounded w-28"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+        
+        {/* 일반 로딩 스켈레톤 */}
+        {!isPendingJoin && isMessagesLoading && (
           <div className="space-y-4">
             {/* 받은 메시지 스켈레톤 */}
             <div className="flex justify-start">
@@ -714,7 +790,7 @@ const ChatRoomPage = () => {
           </div>
         )}
 
-        {!isMessagesLoading && (
+        {!isMessagesLoading && !isPendingJoin && (
           <AnimatePresence>
           {React.Children.toArray(
             messages.map((message) => (
