@@ -8,7 +8,7 @@ export default defineConfig({
       target: "./src/api/generated-api.ts",
       client: "axios",
       httpClient: "axios",
-      baseUrl: "http://localhost:3000",
+      baseUrl: "",
       prettier: false,
       override: {
         mutator: {

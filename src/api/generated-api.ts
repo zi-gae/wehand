@@ -1561,7 +1561,7 @@ export type GetApiNotificationsUnreadCount200 = {
 
 export type GetApiNotificationsUnreadChatCount200Data = {
   /** 읽지 않은 채팅 메시지 개수 */
-  count?: number;
+  unreadChatCount?: number;
 };
 
 export type GetApiNotificationsUnreadChatCount200 = {
@@ -1839,7 +1839,7 @@ export const getWeHandTennisAPI = () => {
   ) => {
     return customAxiosInstance<LoginResponse>(
       {
-        url: `http://localhost:3000/api/auth/login`,
+        url: `/api/auth/login`,
         method: "POST",
         headers: { "Content-Type": "application/json" },
         data: loginRequest,
@@ -1857,7 +1857,7 @@ export const getWeHandTennisAPI = () => {
   ) => {
     return customAxiosInstance<LoginResponse>(
       {
-        url: `http://localhost:3000/api/auth/refresh`,
+        url: `/api/auth/refresh`,
         method: "POST",
         headers: { "Content-Type": "application/json" },
         data: refreshTokenRequest,
@@ -1873,7 +1873,7 @@ export const getWeHandTennisAPI = () => {
     options?: SecondParameter<typeof customAxiosInstance>
   ) => {
     return customAxiosInstance<SuccessResponse>(
-      { url: `http://localhost:3000/api/auth/logout`, method: "POST" },
+      { url: `/api/auth/logout`, method: "POST" },
       options
     );
   };
@@ -1887,7 +1887,7 @@ export const getWeHandTennisAPI = () => {
   ) => {
     return customAxiosInstance<LoginResponse>(
       {
-        url: `http://localhost:3000/api/auth/signup`,
+        url: `/api/auth/signup`,
         method: "POST",
         headers: { "Content-Type": "application/json" },
         data: signupRequest,
@@ -1903,7 +1903,7 @@ export const getWeHandTennisAPI = () => {
     options?: SecondParameter<typeof customAxiosInstance>
   ) => {
     return customAxiosInstance<GetApiAuthMe200>(
-      { url: `http://localhost:3000/api/auth/me`, method: "GET" },
+      { url: `/api/auth/me`, method: "GET" },
       options
     );
   };
@@ -1916,7 +1916,7 @@ export const getWeHandTennisAPI = () => {
     options?: SecondParameter<typeof customAxiosInstance>
   ) => {
     return customAxiosInstance<GetApiChatRooms200>(
-      { url: `http://localhost:3000/api/chat/rooms`, method: "GET", params },
+      { url: `/api/chat/rooms`, method: "GET", params },
       options
     );
   };
@@ -1930,7 +1930,7 @@ export const getWeHandTennisAPI = () => {
   ) => {
     return customAxiosInstance<PostApiChatRooms201>(
       {
-        url: `http://localhost:3000/api/chat/rooms`,
+        url: `/api/chat/rooms`,
         method: "POST",
         headers: { "Content-Type": "application/json" },
         data: createChatRoomRequest,
@@ -1947,10 +1947,7 @@ export const getWeHandTennisAPI = () => {
     options?: SecondParameter<typeof customAxiosInstance>
   ) => {
     return customAxiosInstance<GetApiChatRoomsChatRoomId200>(
-      {
-        url: `http://localhost:3000/api/chat/rooms/${chatRoomId}`,
-        method: "GET",
-      },
+      { url: `/api/chat/rooms/${chatRoomId}`, method: "GET" },
       options
     );
   };
@@ -1964,11 +1961,7 @@ export const getWeHandTennisAPI = () => {
     options?: SecondParameter<typeof customAxiosInstance>
   ) => {
     return customAxiosInstance<GetApiChatRoomsChatRoomIdMessages200>(
-      {
-        url: `http://localhost:3000/api/chat/rooms/${chatRoomId}/messages`,
-        method: "GET",
-        params,
-      },
+      { url: `/api/chat/rooms/${chatRoomId}/messages`, method: "GET", params },
       options
     );
   };
@@ -1983,7 +1976,7 @@ export const getWeHandTennisAPI = () => {
   ) => {
     return customAxiosInstance<PostApiChatRoomsChatRoomIdMessages201>(
       {
-        url: `http://localhost:3000/api/chat/rooms/${chatRoomId}/messages`,
+        url: `/api/chat/rooms/${chatRoomId}/messages`,
         method: "POST",
         headers: { "Content-Type": "application/json" },
         data: sendMessageRequest,
@@ -2000,10 +1993,7 @@ export const getWeHandTennisAPI = () => {
     options?: SecondParameter<typeof customAxiosInstance>
   ) => {
     return customAxiosInstance<GetApiChatRoomsChatRoomIdMessagesAll200>(
-      {
-        url: `http://localhost:3000/api/chat/rooms/${chatRoomId}/messages/all`,
-        method: "GET",
-      },
+      { url: `/api/chat/rooms/${chatRoomId}/messages/all`, method: "GET" },
       options
     );
   };
@@ -2018,7 +2008,7 @@ export const getWeHandTennisAPI = () => {
   ) => {
     return customAxiosInstance<SuccessResponse>(
       {
-        url: `http://localhost:3000/api/chat/rooms/${chatRoomId}/read`,
+        url: `/api/chat/rooms/${chatRoomId}/read`,
         method: "POST",
         headers: { "Content-Type": "application/json" },
         data: postApiChatRoomsChatRoomIdReadBody,
@@ -2035,10 +2025,7 @@ export const getWeHandTennisAPI = () => {
     options?: SecondParameter<typeof customAxiosInstance>
   ) => {
     return customAxiosInstance<SuccessResponse>(
-      {
-        url: `http://localhost:3000/api/chat/rooms/${chatRoomId}/leave`,
-        method: "POST",
-      },
+      { url: `/api/chat/rooms/${chatRoomId}/leave`, method: "POST" },
       options
     );
   };
@@ -2051,10 +2038,7 @@ export const getWeHandTennisAPI = () => {
     options?: SecondParameter<typeof customAxiosInstance>
   ) => {
     return customAxiosInstance<SuccessResponse>(
-      {
-        url: `http://localhost:3000/api/chat/rooms/${chatRoomId}/join`,
-        method: "POST",
-      },
+      { url: `/api/chat/rooms/${chatRoomId}/join`, method: "POST" },
       options
     );
   };
@@ -2068,10 +2052,7 @@ export const getWeHandTennisAPI = () => {
     options?: SecondParameter<typeof customAxiosInstance>
   ) => {
     return customAxiosInstance<PostApiChatRoomsChatRoomIdApprove200>(
-      {
-        url: `http://localhost:3000/api/chat/rooms/${chatRoomId}/approve`,
-        method: "POST",
-      },
+      { url: `/api/chat/rooms/${chatRoomId}/approve`, method: "POST" },
       options
     );
   };
@@ -2085,10 +2066,7 @@ export const getWeHandTennisAPI = () => {
     options?: SecondParameter<typeof customAxiosInstance>
   ) => {
     return customAxiosInstance<PostApiChatRoomsChatRoomIdCancelApproval200>(
-      {
-        url: `http://localhost:3000/api/chat/rooms/${chatRoomId}/cancel-approval`,
-        method: "POST",
-      },
+      { url: `/api/chat/rooms/${chatRoomId}/cancel-approval`, method: "POST" },
       options
     );
   };
@@ -2101,11 +2079,7 @@ export const getWeHandTennisAPI = () => {
     options?: SecondParameter<typeof customAxiosInstance>
   ) => {
     return customAxiosInstance<GetApiCommunityPosts200>(
-      {
-        url: `http://localhost:3000/api/community/posts`,
-        method: "GET",
-        params,
-      },
+      { url: `/api/community/posts`, method: "GET", params },
       options
     );
   };
@@ -2119,7 +2093,7 @@ export const getWeHandTennisAPI = () => {
   ) => {
     return customAxiosInstance<PostApiCommunityPosts201>(
       {
-        url: `http://localhost:3000/api/community/posts`,
+        url: `/api/community/posts`,
         method: "POST",
         headers: { "Content-Type": "application/json" },
         data: createPostRequest,
@@ -2136,10 +2110,7 @@ export const getWeHandTennisAPI = () => {
     options?: SecondParameter<typeof customAxiosInstance>
   ) => {
     return customAxiosInstance<GetApiCommunityPostsPostId200>(
-      {
-        url: `http://localhost:3000/api/community/posts/${postId}`,
-        method: "GET",
-      },
+      { url: `/api/community/posts/${postId}`, method: "GET" },
       options
     );
   };
@@ -2154,7 +2125,7 @@ export const getWeHandTennisAPI = () => {
   ) => {
     return customAxiosInstance<SuccessResponse>(
       {
-        url: `http://localhost:3000/api/community/posts/${postId}`,
+        url: `/api/community/posts/${postId}`,
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         data: updatePostRequest,
@@ -2171,10 +2142,7 @@ export const getWeHandTennisAPI = () => {
     options?: SecondParameter<typeof customAxiosInstance>
   ) => {
     return customAxiosInstance<SuccessResponse>(
-      {
-        url: `http://localhost:3000/api/community/posts/${postId}`,
-        method: "DELETE",
-      },
+      { url: `/api/community/posts/${postId}`, method: "DELETE" },
       options
     );
   };
@@ -2196,10 +2164,7 @@ export const getWeHandTennisAPI = () => {
     options?: SecondParameter<typeof customAxiosInstance>
   ) => {
     return customAxiosInstance<SuccessResponse>(
-      {
-        url: `http://localhost:3000/api/community/posts/${postId}/like`,
-        method: "POST",
-      },
+      { url: `/api/community/posts/${postId}/like`, method: "POST" },
       options
     );
   };
@@ -2212,10 +2177,7 @@ export const getWeHandTennisAPI = () => {
     options?: SecondParameter<typeof customAxiosInstance>
   ) => {
     return customAxiosInstance<SuccessResponse>(
-      {
-        url: `http://localhost:3000/api/community/posts/${postId}/like`,
-        method: "DELETE",
-      },
+      { url: `/api/community/posts/${postId}/like`, method: "DELETE" },
       options
     );
   };
@@ -2229,11 +2191,7 @@ export const getWeHandTennisAPI = () => {
     options?: SecondParameter<typeof customAxiosInstance>
   ) => {
     return customAxiosInstance<GetApiCommunityPostsPostIdComments200>(
-      {
-        url: `http://localhost:3000/api/community/posts/${postId}/comments`,
-        method: "GET",
-        params,
-      },
+      { url: `/api/community/posts/${postId}/comments`, method: "GET", params },
       options
     );
   };
@@ -2263,7 +2221,7 @@ export const getWeHandTennisAPI = () => {
   ) => {
     return customAxiosInstance<PostApiCommunityPostsPostIdComments201>(
       {
-        url: `http://localhost:3000/api/community/posts/${postId}/comments`,
+        url: `/api/community/posts/${postId}/comments`,
         method: "POST",
         headers: { "Content-Type": "application/json" },
         data: createCommentRequest,
@@ -2280,10 +2238,7 @@ export const getWeHandTennisAPI = () => {
     options?: SecondParameter<typeof customAxiosInstance>
   ) => {
     return customAxiosInstance<SuccessResponse>(
-      {
-        url: `http://localhost:3000/api/community/comments/${commentId}`,
-        method: "DELETE",
-      },
+      { url: `/api/community/comments/${commentId}`, method: "DELETE" },
       options
     );
   };
@@ -2295,7 +2250,7 @@ export const getWeHandTennisAPI = () => {
     options?: SecondParameter<typeof customAxiosInstance>
   ) => {
     return customAxiosInstance<GetApiHome200>(
-      { url: `http://localhost:3000/api/home`, method: "GET" },
+      { url: `/api/home`, method: "GET" },
       options
     );
   };
@@ -2308,7 +2263,7 @@ export const getWeHandTennisAPI = () => {
     options?: SecondParameter<typeof customAxiosInstance>
   ) => {
     return customAxiosInstance<GetApiMatches200>(
-      { url: `http://localhost:3000/api/matches`, method: "GET", params },
+      { url: `/api/matches`, method: "GET", params },
       options
     );
   };
@@ -2322,7 +2277,7 @@ export const getWeHandTennisAPI = () => {
   ) => {
     return customAxiosInstance<PostApiMatches201>(
       {
-        url: `http://localhost:3000/api/matches`,
+        url: `/api/matches`,
         method: "POST",
         headers: { "Content-Type": "application/json" },
         data: createMatchRequest,
@@ -2339,7 +2294,7 @@ export const getWeHandTennisAPI = () => {
     options?: SecondParameter<typeof customAxiosInstance>
   ) => {
     return customAxiosInstance<GetApiMatchesMatchId200>(
-      { url: `http://localhost:3000/api/matches/${matchId}`, method: "GET" },
+      { url: `/api/matches/${matchId}`, method: "GET" },
       options
     );
   };
@@ -2354,7 +2309,7 @@ export const getWeHandTennisAPI = () => {
   ) => {
     return customAxiosInstance<SuccessResponse>(
       {
-        url: `http://localhost:3000/api/matches/${matchId}/join`,
+        url: `/api/matches/${matchId}/join`,
         method: "POST",
         headers: { "Content-Type": "application/json" },
         data: joinMatchRequest,
@@ -2371,10 +2326,7 @@ export const getWeHandTennisAPI = () => {
     options?: SecondParameter<typeof customAxiosInstance>
   ) => {
     return customAxiosInstance<PostApiMatchesMatchIdShare200>(
-      {
-        url: `http://localhost:3000/api/matches/${matchId}/share`,
-        method: "POST",
-      },
+      { url: `/api/matches/${matchId}/share`, method: "POST" },
       options
     );
   };
@@ -2387,10 +2339,7 @@ export const getWeHandTennisAPI = () => {
     options?: SecondParameter<typeof customAxiosInstance>
   ) => {
     return customAxiosInstance<SuccessResponse>(
-      {
-        url: `http://localhost:3000/api/matches/${matchId}/bookmark`,
-        method: "POST",
-      },
+      { url: `/api/matches/${matchId}/bookmark`, method: "POST" },
       options
     );
   };
@@ -2403,10 +2352,7 @@ export const getWeHandTennisAPI = () => {
     options?: SecondParameter<typeof customAxiosInstance>
   ) => {
     return customAxiosInstance<SuccessResponse>(
-      {
-        url: `http://localhost:3000/api/matches/${matchId}/bookmark`,
-        method: "DELETE",
-      },
+      { url: `/api/matches/${matchId}/bookmark`, method: "DELETE" },
       options
     );
   };
@@ -2419,10 +2365,7 @@ export const getWeHandTennisAPI = () => {
     options?: SecondParameter<typeof customAxiosInstance>
   ) => {
     return customAxiosInstance<PostApiMatchesMatchIdChat201>(
-      {
-        url: `http://localhost:3000/api/matches/${matchId}/chat`,
-        method: "POST",
-      },
+      { url: `/api/matches/${matchId}/chat`, method: "POST" },
       options
     );
   };
@@ -2435,10 +2378,7 @@ export const getWeHandTennisAPI = () => {
     options?: SecondParameter<typeof customAxiosInstance>
   ) => {
     return customAxiosInstance<PostApiMatchesMatchIdChatPrivate201>(
-      {
-        url: `http://localhost:3000/api/matches/${matchId}/chat/private`,
-        method: "POST",
-      },
+      { url: `/api/matches/${matchId}/chat/private`, method: "POST" },
       options
     );
   };
@@ -2465,7 +2405,7 @@ export const getWeHandTennisAPI = () => {
     options?: SecondParameter<typeof customAxiosInstance>
   ) => {
     return customAxiosInstance<GetApiNotifications200>(
-      { url: `http://localhost:3000/api/notifications`, method: "GET", params },
+      { url: `/api/notifications`, method: "GET", params },
       options
     );
   };
@@ -2488,10 +2428,7 @@ export const getWeHandTennisAPI = () => {
     options?: SecondParameter<typeof customAxiosInstance>
   ) => {
     return customAxiosInstance<GetApiNotificationsUnreadCount200>(
-      {
-        url: `http://localhost:3000/api/notifications/unread-count`,
-        method: "GET",
-      },
+      { url: `/api/notifications/unread-count`, method: "GET" },
       options
     );
   };
@@ -2520,10 +2457,7 @@ export const getWeHandTennisAPI = () => {
     options?: SecondParameter<typeof customAxiosInstance>
   ) => {
     return customAxiosInstance<GetApiNotificationsUnreadChatCount200>(
-      {
-        url: `http://localhost:3000/api/notifications/unread-chat-count`,
-        method: "GET",
-      },
+      { url: `/api/notifications/unread-chat-count`, method: "GET" },
       options
     );
   };
@@ -2557,10 +2491,7 @@ export const getWeHandTennisAPI = () => {
     options?: SecondParameter<typeof customAxiosInstance>
   ) => {
     return customAxiosInstance<GetApiNotificationsUnreadCountByType200>(
-      {
-        url: `http://localhost:3000/api/notifications/unread-count-by-type`,
-        method: "GET",
-      },
+      { url: `/api/notifications/unread-count-by-type`, method: "GET" },
       options
     );
   };
@@ -2573,10 +2504,7 @@ export const getWeHandTennisAPI = () => {
     options?: SecondParameter<typeof customAxiosInstance>
   ) => {
     return customAxiosInstance<SuccessResponse>(
-      {
-        url: `http://localhost:3000/api/notifications/${notificationId}/read`,
-        method: "POST",
-      },
+      { url: `/api/notifications/${notificationId}/read`, method: "POST" },
       options
     );
   };
@@ -2588,10 +2516,7 @@ export const getWeHandTennisAPI = () => {
     options?: SecondParameter<typeof customAxiosInstance>
   ) => {
     return customAxiosInstance<SuccessResponse>(
-      {
-        url: `http://localhost:3000/api/notifications/read-all`,
-        method: "POST",
-      },
+      { url: `/api/notifications/read-all`, method: "POST" },
       options
     );
   };
@@ -2604,10 +2529,7 @@ export const getWeHandTennisAPI = () => {
     options?: SecondParameter<typeof customAxiosInstance>
   ) => {
     return customAxiosInstance<SuccessResponse>(
-      {
-        url: `http://localhost:3000/api/notifications/${notificationId}`,
-        method: "DELETE",
-      },
+      { url: `/api/notifications/${notificationId}`, method: "DELETE" },
       options
     );
   };
@@ -2621,7 +2543,7 @@ export const getWeHandTennisAPI = () => {
   ) => {
     return customAxiosInstance<SuccessResponse>(
       {
-        url: `http://localhost:3000/api/notifications/fcm-token`,
+        url: `/api/notifications/fcm-token`,
         method: "POST",
         headers: { "Content-Type": "application/json" },
         data: updateFcmTokenRequest,
@@ -2645,10 +2567,7 @@ export const getWeHandTennisAPI = () => {
     options?: SecondParameter<typeof customAxiosInstance>
   ) => {
     return customAxiosInstance<GetApiNotificationsSettings200>(
-      {
-        url: `http://localhost:3000/api/notifications/settings`,
-        method: "GET",
-      },
+      { url: `/api/notifications/settings`, method: "GET" },
       options
     );
   };
@@ -2674,7 +2593,7 @@ export const getWeHandTennisAPI = () => {
   ) => {
     return customAxiosInstance<SuccessResponse>(
       {
-        url: `http://localhost:3000/api/notifications/settings`,
+        url: `/api/notifications/settings`,
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         data: updateNotificationSettingsRequest,
@@ -2690,7 +2609,7 @@ export const getWeHandTennisAPI = () => {
     options?: SecondParameter<typeof customAxiosInstance>
   ) => {
     return customAxiosInstance<GetApiProfileMe200>(
-      { url: `http://localhost:3000/api/profile/me`, method: "GET" },
+      { url: `/api/profile/me`, method: "GET" },
       options
     );
   };
@@ -2704,7 +2623,7 @@ export const getWeHandTennisAPI = () => {
   ) => {
     return customAxiosInstance<SuccessResponse>(
       {
-        url: `http://localhost:3000/api/profile/me`,
+        url: `/api/profile/me`,
         method: "PUT",
         headers: { "Content-Type": "application/json" },
         data: updateProfileRequest,
@@ -2721,10 +2640,7 @@ export const getWeHandTennisAPI = () => {
     options?: SecondParameter<typeof customAxiosInstance>
   ) => {
     return customAxiosInstance<GetApiProfileUsersUserId200>(
-      {
-        url: `http://localhost:3000/api/profile/users/${userId}`,
-        method: "GET",
-      },
+      { url: `/api/profile/users/${userId}`, method: "GET" },
       options
     );
   };
@@ -2737,11 +2653,7 @@ export const getWeHandTennisAPI = () => {
     options?: SecondParameter<typeof customAxiosInstance>
   ) => {
     return customAxiosInstance<GetApiProfileMyMatches200>(
-      {
-        url: `http://localhost:3000/api/profile/my-matches`,
-        method: "GET",
-        params,
-      },
+      { url: `/api/profile/my-matches`, method: "GET", params },
       options
     );
   };
@@ -2754,11 +2666,7 @@ export const getWeHandTennisAPI = () => {
     options?: SecondParameter<typeof customAxiosInstance>
   ) => {
     return customAxiosInstance<GetApiProfileMyReviews200>(
-      {
-        url: `http://localhost:3000/api/profile/my-reviews`,
-        method: "GET",
-        params,
-      },
+      { url: `/api/profile/my-reviews`, method: "GET", params },
       options
     );
   };
@@ -2771,11 +2679,7 @@ export const getWeHandTennisAPI = () => {
     options?: SecondParameter<typeof customAxiosInstance>
   ) => {
     return customAxiosInstance<GetApiProfileBookmarks200>(
-      {
-        url: `http://localhost:3000/api/profile/bookmarks`,
-        method: "GET",
-        params,
-      },
+      { url: `/api/profile/bookmarks`, method: "GET", params },
       options
     );
   };
@@ -2787,7 +2691,7 @@ export const getWeHandTennisAPI = () => {
     options?: SecondParameter<typeof customAxiosInstance>
   ) => {
     return customAxiosInstance<GetApiRegions200>(
-      { url: `http://localhost:3000/api/regions`, method: "GET" },
+      { url: `/api/regions`, method: "GET" },
       options
     );
   };
@@ -2800,7 +2704,7 @@ export const getWeHandTennisAPI = () => {
     options?: SecondParameter<typeof customAxiosInstance>
   ) => {
     return customAxiosInstance<GetApiReviewsReviewable200>(
-      { url: `http://localhost:3000/api/reviews/reviewable`, method: "GET" },
+      { url: `/api/reviews/reviewable`, method: "GET" },
       options
     );
   };
@@ -2816,7 +2720,7 @@ export const getWeHandTennisAPI = () => {
   ) => {
     return customAxiosInstance<PostApiReviewsMatchesMatchId200>(
       {
-        url: `http://localhost:3000/api/reviews/matches/${matchId}`,
+        url: `/api/reviews/matches/${matchId}`,
         method: "POST",
         headers: { "Content-Type": "application/json" },
         data: submitReviewRequest,
@@ -2834,10 +2738,7 @@ export const getWeHandTennisAPI = () => {
     options?: SecondParameter<typeof customAxiosInstance>
   ) => {
     return customAxiosInstance<GetApiReviewsUsersUserId200>(
-      {
-        url: `http://localhost:3000/api/reviews/users/${userId}`,
-        method: "GET",
-      },
+      { url: `/api/reviews/users/${userId}`, method: "GET" },
       options
     );
   };
@@ -2850,7 +2751,7 @@ export const getWeHandTennisAPI = () => {
     options?: SecondParameter<typeof customAxiosInstance>
   ) => {
     return customAxiosInstance<GetApiVenues200>(
-      { url: `http://localhost:3000/api/venues`, method: "GET", params },
+      { url: `/api/venues`, method: "GET", params },
       options
     );
   };
@@ -2863,7 +2764,7 @@ export const getWeHandTennisAPI = () => {
     options?: SecondParameter<typeof customAxiosInstance>
   ) => {
     return customAxiosInstance<GetApiVenuesAll200>(
-      { url: `http://localhost:3000/api/venues/all`, method: "GET", params },
+      { url: `/api/venues/all`, method: "GET", params },
       options
     );
   };
@@ -2876,7 +2777,7 @@ export const getWeHandTennisAPI = () => {
     options?: SecondParameter<typeof customAxiosInstance>
   ) => {
     return customAxiosInstance<GetApiVenuesNearby200>(
-      { url: `http://localhost:3000/api/venues/nearby`, method: "GET", params },
+      { url: `/api/venues/nearby`, method: "GET", params },
       options
     );
   };
@@ -2889,7 +2790,7 @@ export const getWeHandTennisAPI = () => {
     options?: SecondParameter<typeof customAxiosInstance>
   ) => {
     return customAxiosInstance<GetApiVenuesVenueId200>(
-      { url: `http://localhost:3000/api/venues/${venueId}`, method: "GET" },
+      { url: `/api/venues/${venueId}`, method: "GET" },
       options
     );
   };
