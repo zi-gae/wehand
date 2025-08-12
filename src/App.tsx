@@ -24,6 +24,7 @@ import ProfilePage from "./pages/ProfilePage";
 import ReviewPage from "./pages/ReviewPage";
 import SignUpPage from "./pages/SignUpPage";
 import TermsPage from "./pages/TermsPage";
+import ProfileEditPage from "./pages/ProfileEditPage";
 
 // Main App Content Component
 const AppContent = () => {
@@ -83,6 +84,7 @@ const AppContent = () => {
               <Route path="/board/write" element={<BoardWritePage />} />
               <Route path="/board/:postId" element={<BoardDetailPage />} />
               <Route path="/profile" element={<ProfilePage />} />
+              <Route path="/profile/edit" element={<ProfileEditPage />} />
               <Route path="/notifications" element={<NotificationPage />} />
               <Route path="/chat" element={<ChatListPage />} />
               <Route path="/chat/:roomId" element={<ChatRoomPage />} />

@@ -6,7 +6,6 @@ import {
   MdCheck,
   MdEmojiEvents,
   MdPerson,
-  MdPlace,
   MdTimer,
   MdTrendingUp,
 } from "react-icons/md";

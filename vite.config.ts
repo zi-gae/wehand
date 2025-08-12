@@ -157,7 +157,7 @@ export default defineConfig({
         ]
       },
       devOptions: {
-        enabled: true // 개발 환경에서도 PWA 테스트 가능
+        enabled: false // 개발 환경에서 PWA 비활성화
       }
     })
   ],
