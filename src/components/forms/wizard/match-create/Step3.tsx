@@ -17,10 +17,6 @@ const Step3 = ({ formData, updateFormData }: any) => {
       try {
         const response = await fetch("/courts.json");
         const data = await response.json();
-
-        const responsev2 = await fetch("/courtsv2.json");
-        const datav2 = await response.json();
-
         setCourtsData(data);
       } catch (error) {
         console.error("테니스장 데이터 로드 실패:", error);
