@@ -35,7 +35,7 @@ const ThemeToggle = () => {
         themeColorMeta.setAttribute("name", "theme-color");
         document.head.appendChild(themeColorMeta);
       }
-      themeColorMeta.setAttribute("content", isDark ? themeColors.dark.background.raw : themeColors.light.background.raw);
+      themeColorMeta.setAttribute("content", isDark ? themeColors.dark.background.headerRaw : themeColors.light.background.headerRaw);
 
       // msapplication-navbutton-color (Windows Phone)
       let msNavButtonMeta = document.querySelector(
@@ -46,7 +46,7 @@ const ThemeToggle = () => {
         msNavButtonMeta.setAttribute("name", "msapplication-navbutton-color");
         document.head.appendChild(msNavButtonMeta);
       }
-      msNavButtonMeta.setAttribute("content", isDark ? themeColors.dark.background.raw : themeColors.light.background.raw);
+      msNavButtonMeta.setAttribute("content", isDark ? themeColors.dark.background.headerRaw : themeColors.light.background.headerRaw);
     };
 
     updateStatusBarColor();

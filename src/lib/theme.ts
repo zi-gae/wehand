@@ -7,6 +7,7 @@ export const themeColors = {
       tennis: 'bg-gradient-to-br from-primary-50 via-secondary-50 to-tennis-lime-50',
       glass: 'bg-gradient-glass backdrop-blur-lg',
       raw: '#f0fdf4', // status bar용 실제 색상 값
+      headerRaw: 'rgba(255, 255, 255, 0.95)', // header glass 색상
     },
     text: {
       primary: 'text-[rgb(var(--text-primary))]',
@@ -31,6 +32,7 @@ export const themeColors = {
       tennis: 'dark:bg-gradient-to-b dark:from-neutral-950 dark:via-neutral-900 dark:to-neutral-800',
       glass: 'dark:bg-gradient-glass-dark dark:backdrop-blur-lg',
       raw: '#0f172a', // status bar용 실제 색상 값
+      headerRaw: 'rgba(17, 24, 39, 0.95)', // header glass 색상 (dark)
     },
     text: {
       primary: 'dark:text-[rgb(var(--text-primary))]',
