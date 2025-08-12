@@ -227,7 +227,7 @@ const ProfileEditPage = () => {
 
   if (profileLoading) {
     return (
-      <div className={`min-h-screen ${theme.background.tennis} p-4`}>
+      <div className={`min-h-screen ${theme.background.tennis} p-4 pb-safe`}>
         <div className="max-w-lg mx-auto space-y-4 animate-pulse">
           <div className="h-12 bg-gray-200 dark:bg-gray-700 rounded-xl" />
           <div className="h-32 bg-gray-200 dark:bg-gray-700 rounded-2xl" />
@@ -243,7 +243,7 @@ const ProfileEditPage = () => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className={`min-h-screen ${theme.background.tennis} page-content`}
+      className={`min-h-screen ${theme.background.tennis} page-content pb-safe`}
     >
       {/* Floating Header */}
       <motion.header

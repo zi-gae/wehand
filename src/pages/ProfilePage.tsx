@@ -117,7 +117,7 @@ const ProfilePageContent = () => {
 
   if (profileLoading) {
     return (
-      <div className={`min-h-screen ${theme.background.tennis} page-content`}>
+      <div className={`min-h-screen ${theme.background.tennis} page-content pb-safe`}>
         {/* Header Skeleton */}
         <div
           className={`${theme.background.glass} shadow-sm sticky top-0 z-40`}
@@ -231,7 +231,7 @@ const ProfilePageContent = () => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className={`min-h-screen ${theme.background.tennis} page-content transition-colors duration-300`}
+      className={`min-h-screen ${theme.background.tennis} page-content pb-safe transition-colors duration-300`}
     >
       {/* Header */}
       <motion.header

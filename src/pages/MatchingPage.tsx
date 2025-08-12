@@ -16,7 +16,13 @@ import {
   MdSportsTennis,
 } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
-import { parseAsString, parseAsFloat, parseAsInteger, parseAsArrayOf, useQueryStates } from "nuqs";
+import {
+  parseAsString,
+  parseAsFloat,
+  parseAsInteger,
+  parseAsArrayOf,
+  useQueryStates,
+} from "nuqs";
 import BottomSheet from "../components/BottomSheet";
 import LoadingFallback from "../components/LoadingFallback";
 import MatchCard from "../components/MatchCard";
@@ -291,7 +297,7 @@ const MatchingPage = () => {
   // 알림 카운트 훅
   const { data: notificationCount } = useUnreadNotificationCount();
   const { data: chatCount } = useUnreadChatNotificationCount();
-  
+
   // URL 쿼리 스트링으로 필터 값 관리
   const [queryFilters, setQueryFilters] = useQueryStates(
     {
@@ -326,7 +332,7 @@ const MatchingPage = () => {
     experienceMin: queryFilters.experienceMin,
     experienceMax: queryFilters.experienceMax,
   };
-  
+
   const sortBy = queryFilters.sort;
   const activeTab = queryFilters.activeTab;
 
@@ -371,11 +377,14 @@ const MatchingPage = () => {
       region: tempFilters.region || null,
       gameType: tempFilters.gameType || null,
       date: tempFilters.date || null,
-      timeSlots: tempFilters.timeSlots.length > 0 ? tempFilters.timeSlots : null,
+      timeSlots:
+        tempFilters.timeSlots.length > 0 ? tempFilters.timeSlots : null,
       ntrpMin: tempFilters.ntrpMin !== 1.0 ? tempFilters.ntrpMin : null,
       ntrpMax: tempFilters.ntrpMax !== 7.0 ? tempFilters.ntrpMax : null,
-      experienceMin: tempFilters.experienceMin !== 0 ? tempFilters.experienceMin : null,
-      experienceMax: tempFilters.experienceMax !== 10 ? tempFilters.experienceMax : null,
+      experienceMin:
+        tempFilters.experienceMin !== 0 ? tempFilters.experienceMin : null,
+      experienceMax:
+        tempFilters.experienceMax !== 10 ? tempFilters.experienceMax : null,
     });
     setIsFilterOpen(false);
   };
@@ -501,7 +510,11 @@ const MatchingPage = () => {
     } else if (key === "ntrpMin" || key === "ntrpMax" || key === "ntrp") {
       updates.ntrpMin = null;
       updates.ntrpMax = null;
-    } else if (key === "experienceMin" || key === "experienceMax" || key === "experience") {
+    } else if (
+      key === "experienceMin" ||
+      key === "experienceMax" ||
+      key === "experience"
+    ) {
       updates.experienceMin = null;
       updates.experienceMax = null;
     } else {
@@ -572,7 +585,7 @@ const MatchingPage = () => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className={`min-h-screen ${theme.background.tennis} page-content transition-colors duration-300`}
+      className={`min-h-screen ${theme.background.tennis} page-content pb-safe transition-colors duration-300`}
     >
       {/* Modern Header */}
       <motion.header
@@ -1399,7 +1412,9 @@ const MatchingPage = () => {
                   if (option.value === "distance" && !userLocation) {
                     await requestLocation();
                   }
-                  setQueryFilters({ sort: option.value !== "latest" ? option.value : null });
+                  setQueryFilters({
+                    sort: option.value !== "latest" ? option.value : null,
+                  });
                   setIsSortOpen(false);
                 }}
                 whileHover={{ scale: 1.02 }}
