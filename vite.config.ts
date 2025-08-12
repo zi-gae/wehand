@@ -55,6 +55,7 @@ export default defineConfig({
         theme_color: '#059669', // 테니스 코트 그린
         background_color: '#ffffff',
         display: 'standalone',
+        display_override: ['window-controls-overlay', 'standalone'],
         start_url: '/',
         scope: '/',
         orientation: 'portrait-primary',
