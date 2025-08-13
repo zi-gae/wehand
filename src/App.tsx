@@ -27,6 +27,7 @@ import ReviewPage from "./pages/ReviewPage";
 import SignUpPage from "./pages/SignUpPage";
 import TermsPage from "./pages/TermsPage";
 import ProfileEditPage from "./pages/ProfileEditPage";
+import SettingsPage from "./pages/SettingsPage";
 
 // Main App Content Component
 const AppContent = () => {
@@ -123,6 +124,7 @@ const AppContent = () => {
                 />
                 <Route path="/terms" element={<TermsPage />} />
                 <Route path="/privacy" element={<PrivacyPage />} />
+                <Route path="/settings" element={<SettingsPage />} />
               </Routes>
             </main>
             <BottomNavigation />

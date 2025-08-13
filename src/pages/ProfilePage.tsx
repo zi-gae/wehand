@@ -11,6 +11,9 @@ import {
   MdSportsTennis,
   MdThumbDown,
   MdThumbUp,
+  MdDescription,
+  MdSecurity,
+  MdSettings,
 } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import ThemeToggle from "../components/ThemeToggle";
@@ -71,6 +74,13 @@ const ProfilePageContent = () => {
         "text-primary-600 bg-primary-100 dark:text-primary-400 dark:bg-primary-900/20",
     },
     {
+      id: 3,
+      icon: MdSettings,
+      title: "설정",
+      description: "알림, 테마 및 기타 설정",
+      color: "text-gray-600 bg-gray-100 dark:text-gray-400 dark:bg-gray-900/20",
+    },
+    {
       id: 4,
       icon: MdNotifications,
       title: "알림 설정",
@@ -94,6 +104,13 @@ const ProfilePageContent = () => {
       case 2:
         break;
       case 3:
+        navigate("/settings");
+        break;
+      case 5:
+        navigate("/terms");
+        break;
+      case 6:
+        navigate("/privacy");
         break;
       default:
         break;
@@ -117,7 +134,9 @@ const ProfilePageContent = () => {
 
   if (profileLoading) {
     return (
-      <div className={`min-h-screen ${theme.background.tennis} page-content pb-safe`}>
+      <div
+        className={`min-h-screen ${theme.background.tennis} page-content pb-safe`}
+      >
         {/* Header Skeleton */}
         <div
           className={`${theme.background.glass} shadow-sm sticky top-0 z-40`}
