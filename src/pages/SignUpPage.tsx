@@ -204,7 +204,7 @@ const SignUpPage = () => {
           transition={{ delay: 0.8 }}
         >
           {/* Apple 로그인 버튼 (iOS 또는 개발 환경에서 표시) */}
-          {(isIOS || isDevelopment) && (
+          {
             <motion.button
               className={`w-full py-4 bg-black text-white rounded-2xl font-bold shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center gap-3 ${
                 isLoading
@@ -231,7 +231,7 @@ const SignUpPage = () => {
                 </>
               )}
             </motion.button>
-          )}
+          }
 
           {/* 카카오 로그인 버튼 */}
           <motion.button
