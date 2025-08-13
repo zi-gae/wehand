@@ -49,6 +49,8 @@ const BottomNavigation = () => {
   const hideBottomNavRoutes = [
     "/signup",
     "/auth/kakao/callback",
+    "/auth/apple/callback",
+    "/auth/apple/test-callback",
     "/terms",
     "/privacy",
   ];

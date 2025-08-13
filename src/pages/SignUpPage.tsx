@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { getThemeClasses } from "../lib/theme";
 import { supabase } from "../lib/supabase/client";
@@ -22,9 +22,39 @@ const KakaoLogo = () => (
   </svg>
 );
 
+// Apple 로고 SVG 컴포넌트
+const AppleLogo = () => (
+  <svg
+    width="18"
+    height="22"
+    viewBox="0 0 18 22"
+    fill="none"
+    xmlns="http://www.w3.org/2000/svg"
+  >
+    <path
+      d="M13.43 0C12.73 0.65 11.77 1.12 10.85 1.12C10.75 0.37 11.08 -0.38 11.55 -0.87C12.25 -1.52 13.3 -1.95 14.11 -2C14.2 -1.24 13.87 -0.47 13.43 0ZM14.1 1.17C13.07 1.11 12.16 1.69 11.67 1.69C11.18 1.69 10.4 1.2 9.6 1.21C8.56 1.22 7.57 1.85 7.02 2.83C5.9 4.8 6.74 7.8 7.83 9.44C8.37 10.25 9.01 11.15 9.85 11.12C10.61 11.09 10.92 10.66 11.85 10.66C12.78 10.66 13.05 11.12 13.85 11.11C14.69 11.09 15.24 10.29 15.78 9.48C16.4 8.55 16.66 7.64 16.67 7.59C16.65 7.58 14.76 6.84 14.74 4.59C14.72 2.74 16.23 1.87 16.3 1.82C15.51 0.65 14.32 1.2 14.1 1.17Z"
+      fill="currentColor"
+    />
+  </svg>
+);
+
 const SignUpPage = () => {
   const theme = getThemeClasses();
   const [isLoading, setIsLoading] = useState(false);
+  const [isIOS, setIsIOS] = useState(false);
+  const [isDevelopment] = useState(
+    () => window.location.hostname === "localhost"
+  );
+
+  useEffect(() => {
+    const checkIfIOS = () => {
+      return (
+        /iPad|iPhone|iPod/.test(navigator.userAgent) ||
+        (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1)
+      );
+    };
+    setIsIOS(checkIfIOS());
+  }, []);
 
   const handleKakaoLogin = async () => {
     setIsLoading(true);
@@ -47,6 +77,32 @@ const SignUpPage = () => {
     } catch (error) {
       console.error("카카오 로그인 실패:", error);
       alert("카카오 로그인에 실패했습니다. 다시 시도해 주세요.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleAppleLogin = async () => {
+    setIsLoading(true);
+    try {
+      console.log("Apple 로그인 시작...");
+
+      const { error } = await supabase.auth.signInWithOAuth({
+        provider: "apple",
+        options: {
+          redirectTo: `${window.location.origin}/auth/apple/callback`,
+        },
+      });
+
+      if (error) {
+        console.error("Apple 로그인 실패:", error);
+        alert("Apple 로그인에 실패했습니다. 다시 시도해 주세요.");
+      }
+
+      // OAuth는 자동으로 리다이렉트되므로 별도 처리 불필요
+    } catch (error) {
+      console.error("Apple 로그인 실패:", error);
+      alert("Apple 로그인에 실패했습니다. 다시 시도해 주세요.");
     } finally {
       setIsLoading(false);
     }
@@ -140,13 +196,44 @@ const SignUpPage = () => {
           ))}
         </motion.div>
 
-        {/* 카카오 로그인 버튼 */}
+        {/* 로그인 버튼들 */}
         <motion.div
           className="space-y-4"
           initial={{ y: 30, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.8 }}
         >
+          {/* Apple 로그인 버튼 (iOS 또는 개발 환경에서 표시) */}
+          {(isIOS || isDevelopment) && (
+            <motion.button
+              className={`w-full py-4 bg-black text-white rounded-2xl font-bold shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center gap-3 ${
+                isLoading
+                  ? "opacity-75 cursor-not-allowed"
+                  : "hover:bg-gray-800 active:bg-gray-900"
+              }`}
+              onClick={handleAppleLogin}
+              disabled={isLoading}
+              whileHover={!isLoading ? { scale: 1.02, y: -2 } : {}}
+              whileTap={!isLoading ? { scale: 0.98 } : {}}
+              initial={{ y: 20, opacity: 0 }}
+              animate={{ y: 0, opacity: 1 }}
+              transition={{ delay: 0.85 }}
+            >
+              {isLoading ? (
+                <>
+                  <div className="w-5 h-5 animate-spin border-2 border-white border-t-transparent rounded-full"></div>
+                  Apple로 로그인 중...
+                </>
+              ) : (
+                <>
+                  <AppleLogo />
+                  Apple로 계속하기
+                </>
+              )}
+            </motion.button>
+          )}
+
+          {/* 카카오 로그인 버튼 */}
           <motion.button
             className={`w-full py-4 bg-yellow-400 text-gray-900 rounded-2xl font-bold shadow-lg hover:shadow-xl transition-all duration-200 flex items-center justify-center gap-3 ${
               isLoading
@@ -159,7 +246,7 @@ const SignUpPage = () => {
             whileTap={!isLoading ? { scale: 0.98 } : {}}
             initial={{ y: 20, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 0.9 }}
+            transition={{ delay: isIOS || isDevelopment ? 0.9 : 0.85 }}
           >
             {isLoading ? (
               <>

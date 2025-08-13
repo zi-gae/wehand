@@ -18,6 +18,8 @@ import ChatRoomPage from "./pages/ChatRoomPage";
 import CreatePage from "./pages/CreatePage";
 import HomePage from "./pages/HomePage";
 import KakaoCallbackPage from "./pages/KakaoCallbackPage";
+import AppleCallbackPage from "./pages/AppleCallbackPage";
+import AppleTestCallbackPage from "./pages/AppleTestCallbackPage";
 import MatchDetailPage from "./pages/MatchDetailPage";
 import MatchingPage from "./pages/MatchingPage";
 import NotificationPage from "./pages/NotificationPage";
@@ -121,6 +123,10 @@ const AppContent = () => {
                 <Route
                   path="/auth/kakao/callback"
                   element={<KakaoCallbackPage />}
+                />
+                <Route
+                  path="/auth/apple/callback"
+                  element={<AppleCallbackPage />}
                 />
                 <Route path="/terms" element={<TermsPage />} />
                 <Route path="/privacy" element={<PrivacyPage />} />
