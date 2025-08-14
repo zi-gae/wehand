@@ -20,6 +20,7 @@ import ThemeToggle from "../components/ThemeToggle";
 import { useLogout } from "../hooks";
 import { useMyReviews, useProfile } from "../hooks/useProfile";
 import { getThemeClasses, tennisGradients } from "../lib/theme";
+import { supabase } from "@/lib/supabase/client";
 
 const ProfilePageContent = () => {
   const navigate = useNavigate();
@@ -118,17 +119,10 @@ const ProfilePageContent = () => {
   };
 
   const handleLogoutClick = () => setShowLogoutModal(true);
-  const handleLogoutConfirm = () => {
-    logoutMutation.mutate(undefined, {
-      onSuccess: () => {
-        setShowLogoutModal(false);
-        navigate("/signup", { replace: true });
-      },
-      onError: () => {
-        setShowLogoutModal(false);
-        navigate("/signup", { replace: true });
-      },
-    });
+  const handleLogoutConfirm = async () => {
+    await supabase.auth.signOut();
+    setShowLogoutModal(false);
+    navigate("/signup", { replace: true });
   };
   const handleLogoutCancel = () => setShowLogoutModal(false);
 

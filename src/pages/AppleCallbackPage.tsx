@@ -34,12 +34,12 @@ const AppleCallbackPage = () => {
       // URL 파라미터 확인
       const hash = window.location.hash || "";
       const search = window.location.search || "";
-      
+
       // Apple OAuth는 fragment(#) 대신 query string(?)으로 올 수 있음
       let errorParam = null;
       let errorDescription = null;
       let errorCode = null;
-      
+
       if (hash) {
         const hashParams = new URLSearchParams(hash.substring(1));
         errorParam = hashParams.get("error");
@@ -47,11 +47,12 @@ const AppleCallbackPage = () => {
         errorCode = hashParams.get("error_code");
         console.log("Hash params:", Object.fromEntries(hashParams));
       }
-      
+
       if (search) {
         const searchParams = new URLSearchParams(search);
         errorParam = errorParam || searchParams.get("error");
-        errorDescription = errorDescription || searchParams.get("error_description");
+        errorDescription =
+          errorDescription || searchParams.get("error_description");
         errorCode = errorCode || searchParams.get("error_code");
         console.log("Search params:", Object.fromEntries(searchParams));
       }
@@ -63,41 +64,47 @@ const AppleCallbackPage = () => {
           error_code: errorCode,
           error_description: errorDescription,
         });
-        
+
         // Apple 특정 에러 처리
-        if (errorCode === "unexpected_failure" || errorDescription?.includes("Unable to exchange")) {
-          throw new Error("Apple 인증 설정 오류가 발생했습니다. 관리자에게 문의해주세요.");
+        if (
+          errorCode === "unexpected_failure" ||
+          errorDescription?.includes("Unable to exchange")
+        ) {
+          throw new Error(
+            "Apple 인증 설정 오류가 발생했습니다. 관리자에게 문의해주세요."
+          );
         }
-        
+
         throw new Error(errorDescription || "OAuth 인증 실패");
       }
 
       // Supabase 세션 처리 - exchangeCodeForSession 사용
-      const { data: sessionData, error: exchangeError } = 
+      const { data: sessionData, error: exchangeError } =
         await supabaseClient.auth.exchangeCodeForSession(window.location.href);
-      
+
       if (exchangeError) {
         console.error("Code exchange 실패:", exchangeError);
-        
+
         // 이미 처리된 경우 세션 확인
-        const { data, error: sessionError } = await supabaseClient.auth.getSession();
-        
+        const { data, error: sessionError } =
+          await supabaseClient.auth.getSession();
+
         if (sessionError) {
           console.error("세션 가져오기 실패:", sessionError);
           throw new Error(sessionError.message);
         }
-        
+
         const session = data.session;
-        
+
         if (!session) {
           console.error("유효한 세션을 찾을 수 없습니다.");
           throw new Error("로그인 세션을 찾을 수 없습니다.");
         }
-        
+
         // 기존 세션이 있으면 사용
         sessionData.session = session;
       }
-      
+
       const session = sessionData?.session;
 
       if (!session) {
@@ -125,7 +132,7 @@ const AppleCallbackPage = () => {
         id: user.id,
         email: user.email,
         metadata: user.user_metadata,
-        appMetadata: user.app_metadata
+        appMetadata: user.app_metadata,
       });
 
       // 모든 사용자에 대해 hyper-responder Edge Function 호출

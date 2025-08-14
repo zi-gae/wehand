@@ -1,7 +1,7 @@
 import { QueryClientProvider } from "@tanstack/react-query";
+import { NuqsAdapter } from "nuqs/adapters/react-router";
 import { useEffect, useState } from "react";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
-import { NuqsAdapter } from "nuqs/adapters/react-router";
 import AuthGuard from "./components/AuthGuard";
 import BottomNavigation from "./components/BottomNavigation";
 import PWAUpdatePrompt, { usePWAUpdate } from "./components/PWAUpdatePrompt";
@@ -10,6 +10,7 @@ import SplashScreen from "./components/SplashScreen";
 import { ThemeProvider } from "./contexts/ThemeContext";
 import { useAuth, usePrefetch } from "./hooks";
 import { queryClient } from "./lib/queryClient";
+import AppleCallbackPage from "./pages/AppleCallbackPage";
 import BoardDetailPage from "./pages/BoardDetailPage";
 import BoardPage from "./pages/BoardPage";
 import BoardWritePage from "./pages/BoardWritePage";
@@ -18,18 +19,16 @@ import ChatRoomPage from "./pages/ChatRoomPage";
 import CreatePage from "./pages/CreatePage";
 import HomePage from "./pages/HomePage";
 import KakaoCallbackPage from "./pages/KakaoCallbackPage";
-import AppleCallbackPage from "./pages/AppleCallbackPage";
-import AppleTestCallbackPage from "./pages/AppleTestCallbackPage";
 import MatchDetailPage from "./pages/MatchDetailPage";
 import MatchingPage from "./pages/MatchingPage";
 import NotificationPage from "./pages/NotificationPage";
 import PrivacyPage from "./pages/PrivacyPage";
+import ProfileEditPage from "./pages/ProfileEditPage";
 import ProfilePage from "./pages/ProfilePage";
 import ReviewPage from "./pages/ReviewPage";
+import SettingsPage from "./pages/SettingsPage";
 import SignUpPage from "./pages/SignUpPage";
 import TermsPage from "./pages/TermsPage";
-import ProfileEditPage from "./pages/ProfileEditPage";
-import SettingsPage from "./pages/SettingsPage";
 
 // Main App Content Component
 const AppContent = () => {
