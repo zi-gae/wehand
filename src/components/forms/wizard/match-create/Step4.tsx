@@ -123,7 +123,7 @@ const Step4 = ({ formData, updateFormData }: any) => {
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: -50 }}
       transition={{ duration: 0.2 }}
-      className="space-y-8"
+      className="space-y-8 pb-safe"
     >
       {/* 날짜 선택 - 캘린더 형태 */}
       <div>

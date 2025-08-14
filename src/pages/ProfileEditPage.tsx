@@ -245,9 +245,9 @@ const ProfileEditPage = () => {
       exit={{ opacity: 0 }}
       className={`min-h-screen ${theme.background.tennis} page-content pb-safe`}
     >
-      {/* Floating Header */}
+      {/* Floating Header - Fixed at Top */}
       <motion.header
-        className={`${theme.background.glass} backdrop-blur-lg shadow-lg sticky top-0 z-40`}
+        className={`${theme.background.glass} backdrop-blur-lg shadow-lg fixed top-0 left-0 right-0 z-40`}
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
       >
@@ -289,6 +289,9 @@ const ProfileEditPage = () => {
           </motion.button>
         </div>
       </motion.header>
+
+      {/* Spacer for fixed header */}
+      <div className="h-[68px]" />
 
       <div className="px-4 py-6 max-w-lg mx-auto space-y-6">
         {/* 프로필 미리보기 카드 */}

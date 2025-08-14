@@ -23,7 +23,7 @@ const Step7 = ({ formData, onSubmit, isLoading = false }: Step7Props) => {
       animate={{ opacity: 1, x: 0 }}
       exit={{ opacity: 0, x: -50 }}
       transition={{ duration: 0.2 }}
-      className="space-y-8"
+      className="space-y-8 pb-safe"
     >
       <div>
         <h2 className={`text-xl font-bold mb-2 ${theme.text.primary}`}>

@@ -56,16 +56,15 @@ const ThemeToggle = () => {
     <motion.button
       onClick={toggle}
       className={`
-        relative p-3 rounded-full transition-all duration-300
-        ${theme.surface.glassCard} ${theme.text.primary}
-        shadow-lg hover:shadow-xl
+        relative p-0 rounded-full transition-all duration-300
+        ${theme.text.primary}
       `}
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.95 }}
       aria-label={isDark ? "라이트 모드로 변경" : "다크 모드로 변경"}
     >
       <motion.div
-        className="relative w-6 h-6 flex items-center justify-center"
+        className="relative w-5 h-5 flex items-center justify-center"
         initial={false}
         animate={{ rotate: isDark ? 180 : 0 }}
         transition={{ duration: 0.5, ease: "easeInOut" }}
@@ -79,7 +78,7 @@ const ThemeToggle = () => {
             transition={{ duration: 0.3 }}
             className="text-secondary-400"
           >
-            <MdDarkMode className="w-6 h-6" />
+            <MdDarkMode className="w-5 h-5" />
           </motion.div>
         ) : (
           <motion.div
@@ -90,7 +89,7 @@ const ThemeToggle = () => {
             transition={{ duration: 0.3 }}
             className="text-secondary-500"
           >
-            <MdLightMode className="w-6 h-6" />
+            <MdLightMode className="w-5 h-5" />
           </motion.div>
         )}
       </motion.div>

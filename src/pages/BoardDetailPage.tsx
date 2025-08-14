@@ -161,7 +161,9 @@ const BoardDetailPage = () => {
         animate={{ opacity: 1 }}
       >
         {/* Header 스켈레톤 */}
-        <div className={`${theme.background.glass} ${theme.text.primary} shadow-sm sticky top-0 z-40`}>
+        <div
+          className={`${theme.background.glass} ${theme.text.primary} shadow-sm sticky top-0 z-40`}
+        >
           <div className="flex items-center justify-between px-4 py-3">
             <div className="p-2 -ml-2">
               <MdArrowBack className={`w-6 h-6 ${theme.text.secondary}`} />
@@ -173,7 +175,9 @@ const BoardDetailPage = () => {
 
         <div className="px-3 py-3">
           {/* 게시글 스켈레톤 */}
-          <div className={`${theme.surface.card} rounded-2xl p-3 mb-3 border ${theme.border.primary} animate-pulse`}>
+          <div
+            className={`${theme.surface.card} rounded-2xl p-3 mb-3 border ${theme.border.primary} animate-pulse`}
+          >
             {/* 작성자 정보 스켈레톤 */}
             <div className="flex items-center gap-2 mb-3">
               <div className="w-8 h-8 bg-gray-200 dark:bg-gray-700 rounded-full"></div>
@@ -185,7 +189,7 @@ const BoardDetailPage = () => {
 
             {/* 제목 스켈레톤 */}
             <div className="h-6 bg-gray-200 dark:bg-gray-700 rounded w-3/4 mb-3"></div>
-            
+
             {/* 내용 스켈레톤 */}
             <div className="space-y-2 mb-4">
               <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-full"></div>
@@ -204,9 +208,11 @@ const BoardDetailPage = () => {
           {/* 댓글 섹션 스켈레톤 */}
           <div>
             <div className="h-5 bg-gray-200 dark:bg-gray-700 rounded w-24 mb-3 animate-pulse"></div>
-            
+
             {/* 댓글 입력 스켈레톤 */}
-            <div className={`${theme.surface.card} rounded-2xl p-3 mb-3 border ${theme.border.primary} animate-pulse`}>
+            <div
+              className={`${theme.surface.card} rounded-2xl p-3 mb-3 border ${theme.border.primary} animate-pulse`}
+            >
               <div className="flex gap-2">
                 <div className="flex-1 h-8 bg-gray-200 dark:bg-gray-700 rounded-full"></div>
                 <div className="w-10 h-8 bg-gray-200 dark:bg-gray-700 rounded-full"></div>
@@ -271,9 +277,9 @@ const BoardDetailPage = () => {
       exit={{ opacity: 0 }}
       className={`min-h-screen ${theme.background.tennis} page-content transition-colors duration-300`}
     >
-      {/* Header */}
+      {/* Header - Fixed at Top */}
       <motion.header
-        className={`${theme.background.glass} ${theme.text.primary} shadow-sm sticky top-0 z-40 transition-colors duration-300`}
+        className={`${theme.background.glass} ${theme.text.primary} shadow-sm fixed top-0 left-0 right-0 z-40 transition-colors duration-300`}
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ delay: 0.1 }}
@@ -292,7 +298,7 @@ const BoardDetailPage = () => {
             게시글
           </h1>
 
-          {isAuthor && (
+          {isAuthor ? (
             <div className="relative">
               <motion.button
                 className={`p-2 -mr-2 rounded-full hover:bg-primary-100 dark:hover:bg-primary-900/20 transition-colors`}
@@ -329,9 +335,14 @@ const BoardDetailPage = () => {
                 )}
               </AnimatePresence>
             </div>
+          ) : (
+            <div></div>
           )}
         </div>
       </motion.header>
+
+      {/* Spacer for fixed header */}
+      <div className="h-[56px]" />
 
       {/* Post Content */}
       <div className="px-3 py-3">

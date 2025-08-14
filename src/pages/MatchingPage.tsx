@@ -35,6 +35,7 @@ import {
   useUnreadChatNotificationCount,
 } from "../hooks";
 import { getThemeClasses, tennisGradients } from "../lib/theme";
+import { ScrollToTop } from "@/components/ScrollToTop";
 
 interface MatchingFilters {
   search: string;
@@ -293,6 +294,8 @@ const MatchingPage = () => {
   const [selectedCity, setSelectedCity] = useState("");
   const [selectedDistrict, setSelectedDistrict] = useState("");
   const [selectedSubDistrict, setSelectedSubDistrict] = useState("");
+
+  // 페이지 방문 시 스크롤을 최상단으로
 
   // 알림 카운트 훅
   const { data: notificationCount } = useUnreadNotificationCount();
@@ -587,9 +590,10 @@ const MatchingPage = () => {
       exit={{ opacity: 0 }}
       className={`min-h-screen ${theme.background.tennis} page-content pb-safe transition-colors duration-300`}
     >
-      {/* Modern Header */}
+      <ScrollToTop />
+      {/* Modern Header - Fixed at Top */}
       <motion.header
-        className={`${theme.background.glass} ${theme.text.primary} shadow-sm sticky top-0 z-40 transition-colors duration-300`}
+        className={`${theme.background.glass} ${theme.text.primary} shadow-sm fixed top-0 left-0 right-0 z-40 transition-colors duration-300`}
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ delay: 0.1 }}
@@ -652,6 +656,9 @@ const MatchingPage = () => {
           </div>
         </div>
       </motion.header>
+
+      {/* Spacer for fixed header */}
+      <div className="h-[108px]" />
 
       {/* Active Filters */}
       {getActiveFilters().length > 0 && (

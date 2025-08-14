@@ -246,34 +246,34 @@ const ProfilePageContent = () => {
       exit={{ opacity: 0 }}
       className={`min-h-screen ${theme.background.tennis} page-content pb-safe transition-colors duration-300`}
     >
-      {/* Header */}
+      {/* Header - Fixed at Top */}
       <motion.header
-        className={`${theme.background.glass} ${theme.text.primary} shadow-sm sticky top-0 z-40 transition-colors duration-300`}
+        className={`${theme.background.glass} ${theme.text.primary} shadow-sm fixed top-0 left-0 right-0 z-40 transition-colors duration-300`}
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ delay: 0.1 }}
       >
-        <div className="flex items-center justify-between px-6 py-4">
-          <motion.button
-            className={`p-2 -ml-2 rounded-full hover:bg-tennis-court-50 dark:hover:bg-tennis-court-900/20 transition-colors`}
-            onClick={() => navigate(-1)}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
+        <div className="flex items-center justify-between px-4 py-3">
+          <div></div>
+
+          <motion.h1
+            className={`text-lg font-bold ${theme.text.primary}`}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.2 }}
           >
-            <MdArrowBack className={`w-6 h-6 ${theme.text.primary}`} />
-          </motion.button>
-          <div className="text-center flex-1">
-            <h1
-              className={`text-lg font-bold ${theme.text.primary} flex items-center justify-center gap-2`}
-            >
-              프로필
-            </h1>
-          </div>
-          <div className="flex items-center gap-2">
+            프로필
+          </motion.h1>
+
+          <div className="flex p-2.5 rounded-2xl bg-white/10 dark:bg-gray-800/50 backdrop-blur-sm">
             <ThemeToggle />
           </div>
         </div>
       </motion.header>
+
+      {/* Spacer for fixed header */}
+      <div className="h-[68px]" />
+
       <div className="px-2 py-4">
         {/* Profile Card */}
         <motion.div

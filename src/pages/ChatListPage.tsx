@@ -87,7 +87,7 @@ const ChatListPage = () => {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      className={`min-h-screen ${theme.background.tennis} page-content transition-colors duration-300`}
+      className={`min-h-screen ${theme.background.tennis} page-content transition-colors duration-300 pb-safe`}
     >
       {/* Header */}
       <motion.header
@@ -194,7 +194,7 @@ const ChatListPage = () => {
                           <MdChat className="w-6 h-6" />
                         )}
                       </div>
-                      {room.unreadCount && room.unreadCount > 0 && (
+                      {room.unreadCount != null && room.unreadCount > 0 && (
                         <div className="absolute -top-1 -right-1 w-6 h-6 bg-red-500 text-white text-xs rounded-full flex items-center justify-center font-bold">
                           {room.unreadCount > 99 ? "99+" : room.unreadCount}
                         </div>

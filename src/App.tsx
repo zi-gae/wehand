@@ -1,7 +1,12 @@
 import { QueryClientProvider } from "@tanstack/react-query";
 import { NuqsAdapter } from "nuqs/adapters/react-router";
 import { useEffect, useState } from "react";
-import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import {
+  Route,
+  BrowserRouter as Router,
+  Routes,
+  useLocation,
+} from "react-router-dom";
 import AuthGuard from "./components/AuthGuard";
 import BottomNavigation from "./components/BottomNavigation";
 import PWAUpdatePrompt, { usePWAUpdate } from "./components/PWAUpdatePrompt";
@@ -29,6 +34,7 @@ import ReviewPage from "./pages/ReviewPage";
 import SettingsPage from "./pages/SettingsPage";
 import SignUpPage from "./pages/SignUpPage";
 import TermsPage from "./pages/TermsPage";
+import { ScrollToTop } from "./components/ScrollToTop";
 
 // Main App Content Component
 const AppContent = () => {
@@ -100,6 +106,7 @@ const AppContent = () => {
 
   return (
     <Router>
+      <ScrollToTop />
       <NuqsAdapter>
         <AuthGuard>
           <div className="app">

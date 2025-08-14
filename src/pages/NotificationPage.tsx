@@ -587,7 +587,7 @@ const NotificationContent = () => {
         </div>
       </motion.header>
 
-      <div className="px-2 py-4">
+      <div className="px-2 py-4 pb-safe">
         {/* 알림 리스트 */}
         <div className="space-y-2">
           <AnimatePresence mode="popLayout">

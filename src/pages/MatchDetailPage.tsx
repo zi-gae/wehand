@@ -485,9 +485,9 @@ const MatchDetailPage = () => {
       exit={{ opacity: 0 }}
       className={`min-h-screen ${theme.background.tennis} page-content pb-safe transition-colors duration-300`}
     >
-      {/* Header */}
+      {/* Header - Fixed at Top */}
       <motion.header
-        className={`${theme.background.glass} ${theme.text.primary} shadow-sm sticky top-0 z-40 transition-colors duration-300`}
+        className={`${theme.background.glass} ${theme.text.primary} shadow-sm fixed top-0 left-0 right-0 z-40 transition-colors duration-300`}
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ delay: 0.1 }}
@@ -535,6 +535,9 @@ const MatchDetailPage = () => {
           </div>
         </div>
       </motion.header>
+
+      {/* Spacer for fixed header */}
+      <div className="h-[72px]" />
 
       {/* Suspense로 감싸진 컨텐츠 영역 */}
       <Suspense fallback={<LoadingFallback type="detail" />}>

@@ -21,6 +21,7 @@ import { getThemeClasses, tennisGradients } from "../lib/theme";
 import { usePosts } from "../hooks/usePosts";
 import { formatDistanceToNow } from "date-fns";
 import { ko } from "date-fns/locale";
+import { ScrollToTop } from "@/components/ScrollToTop";
 
 const categoryMap = {
   free: { label: "자유게시판", icon: MdForum },
@@ -90,9 +91,10 @@ const BoardPage = () => {
       exit={{ opacity: 0 }}
       className={`min-h-screen ${theme.background.tennis} page-content pb-safe transition-colors duration-300`}
     >
-      {/* Header */}
+      <ScrollToTop />
+      {/* Header - Fixed at Top */}
       <motion.header
-        className={`${theme.background.glass} ${theme.text.primary} shadow-sm sticky top-0 z-40 transition-colors duration-300`}
+        className={`${theme.background.glass} ${theme.text.primary} shadow-sm fixed top-0 left-0 right-0 z-40 transition-colors duration-300`}
         initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ delay: 0.1 }}
@@ -145,6 +147,9 @@ const BoardPage = () => {
           </div>
         </div>
       </motion.header>
+
+      {/* Spacer for fixed header */}
+      <div className="h-[144px]" />
 
       <div className="px-2 py-4">
         {/* Loading Skeleton */}
