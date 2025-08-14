@@ -31,13 +31,6 @@ const BottomSheet = ({
       document.body.style.top = `-${scrollY}px`;
       document.body.style.width = "100%";
       document.body.style.overflow = "hidden";
-
-      // 2. 해시 추가 (현재 해시가 없거나 다른 해시인 경우만)
-      if (location.hash !== hashRoute) {
-        navigate(location.pathname + location.search + hashRoute, {
-          replace: false,
-        });
-      }
     } else {
       // 바텀시트가 닫힐 때
       // 1. 스크롤 복구
@@ -94,9 +87,11 @@ const BottomSheet = ({
 
           {/* Bottom Sheet */}
           <motion.div
-            className={`fixed bottom-20 left-0 right-0 ${theme.surface.card} rounded-t-3xl z-50 overflow-y-auto shadow-2xl border-t border-l border-r ${theme.border.primary} ${
-              size === "half" ? "h-[50vh]" : "h-[80vh]"
-            }`}
+            className={`fixed bottom-20 left-0 right-0 ${
+              theme.surface.card
+            } rounded-t-3xl z-50 overflow-y-auto shadow-2xl border-t border-l border-r ${
+              theme.border.primary
+            } ${size === "half" ? "h-[50vh]" : "h-[80vh]"}`}
             initial={{ y: "100%" }}
             animate={{ y: 0 }}
             exit={{
@@ -111,7 +106,13 @@ const BottomSheet = ({
             <div className="flex flex-col h-full">
               {/* Handle Bar */}
               <div className="flex justify-center py-3">
-                <div className={`w-12 h-1 ${theme.text.secondary === 'text-gray-600' ? 'bg-gray-300' : 'bg-gray-600'} rounded-full`}></div>
+                <div
+                  className={`w-12 h-1 ${
+                    theme.text.secondary === "text-gray-600"
+                      ? "bg-gray-300"
+                      : "bg-gray-600"
+                  } rounded-full`}
+                ></div>
               </div>
 
               {/* Content */}

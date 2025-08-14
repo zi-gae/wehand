@@ -10,20 +10,31 @@ import {
   MdSchedule,
   MdStar,
   MdRefresh,
+  MdNotifications,
+  MdChat,
+  MdSearch,
 } from "react-icons/md";
 import { getThemeClasses, tennisGradients } from "../lib/theme";
-import { useHomeData, useJoinMatchFromHome } from "../hooks";
+import {
+  useHomeData,
+  useJoinMatchFromHome,
+  useUnreadNotificationCount,
+  useUnreadChatNotificationCount,
+} from "../hooks";
 
 const HomePage = () => {
   const navigate = useNavigate();
   const [currentTime, setCurrentTime] = useState(new Date());
   const [greeting, setGreeting] = useState("");
   const [motivationMessage, setMotivationMessage] = useState("");
+  const [searchQuery, setSearchQuery] = useState("");
   const theme = getThemeClasses();
 
   // API 호출
   const { data: homeData, isLoading, error, refetch } = useHomeData();
   const joinMatchMutation = useJoinMatchFromHome();
+  const { data: notificationCount } = useUnreadNotificationCount();
+  const { data: chatCount } = useUnreadChatNotificationCount();
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -120,6 +131,12 @@ const HomePage = () => {
     );
   };
 
+  const handleSearchSubmit = () => {
+    if (searchQuery.trim()) {
+      navigate(`/matching?search=${encodeURIComponent(searchQuery.trim())}`);
+    }
+  };
+
   return (
     <motion.div
       initial={{ opacity: 0 }}
@@ -127,102 +144,62 @@ const HomePage = () => {
       exit={{ opacity: 0 }}
       className={`min-h-screen ${theme.background.tennis} page-content transition-colors duration-300 pb-safe`}
     >
-      {/* Warm Welcome Header */}
+      {/* Modern Header - Fixed at Top */}
       <motion.header
-        className={`relative overflow-hidden ${theme.background.glass} ${theme.text.primary} px-6 pt-10 pb-6 rounded-b-[2rem] shadow-lg border ${theme.border.primary}`}
-        initial={{ y: -50, opacity: 0 }}
+        className={`${theme.background.glass} ${theme.text.primary} shadow-sm fixed top-0 left-0 right-0 z-40 transition-colors duration-300`}
+        initial={{ y: -20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ type: "spring", stiffness: 100, damping: 20 }}
+        transition={{ delay: 0.1 }}
       >
-        <div className="relative z-10">
-          <motion.div
-            className="text-center"
-            initial={{ y: -20, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ delay: 0.1 }}
+        <div className="flex px-6 py-2 items-center justify-between mb-2">
+          <h1
+            className={`text-lg font-bold ${theme.text.primary} flex items-center gap-2`}
           >
-            <div className="flex items-center justify-between">
-              <motion.h1
-                className={`text-2xl font-bold mb-2 ${theme.text.primary} flex-1 text-center`}
-                animate={{
-                  rotate: [0, -1, 1, 0],
-                }}
-                transition={{ duration: 2, repeat: Infinity, repeatDelay: 4 }}
-              >
-                {greeting || "환영합니다"}
-              </motion.h1>
-
-              {/* Refresh Button */}
-              <motion.button
-                className={`p-2 rounded-full hover:bg-tennis-court-50 dark:hover:bg-tennis-court-900/20 transition-colors ${
-                  isLoading ? "opacity-50 cursor-not-allowed" : ""
-                }`}
-                onClick={() => !isLoading && refetch()}
-                disabled={isLoading}
-                whileHover={!isLoading ? { scale: 1.1 } : {}}
-                whileTap={!isLoading ? { scale: 0.9 } : {}}
-                animate={isLoading ? { rotate: 360 } : {}}
-                transition={
-                  isLoading
-                    ? { duration: 1, repeat: Infinity, ease: "linear" }
-                    : {}
-                }
-              >
-                <MdRefresh className={`w-5 h-5 ${theme.text.secondary}`} />
-              </motion.button>
-            </div>
-
-            <p className={`text-sm ${theme.text.secondary} text-center`}>
-              {motivationMessage || "오늘도 즐거운 테니스 되세요!"}
-            </p>
-
-            {/* Loading Indicator */}
-            {isLoading && (
-              <motion.div
-                className="flex justify-center mt-2"
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-              >
-                <div className="flex space-x-1">
-                  <motion.div
-                    className="w-2 h-2 bg-tennis-court-500 rounded-full"
-                    animate={{ scale: [1, 1.2, 1], opacity: [1, 0.7, 1] }}
-                    transition={{ duration: 0.8, repeat: Infinity, delay: 0 }}
-                  />
-                  <motion.div
-                    className="w-2 h-2 bg-tennis-court-500 rounded-full"
-                    animate={{ scale: [1, 1.2, 1], opacity: [1, 0.7, 1] }}
-                    transition={{ duration: 0.8, repeat: Infinity, delay: 0.1 }}
-                  />
-                  <motion.div
-                    className="w-2 h-2 bg-tennis-court-500 rounded-full"
-                    animate={{ scale: [1, 1.2, 1], opacity: [1, 0.7, 1] }}
-                    transition={{ duration: 0.8, repeat: Infinity, delay: 0.2 }}
-                  />
-                </div>
-              </motion.div>
-            )}
-
-            {/* Error Message */}
-            {error && (
-              <motion.div
-                className="mt-2 p-2 bg-status-error-100 dark:bg-status-error-900/20 text-status-error-700 dark:text-status-error-400 rounded-lg text-sm text-center"
-                initial={{ opacity: 0, y: -10 }}
-                animate={{ opacity: 1, y: 0 }}
-              >
-                데이터를 불러오는 중 오류가 발생했습니다.
-              </motion.div>
-            )}
-          </motion.div>
+            <MdSportsTennis className={`${theme.text.tennis} w-5 h-5`} />홈
+          </h1>
+          <div className="flex items-center gap-3">
+            <motion.button
+              className={`p-2 rounded-full relative shadow-sm ${theme.surface.card}`}
+              onClick={() => navigate("/notifications")}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <MdNotifications className={`w-5 h-5 ${theme.text.secondary}`} />
+              {notificationCount?.unreadCount !== undefined &&
+                notificationCount.unreadCount > 0 && (
+                  <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center">
+                    {notificationCount.unreadCount > 99
+                      ? "99+"
+                      : notificationCount.unreadCount}
+                  </span>
+                )}
+            </motion.button>
+            <motion.button
+              className={`p-2 rounded-full relative shadow-sm ${theme.surface.card}`}
+              onClick={() => navigate("/chat")}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <MdChat className={`w-5 h-5 ${theme.text.secondary}`} />
+              {chatCount?.count !== undefined && chatCount.count > 0 && (
+                <span className="absolute -top-1 -right-1 w-5 h-5 bg-blue-500 text-white text-xs rounded-full flex items-center justify-center">
+                  {chatCount.count > 99 ? "99+" : chatCount.count}
+                </span>
+              )}
+            </motion.button>
+          </div>
         </div>
       </motion.header>
 
+      {/* Spacer for fixed header */}
+      <div className="h-[80px]" />
+
       {/* Quick Action Menu */}
       <motion.section
-        className="px-2 -mt-2"
+        className="px-2"
         initial={{ y: 20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
-        transition={{ delay: 0.15 }}
+        transition={{ delay: 0.3 }}
       >
         <div className="grid grid-cols-2 gap-4">
           {menuItems.map((item, index) => (

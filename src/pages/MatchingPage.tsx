@@ -598,12 +598,12 @@ const MatchingPage = () => {
         animate={{ y: 0, opacity: 1 }}
         transition={{ delay: 0.1 }}
       >
-        <div className="px-6 py-3">
-          <div className="flex items-center justify-between mb-3">
+        <div className="px-6 py-2">
+          <div className="flex items-center justify-between mb-2">
             <h1
-              className={`text-xl font-bold ${theme.text.primary} flex items-center gap-2`}
+              className={`text-lg font-bold ${theme.text.primary} flex items-center gap-2`}
             >
-              <MdSportsTennis className={`${theme.text.tennis} w-6 h-6`} />
+              <MdSportsTennis className={`${theme.text.tennis} w-5 h-5`} />
               매칭 찾기
             </h1>
             <div className="flex items-center gap-3">
@@ -642,7 +642,7 @@ const MatchingPage = () => {
           </div>
 
           {/* Search Bar */}
-          <div className="relative mb-3">
+          <div className="relative mb-2">
             <MdSearch
               className={`absolute left-2.5 top-1/2 transform -translate-y-1/2 ${theme.text.secondary} w-4 h-4`}
             />
@@ -651,14 +651,14 @@ const MatchingPage = () => {
               placeholder="매칭 검색..."
               value={appliedFilters.search}
               onChange={(e) => handleSearchChange(e.target.value)}
-              className={`w-full pl-8 pr-3 py-2 rounded-xl shadow-sm text-sm ${theme.surface.card} ${theme.text.primary} ${theme.border.primary} border focus:outline-none focus:ring-1 focus:ring-primary-400 focus:border-primary-400`}
+              className={`w-full pl-8 pr-3 py-1.5 rounded-xl shadow-sm text-sm ${theme.surface.card} ${theme.text.primary} ${theme.border.primary} border focus:outline-none focus:ring-1 focus:ring-primary-400 focus:border-primary-400`}
             />
           </div>
         </div>
       </motion.header>
 
       {/* Spacer for fixed header */}
-      <div className="h-[108px]" />
+      <div className="h-[92px] mb-5" />
 
       {/* Active Filters */}
       {getActiveFilters().length > 0 && (
