@@ -1,12 +1,7 @@
 import { motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import {
-  MdArrowBack,
-  MdSend,
-  MdImage,
-  MdClose,
-} from "react-icons/md";
+import { MdArrowBack, MdSend, MdImage, MdClose } from "react-icons/md";
 import { getThemeClasses, tennisGradients } from "../lib/theme";
 import { useCreatePost } from "../hooks/usePosts";
 import { PostCategory } from "../api/generated-api";
@@ -16,14 +11,13 @@ const categoryOptions = [
   { value: "tips", label: "팁/기술" },
   { value: "equipment", label: "장비" },
   { value: "match", label: "경기후기" },
-  { value: "question", label: "질문" },
 ];
 
 const BoardWritePage = () => {
   const navigate = useNavigate();
   const theme = getThemeClasses();
   const createPost = useCreatePost();
-  
+
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [category, setCategory] = useState<PostCategory>("free");
@@ -47,7 +41,7 @@ const BoardWritePage = () => {
     }
 
     setIsSubmitting(true);
-    
+
     try {
       const result = await createPost.mutateAsync({
         title: title.trim(),
@@ -56,8 +50,8 @@ const BoardWritePage = () => {
         images: images.length > 0 ? images : undefined,
       });
 
-      if (result?.data?.id) {
-        navigate(`/board/${result.data.id}`);
+      if (result) {
+        navigate(`/board/${result.id}`);
       }
     } catch (error) {
       console.error("Failed to create post:", error);
@@ -79,7 +73,7 @@ const BoardWritePage = () => {
       const url = URL.createObjectURL(file);
       newImages.push(url);
     }
-    
+
     setImages([...images, ...newImages]);
   };
 
@@ -104,7 +98,9 @@ const BoardWritePage = () => {
         <div className="flex items-center justify-between px-4 py-3">
           <motion.button
             className={`p-2 -ml-2 rounded-full hover:bg-primary-100 dark:hover:bg-primary-900/20 transition-colors`}
-            onClick={() => navigate(-1)}
+            onClick={() => {
+              navigate("/board");
+            }}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
@@ -123,14 +119,20 @@ const BoardWritePage = () => {
             } transition-colors`}
             onClick={handleSubmit}
             disabled={!title.trim() || !content.trim() || isSubmitting}
-            whileHover={{ scale: title.trim() && content.trim() && !isSubmitting ? 1.05 : 1 }}
-            whileTap={{ scale: title.trim() && content.trim() && !isSubmitting ? 0.95 : 1 }}
+            whileHover={{
+              scale: title.trim() && content.trim() && !isSubmitting ? 1.05 : 1,
+            }}
+            whileTap={{
+              scale: title.trim() && content.trim() && !isSubmitting ? 0.95 : 1,
+            }}
           >
-            <MdSend className={`w-5 h-5 ${
-              title.trim() && content.trim() && !isSubmitting
-                ? theme.text.tennis
-                : theme.text.secondary
-            }`} />
+            <MdSend
+              className={`w-5 h-5 ${
+                title.trim() && content.trim() && !isSubmitting
+                  ? theme.text.tennis
+                  : theme.text.secondary
+              }`}
+            />
           </motion.button>
         </div>
       </motion.header>
@@ -146,7 +148,9 @@ const BoardWritePage = () => {
           animate={{ x: 0, opacity: 1 }}
           transition={{ delay: 0.2 }}
         >
-          <label className={`block text-[13px] font-medium ${theme.text.secondary} mb-1.5`}>
+          <label
+            className={`block text-[13px] font-medium ${theme.text.secondary} mb-1.5`}
+          >
             카테고리
           </label>
           <select
@@ -169,7 +173,9 @@ const BoardWritePage = () => {
           animate={{ x: 0, opacity: 1 }}
           transition={{ delay: 0.3 }}
         >
-          <label className={`block text-[13px] font-medium ${theme.text.secondary} mb-1.5`}>
+          <label
+            className={`block text-[13px] font-medium ${theme.text.secondary} mb-1.5`}
+          >
             제목 ({title.length}/200)
           </label>
           <input
@@ -188,7 +194,9 @@ const BoardWritePage = () => {
           animate={{ x: 0, opacity: 1 }}
           transition={{ delay: 0.4 }}
         >
-          <label className={`block text-[13px] font-medium ${theme.text.secondary} mb-1.5`}>
+          <label
+            className={`block text-[13px] font-medium ${theme.text.secondary} mb-1.5`}
+          >
             내용 ({content.length}/5000)
           </label>
           <textarea
@@ -207,10 +215,12 @@ const BoardWritePage = () => {
           animate={{ x: 0, opacity: 1 }}
           transition={{ delay: 0.5 }}
         >
-          <label className={`block text-[13px] font-medium ${theme.text.secondary} mb-1.5`}>
+          <label
+            className={`block text-[13px] font-medium ${theme.text.secondary} mb-1.5`}
+          >
             이미지 첨부 ({images.length}/10)
           </label>
-          
+
           {/* Image Preview */}
           {images.length > 0 && (
             <div className="grid grid-cols-3 gap-1.5 mb-2">
@@ -241,7 +251,9 @@ const BoardWritePage = () => {
                 onChange={handleImageUpload}
                 className="hidden"
               />
-              <div className={`flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-[13px] ${theme.surface.card} ${theme.text.secondary} ${theme.border.primary} border border-dashed hover:border-primary-400 transition-colors`}>
+              <div
+                className={`flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg text-[13px] ${theme.surface.card} ${theme.text.secondary} ${theme.border.primary} border border-dashed hover:border-primary-400 transition-colors`}
+              >
                 <MdImage className="w-4 h-4" />
                 <span>이미지 선택</span>
               </div>
@@ -261,8 +273,12 @@ const BoardWritePage = () => {
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ delay: 0.6 }}
-          whileHover={{ scale: title.trim() && content.trim() && !isSubmitting ? 1.02 : 1 }}
-          whileTap={{ scale: title.trim() && content.trim() && !isSubmitting ? 0.98 : 1 }}
+          whileHover={{
+            scale: title.trim() && content.trim() && !isSubmitting ? 1.02 : 1,
+          }}
+          whileTap={{
+            scale: title.trim() && content.trim() && !isSubmitting ? 0.98 : 1,
+          }}
         >
           {isSubmitting ? "작성 중..." : "게시글 작성"}
         </motion.button>

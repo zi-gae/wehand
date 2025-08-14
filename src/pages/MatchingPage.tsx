@@ -510,14 +510,10 @@ const MatchingPage = () => {
     const updates: any = {};
     if (key === "timeSlots") {
       updates.timeSlots = null;
-    } else if (key === "ntrpMin" || key === "ntrpMax" || key === "ntrp") {
+    } else if (key === "ntrpMin" || key === "ntrpMax") {
       updates.ntrpMin = null;
       updates.ntrpMax = null;
-    } else if (
-      key === "experienceMin" ||
-      key === "experienceMax" ||
-      key === "experience"
-    ) {
+    } else if (key === "experienceMin" || key === "experienceMax") {
       updates.experienceMin = null;
       updates.experienceMax = null;
     } else {
