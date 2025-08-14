@@ -1036,7 +1036,13 @@ export interface ChatMessage {
   /** 메시지 ID */
   id: string;
   /** 메시지 내용 */
-  content: string;
+  content:
+    | string
+    | {
+        participantId: string;
+        participantName: string;
+        type: "approve_request" | "cancel_approval";
+      };
   /** 메시지 유형 */
   message_type: ChatMessageMessageType;
   /** 메시지 생성일시 */

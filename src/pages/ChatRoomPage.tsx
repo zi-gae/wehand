@@ -2,24 +2,17 @@ import { useDidMount } from "@/lib/react/useDidMount";
 import { useQueryClient } from "@tanstack/react-query";
 import { AnimatePresence, motion } from "framer-motion";
 import React, { useCallback, useEffect, useRef, useState } from "react";
-import {
-  MdArrowBack,
-  MdGroup,
-  MdInfo,
-  MdMoreVert,
-  MdSend,
-  MdCheckCircle,
-} from "react-icons/md";
-import { useNavigate, useParams, useSearchParams, useLocation } from "react-router-dom";
-import { useAuth, useMe } from "../hooks";
+import { MdArrowBack, MdCheckCircle, MdGroup, MdSend } from "react-icons/md";
+import { useNavigate, useParams, useSearchParams } from "react-router-dom";
+import { useAuth } from "../hooks";
 import {
   chatQueryKeys,
+  useApproveParticipant,
+  useCancelParticipantApproval,
   useChatAllMessages,
   useChatRoom,
   useMarkChatRoomAsRead,
   useSendMessage,
-  useApproveParticipant,
-  useCancelParticipantApproval,
 } from "../hooks/useChat";
 import { useSocket } from "../hooks/useSocket";
 import { getThemeClasses } from "../lib/theme";
@@ -27,8 +20,6 @@ import {
   MessageReadByEvent,
   NewMessageEvent,
   ParticipantApprovedEvent,
-  UserJoinedEvent,
-  UserLeftEvent,
 } from "../types/socket";
 
 // 내부 채팅 메시지 타입
@@ -58,17 +49,13 @@ const ChatRoomPage = () => {
   const { roomId } = useParams();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
-  const location = useLocation();
   const theme = getThemeClasses();
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const [newMessage, setNewMessage] = useState("");
   const [isSending, setIsSending] = useState(false);
   const [messages, setMessages] = useState<ChatMessage[]>([]);
-  const [pendingApprovalParticipantId, setPendingApprovalParticipantId] =
-    useState<string | null>(null);
   const [isPendingJoin, setIsPendingJoin] = useState(false);
-  const [pendingMatchId, setPendingMatchId] = useState<string | null>(null);
 
   // 메시지 병합 관리를 위한 내부 Map (id -> message)
   const messagesMapRef = useRef<Map<string, ChatMessage>>(new Map());
@@ -83,15 +70,15 @@ const ChatRoomPage = () => {
   const { user } = useAuth();
 
   // 채팅방 정보 조회 (pending 상태일 때는 비활성화)
-  const { data: roomData } = useChatRoom(roomId || "", { 
-    enabled: !!roomId && !isPendingJoin && !roomId?.startsWith('pending_') 
+  const { data: roomData } = useChatRoom(roomId || "", {
+    enabled: !!roomId && !isPendingJoin && !roomId?.startsWith("pending_"),
   });
   const chatRoom = roomData?.data;
 
   // 메시지 데이터 조회 (pending 상태일 때는 비활성화)
   const { data: messagesData, isLoading: isMessagesLoading } =
-    useChatAllMessages(roomId || "", { 
-      enabled: !!roomId && !isPendingJoin && !roomId?.startsWith('pending_') 
+    useChatAllMessages(roomId || "", {
+      enabled: !!roomId && !isPendingJoin && !roomId?.startsWith("pending_"),
     });
 
   const sendMessageMutation = useSendMessage();
@@ -105,19 +92,7 @@ const ChatRoomPage = () => {
       id: msg.id,
       content: msg.content ?? "",
       messageType: (msg.message_type as "text" | "image" | "system") || "text",
-      metadata:
-        msg.metadata ||
-        (msg.content &&
-        typeof msg.content === "string" &&
-        msg.content.startsWith("{")
-          ? (() => {
-              try {
-                return JSON.parse(msg.content);
-              } catch {
-                return undefined;
-              }
-            })()
-          : undefined),
+      metadata: msg.content,
       sender: msg.sender
         ? {
             id: msg.sender.id || "",
@@ -263,40 +238,6 @@ const ChatRoomPage = () => {
     }
   }, []);
 
-  const handleUserJoined = useCallback(
-    (data: UserJoinedEvent) => {
-      // console.log("사용자 입장:", data);
-      // // 시스템 메시지 추가
-      // const joinMessage: ChatMessage = {
-      //   id: `system-join-${Date.now()}`,
-      //   content: `${data.nickname}님이 입장했습니다.`,
-      //   messageType: "system",
-      //   sender: null,
-      //   timestamp: data.timestamp,
-      //   chatRoomId: roomId || "",
-      // };
-      // upsertMessages(joinMessage);
-    },
-    [roomId, upsertMessages]
-  );
-
-  const handleUserLeft = useCallback(
-    (data: UserLeftEvent) => {
-      // console.log("사용자 퇴장:", data);
-      // // 시스템 메시지 추가
-      // const leftMessage: ChatMessage = {
-      //   id: `system-left-${Date.now()}`,
-      //   content: `${data.nickname}님이 퇴장했습니다.`,
-      //   messageType: "system",
-      //   sender: null,
-      //   timestamp: data.timestamp,
-      //   chatRoomId: roomId || "",
-      // };
-      // upsertMessages(leftMessage);
-    },
-    [roomId, upsertMessages]
-  );
-
   const handleParticipantApproved = useCallback(
     (data: ParticipantApprovedEvent) => {
       console.log("참가자 승인:", data);
@@ -318,11 +259,12 @@ const ChatRoomPage = () => {
 
   // WebSocket 연결 (pending 상태가 아닐 때만)
   const { isConnected } = useSocket({
-    chatRoomId: !isPendingJoin && !roomId?.startsWith('pending_') ? roomId : undefined,
+    chatRoomId:
+      !isPendingJoin && !roomId?.startsWith("pending_") ? roomId : undefined,
     onNewMessage: handleNewMessage,
     onMessageReadBy: handleMessageReadBy,
-    onUserJoined: handleUserJoined,
-    onUserLeft: handleUserLeft,
+    onUserJoined: () => {},
+    onUserLeft: () => {},
     onParticipantApproved: handleParticipantApproved,
     onError: (error) => {
       console.error("Socket 에러:", error);
@@ -346,17 +288,15 @@ const ChatRoomPage = () => {
     setMessages([]); // 메시지 초기화
     lastReadMessageIdRef.current = null;
     messagesMapRef.current = new Map(); // 내부 맵 초기화
-    
+
     // URL 파라미터에서 pending 상태 확인
-    const isPending = searchParams.get('pending') === 'true';
-    const matchId = searchParams.get('matchId');
-    
+    const isPending = searchParams.get("pending") === "true";
+    const matchId = searchParams.get("matchId");
+
     if (isPending && matchId) {
       setIsPendingJoin(true);
-      setPendingMatchId(matchId);
     } else {
       setIsPendingJoin(false);
-      setPendingMatchId(null);
     }
   }, [roomId, searchParams]);
 
@@ -449,7 +389,6 @@ const ChatRoomPage = () => {
       await approveParticipantMutation.mutateAsync({
         roomId,
       });
-      setPendingApprovalParticipantId(null);
     } catch (error) {
       console.error("참가자 승인 실패:", error);
     }
@@ -519,12 +458,6 @@ const ChatRoomPage = () => {
     return lastApprovalMessage?.metadata?.type || null;
   }, [messages, toTime]);
 
-  // 확정 완료 메시지가 있는지 확인하는 함수 (기존 호환성을 위해 유지)
-  const hasApprovalConfirm = useCallback(() => {
-    const lastStatus = getLastApprovalStatus();
-    return lastStatus === "approval_confirm";
-  }, [getLastApprovalStatus]);
-
   return (
     <motion.div
       className={`h-screen flex flex-col ${theme.background.primary}`}
@@ -582,7 +515,6 @@ const ChatRoomPage = () => {
                   const hasRequest = lastStatus === "approval_request";
 
                   // 취소된 경우 다시 확정 요청 가능
-                  const canRequest = !hasRequest && !isConfirmed;
 
                   return (
                     <motion.button
@@ -733,7 +665,7 @@ const ChatRoomPage = () => {
             </div>
           </div>
         )}
-        
+
         {/* 일반 로딩 스켈레톤 */}
         {!isPendingJoin && isMessagesLoading && (
           <div className="space-y-4">
@@ -807,181 +739,182 @@ const ChatRoomPage = () => {
 
         {!isMessagesLoading && !isPendingJoin && (
           <AnimatePresence>
-          {React.Children.toArray(
-            messages.map((message) => (
-              <motion.div
-                className={`flex ${
-                  message.isOwn ? "justify-end" : "justify-start"
-                }`}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -10 }}
-                // transition={{ delay: index * 0.05 }}
-              >
-                {message.messageType === "system" && (
-                  <div className="w-full flex justify-center">
-                    {message.metadata?.type === "approval_request" ? (
-                      // 확정 요청 카드 메시지
-                      <motion.div
-                        className={`max-w-sm w-full p-4 rounded-xl ${theme.surface.card} border ${theme.border.primary} shadow-sm`}
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                      >
-                        <div className="flex items-center justify-between mb-3">
-                          <div className="flex items-center gap-2">
-                            <MdCheckCircle className="w-5 h-5 text-tennis-ball-500" />
-                            <span
-                              className={`font-medium ${theme.text.primary}`}
-                            >
-                              참가 확정 요청
-                            </span>
-                          </div>
-                        </div>
-                        <p className={`text-sm mb-3 ${theme.text.secondary}`}>
-                          {message.metadata.participantName}님이 참가 확정을
-                          요청했습니다.
-                        </p>
-                        {/* 호스트만 확정하기 버튼 표시 */}
-                        {chatRoom?.host?.id === user?.id &&
-                          (() => {
-                            const lastStatus = getLastApprovalStatus();
-                            const isConfirmed =
-                              lastStatus === "approval_confirm";
-                            const isCanceled = lastStatus === "approval_cancel";
-
-                            // 취소된 후에는 이전 확정 요청 카드의 버튼 비활성화
-                            const isDisabled =
-                              isConfirmed ||
-                              isCanceled ||
-                              approveParticipantMutation.isPending;
-
-                            return (
-                              <motion.button
-                                className={`w-full py-2 rounded-lg font-medium ${
-                                  isDisabled
-                                    ? "bg-gray-400 text-gray-200 cursor-not-allowed"
-                                    : "bg-tennis-ball-500 text-white"
-                                }`}
-                                onClick={handleApproveParticipant}
-                                whileTap={
-                                  isDisabled ? undefined : { scale: 0.98 }
-                                }
-                                disabled={isDisabled}
+            {React.Children.toArray(
+              messages.map((message) => (
+                <motion.div
+                  className={`flex ${
+                    message.isOwn ? "justify-end" : "justify-start"
+                  }`}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -10 }}
+                  // transition={{ delay: index * 0.05 }}
+                >
+                  {message.messageType === "system" && (
+                    <div className="w-full flex justify-center">
+                      {message.metadata?.type === "approval_request" ? (
+                        // 확정 요청 카드 메시지
+                        <motion.div
+                          className={`max-w-sm w-full p-4 rounded-xl ${theme.surface.card} border ${theme.border.primary} shadow-sm`}
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                        >
+                          <div className="flex items-center justify-between mb-3">
+                            <div className="flex items-center gap-2">
+                              <MdCheckCircle className="w-5 h-5 text-tennis-ball-500" />
+                              <span
+                                className={`font-medium ${theme.text.primary}`}
                               >
-                                {isConfirmed
-                                  ? "이미 확정됨"
-                                  : isCanceled
-                                  ? "취소됨"
-                                  : approveParticipantMutation.isPending
-                                  ? "처리 중..."
-                                  : "확정하기"}
-                              </motion.button>
-                            );
-                          })()}
-                        {chatRoom?.host?.id !== user?.id && (
-                          <div
-                            className={`text-center text-sm ${theme.text.secondary}`}
-                          >
-                            호스트의 승인을 기다리는 중입니다...
+                                참가 확정 요청
+                              </span>
+                            </div>
                           </div>
-                        )}
-                      </motion.div>
-                    ) : message.metadata?.type === "approval_confirm" ? (
-                      // 확정 완료 카드 메시지
-                      <motion.div
-                        className={`max-w-sm w-full p-4 rounded-xl bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 shadow-sm`}
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                      >
-                        <div className="flex items-center justify-between mb-2">
-                          <div className="flex items-center gap-2">
-                            <MdCheckCircle className="w-5 h-5 text-green-600 dark:text-green-400" />
-                            <span className="font-medium text-green-800 dark:text-green-200">
-                              참가 확정 완료!
+                          <p className={`text-sm mb-3 ${theme.text.secondary}`}>
+                            {message.metadata.participantName}님이 참가 확정을
+                            요청했습니다.
+                          </p>
+                          {/* 호스트만 확정하기 버튼 표시 */}
+                          {chatRoom?.host?.id === user?.id &&
+                            (() => {
+                              const lastStatus = getLastApprovalStatus();
+                              const isConfirmed =
+                                lastStatus === "approval_confirm";
+                              const isCanceled =
+                                lastStatus === "approval_cancel";
+
+                              // 취소된 후에는 이전 확정 요청 카드의 버튼 비활성화
+                              const isDisabled =
+                                isConfirmed ||
+                                isCanceled ||
+                                approveParticipantMutation.isPending;
+
+                              return (
+                                <motion.button
+                                  className={`w-full py-2 rounded-lg font-medium ${
+                                    isDisabled
+                                      ? "bg-gray-400 text-gray-200 cursor-not-allowed"
+                                      : "bg-tennis-ball-500 text-white"
+                                  }`}
+                                  onClick={handleApproveParticipant}
+                                  whileTap={
+                                    isDisabled ? undefined : { scale: 0.98 }
+                                  }
+                                  disabled={isDisabled}
+                                >
+                                  {isConfirmed
+                                    ? "이미 확정됨"
+                                    : isCanceled
+                                    ? "취소됨"
+                                    : approveParticipantMutation.isPending
+                                    ? "처리 중..."
+                                    : "확정하기"}
+                                </motion.button>
+                              );
+                            })()}
+                          {chatRoom?.host?.id !== user?.id && (
+                            <div
+                              className={`text-center text-sm ${theme.text.secondary}`}
+                            >
+                              호스트의 승인을 기다리는 중입니다...
+                            </div>
+                          )}
+                        </motion.div>
+                      ) : message.metadata?.type === "approval_confirm" ? (
+                        // 확정 완료 카드 메시지
+                        <motion.div
+                          className={`max-w-sm w-full p-4 rounded-xl bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 shadow-sm`}
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                        >
+                          <div className="flex items-center justify-between mb-2">
+                            <div className="flex items-center gap-2">
+                              <MdCheckCircle className="w-5 h-5 text-green-600 dark:text-green-400" />
+                              <span className="font-medium text-green-800 dark:text-green-200">
+                                참가 확정 완료!
+                              </span>
+                            </div>
+                          </div>
+                          <p className="text-sm text-green-700 dark:text-green-300">
+                            {message.metadata.participantName}님의 참가가
+                            확정되었습니다.
+                          </p>
+                        </motion.div>
+                      ) : message.metadata?.type === "approval_cancel" ? (
+                        // 확정 취소 카드 메시지
+                        <motion.div
+                          className={`max-w-sm w-full p-4 rounded-xl bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 shadow-sm`}
+                          initial={{ opacity: 0, y: 10 }}
+                          animate={{ opacity: 1, y: 0 }}
+                        >
+                          <div className="flex items-center gap-2 mb-2">
+                            <MdCheckCircle className="w-5 h-5 text-red-600 dark:text-red-400" />
+                            <span className="font-medium text-red-800 dark:text-red-200">
+                              참가 확정 취소
                             </span>
                           </div>
+                          <p className="text-sm text-red-700 dark:text-red-300">
+                            {message.metadata.participantName}님의 참가 확정이
+                            취소되었습니다.
+                          </p>
+                        </motion.div>
+                      ) : (
+                        // 일반 시스템 메시지
+                        <div
+                          className={`text-xs px-3 py-1 rounded-full ${theme.surface.card} ${theme.text.secondary}`}
+                        >
+                          {message.content}
                         </div>
-                        <p className="text-sm text-green-700 dark:text-green-300">
-                          {message.metadata.participantName}님의 참가가
-                          확정되었습니다.
-                        </p>
-                      </motion.div>
-                    ) : message.metadata?.type === "approval_cancel" ? (
-                      // 확정 취소 카드 메시지
-                      <motion.div
-                        className={`max-w-sm w-full p-4 rounded-xl bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 shadow-sm`}
-                        initial={{ opacity: 0, y: 10 }}
-                        animate={{ opacity: 1, y: 0 }}
-                      >
-                        <div className="flex items-center gap-2 mb-2">
-                          <MdCheckCircle className="w-5 h-5 text-red-600 dark:text-red-400" />
-                          <span className="font-medium text-red-800 dark:text-red-200">
-                            참가 확정 취소
-                          </span>
-                        </div>
-                        <p className="text-sm text-red-700 dark:text-red-300">
-                          {message.metadata.participantName}님의 참가 확정이
-                          취소되었습니다.
-                        </p>
-                      </motion.div>
-                    ) : (
-                      // 일반 시스템 메시지
-                      <div
-                        className={`text-xs px-3 py-1 rounded-full ${theme.surface.card} ${theme.text.secondary}`}
-                      >
-                        {message.content}
-                      </div>
-                    )}
-                  </div>
-                )}
-
-                {message.messageType === "text" && (
-                  <div
-                    className={`max-w-xs ${
-                      message.isOwn ? "items-end" : "items-start"
-                    } flex flex-col`}
-                  >
-                    {!message.isOwn && message.sender && (
-                      <div
-                        className={`text-xs mb-1 ml-3 ${theme.text.secondary}`}
-                      >
-                        {message.sender.nickname}
-                      </div>
-                    )}
-                    <div
-                      className={`px-4 py-2 rounded-2xl ${
-                        message.isOwn
-                          ? "bg-tennis-ball-500 text-white"
-                          : `${theme.surface.card} ${theme.text.primary}`
-                      }`}
-                    >
-                      <p className="text-sm">{message.content}</p>
-                    </div>
-                    <div
-                      className={`text-xs mt-1 flex items-center gap-1 ${
-                        message.isOwn ? "justify-end mr-3" : "ml-3"
-                      } ${theme.text.secondary}`}
-                    >
-                      <span>
-                        {new Date(message.timestamp).toLocaleTimeString(
-                          "ko-KR",
-                          {
-                            hour: "2-digit",
-                            minute: "2-digit",
-                          }
-                        )}
-                      </span>
-                      {message.isOwn && message.isRead && (
-                        <span className="text-tennis-ball-500 text-xs">
-                          읽음
-                        </span>
                       )}
                     </div>
-                  </div>
-                )}
-              </motion.div>
-            ))
-          )}
+                  )}
+
+                  {message.messageType === "text" && (
+                    <div
+                      className={`max-w-xs ${
+                        message.isOwn ? "items-end" : "items-start"
+                      } flex flex-col`}
+                    >
+                      {!message.isOwn && message.sender && (
+                        <div
+                          className={`text-xs mb-1 ml-3 ${theme.text.secondary}`}
+                        >
+                          {message.sender.nickname}
+                        </div>
+                      )}
+                      <div
+                        className={`px-4 py-2 rounded-2xl ${
+                          message.isOwn
+                            ? "bg-tennis-ball-500 text-white"
+                            : `${theme.surface.card} ${theme.text.primary}`
+                        }`}
+                      >
+                        <p className="text-sm">{message.content}</p>
+                      </div>
+                      <div
+                        className={`text-xs mt-1 flex items-center gap-1 ${
+                          message.isOwn ? "justify-end mr-3" : "ml-3"
+                        } ${theme.text.secondary}`}
+                      >
+                        <span>
+                          {new Date(message.timestamp).toLocaleTimeString(
+                            "ko-KR",
+                            {
+                              hour: "2-digit",
+                              minute: "2-digit",
+                            }
+                          )}
+                        </span>
+                        {message.isOwn && message.isRead && (
+                          <span className="text-tennis-ball-500 text-xs">
+                            읽음
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  )}
+                </motion.div>
+              ))
+            )}
           </AnimatePresence>
         )}
 

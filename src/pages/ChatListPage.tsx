@@ -8,6 +8,7 @@ import { ko } from "date-fns/locale";
 import { useSocket } from "../hooks/useSocket";
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect } from "react";
+import { isString } from "@/lib/is";
 
 const ChatListPage = () => {
   const navigate = useNavigate();
@@ -110,12 +111,8 @@ const ChatListPage = () => {
             <h1
               className={`text-lg font-bold flex items-center justify-center gap-2 ${theme.text.primary}`}
             >
-              <MdChat className="w-6 h-6 text-tennis-ball-600 dark:text-tennis-ball-400" />
               채팅
             </h1>
-            <p className={`text-sm ${theme.text.secondary}`}>
-              {chatRooms.length}개 채팅방
-            </p>
           </div>
 
           <motion.button
@@ -224,7 +221,9 @@ const ChatListPage = () => {
                               {room.lastMessage.sender.nickname}:{" "}
                             </span>
                           )}
-                          {room.lastMessage.content}
+                          {isString(room.lastMessage.content)
+                            ? room.lastMessage.content
+                            : room.lastMessage.content.type}
                         </p>
                       )}
 

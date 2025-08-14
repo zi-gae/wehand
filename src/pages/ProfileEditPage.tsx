@@ -425,47 +425,6 @@ const ProfileEditPage = () => {
               <span className={`text-xs ${theme.text.secondary}`}>베테랑</span>
             </div>
           </div>
-
-          {/* 선택된 경력 설명 */}
-          <AnimatePresence mode="wait">
-            {experienceLevels.map(
-              (level) =>
-                level.value === formData.experience_years && (
-                  <motion.div
-                    key={level.value}
-                    initial={{ opacity: 0, y: 10 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    exit={{ opacity: 0, y: -10 }}
-                    className={`p-3 rounded-xl ${theme.background.secondary} border ${theme.border.primary}`}
-                  >
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-3">
-                        <div
-                          className={`w-12 h-12 rounded-xl bg-gradient-to-br ${level.color} flex items-center justify-center`}
-                        >
-                          <span className="text-white font-bold text-lg">
-                            {level.value === 10 ? "10+" : level.value}
-                          </span>
-                        </div>
-                        <div>
-                          <div
-                            className={`font-semibold ${theme.text.primary}`}
-                          >
-                            테니스 경력 {level.label}
-                          </div>
-                          <div className={`text-sm ${theme.text.secondary}`}>
-                            {level.description}
-                          </div>
-                        </div>
-                      </div>
-                      <MdCalendarToday
-                        className={`w-5 h-5 ${theme.text.secondary} opacity-50`}
-                      />
-                    </div>
-                  </motion.div>
-                )
-            )}
-          </AnimatePresence>
         </motion.div>
 
         {/* NTRP 레벨 선택 */}
