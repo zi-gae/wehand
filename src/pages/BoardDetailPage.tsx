@@ -319,14 +319,14 @@ const BoardDetailPage = () => {
                   >
                     <button
                       onClick={handleEdit}
-                      className={`flex items-center gap-2 px-4 py-2 ${theme.text.primary} hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors w-full text-left`}
+                      className={`flex items-center gap-2 px-2 py-1 ${theme.text.primary} hover:bg-primary-50 dark:hover:bg-primary-900/20 transition-colors w-18 text-left`}
                     >
                       <MdEdit className="w-4 h-4" />
                       수정
                     </button>
                     <button
                       onClick={handleDelete}
-                      className={`flex items-center gap-2 px-4 py-2 text-status-error-600 hover:bg-status-error-50 dark:hover:bg-status-error-900/20 transition-colors w-full text-left`}
+                      className={`flex items-center gap-2 px-2 py-1 text-status-error-600 hover:bg-status-error-50 dark:hover:bg-status-error-900/20 transition-colors w-18 text-left`}
                     >
                       <MdDelete className="w-4 h-4" />
                       삭제
