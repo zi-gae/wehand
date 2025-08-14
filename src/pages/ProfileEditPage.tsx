@@ -319,7 +319,7 @@ const ProfileEditPage = () => {
                   NTRP {formData.ntrp}
                 </span>
                 <span className="px-2 py-1 rounded-lg bg-tennis-ball-100 dark:bg-tennis-ball-900/20 text-tennis-ball-600 dark:text-tennis-ball-400 text-xs font-medium">
-                  {formData.experience_years}년 경력
+                  {formData.experience_years}년 구력
                 </span>
               </div>
             </div>
@@ -370,7 +370,7 @@ const ProfileEditPage = () => {
           </div>
         </motion.div>
 
-        {/* 테니스 경력 선택 */}
+        {/* 테니스 구력 선택 */}
         <motion.div
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
@@ -383,7 +383,7 @@ const ProfileEditPage = () => {
             </div>
             <div>
               <h3 className={`font-semibold ${theme.text.primary}`}>
-                테니스 경력
+                테니스 구력
               </h3>
               <p className={`text-xs ${theme.text.secondary}`}>
                 테니스를 시작한 지 얼마나 되셨나요?
@@ -391,10 +391,10 @@ const ProfileEditPage = () => {
             </div>
           </div>
 
-          {/* 경력 슬라이더 */}
+          {/* 구력 슬라이더 */}
           <div className="mb-4">
             <div className="flex justify-between items-center mb-2">
-              <span className={`text-sm ${theme.text.secondary}`}>경력</span>
+              <span className={`text-sm ${theme.text.secondary}`}>구력</span>
               <span className={`text-lg font-bold ${theme.text.primary}`}>
                 {formData.experience_years === 10
                   ? "10년+"

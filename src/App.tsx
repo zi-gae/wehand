@@ -35,6 +35,7 @@ import SettingsPage from "./pages/SettingsPage";
 import SignUpPage from "./pages/SignUpPage";
 import TermsPage from "./pages/TermsPage";
 import { ScrollToTop } from "./components/ScrollToTop";
+import ShareProfilePage from "./pages/ShareProfilePage";
 
 // Main App Content Component
 const AppContent = () => {
@@ -120,6 +121,7 @@ const AppContent = () => {
                 <Route path="/board/write" element={<BoardWritePage />} />
                 <Route path="/board/:postId" element={<BoardDetailPage />} />
                 <Route path="/profile" element={<ProfilePage />} />
+                <Route path="/profile/:userId" element={<ShareProfilePage />} />
                 <Route path="/profile/edit" element={<ProfileEditPage />} />
                 <Route path="/notifications" element={<NotificationPage />} />
                 <Route path="/chat" element={<ChatListPage />} />

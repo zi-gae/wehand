@@ -136,7 +136,7 @@ const MatchDetailContentSuspense = ({ matchId }: { matchId: string }) => {
 
     // 임시 채팅방 ID로 즉시 이동 (matchId와 userId 조합)
     const tempChatId = `pending_${matchId}_${user?.id}`;
-    
+
     // 즉시 채팅방으로 이동 (로딩 상태로)
     navigate(`/chat/${tempChatId}?pending=true&matchId=${matchId}`);
 
@@ -377,7 +377,7 @@ const MatchDetailContentSuspense = ({ matchId }: { matchId: string }) => {
                   </p>
                   <p className={`text-xs ${theme.text.secondary}`}>
                     NTRP {matchDetail?.hostNtrp || "4.0"} • 구력{" "}
-                    {matchDetail?.hostExperience || "경력 미정"}
+                    {matchDetail?.hostExperience || "구력 미정"}
                   </p>
                 </div>
               </div>

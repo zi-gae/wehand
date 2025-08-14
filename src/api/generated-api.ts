@@ -97,7 +97,7 @@ export interface User {
    */
   ntrp?: number;
   /**
-   * 테니스 경력 (년)
+   * 테니스 구력 (년)
    * @minimum 0
    * @maximum 50
    */
@@ -178,7 +178,7 @@ export type MatchConfirmedParticipantsItem = {
   name?: string;
   /** 참가자 NTRP 레벨 */
   ntrp?: string;
-  /** 참가자 경력 */
+  /** 참가자 구력 */
   experience?: string;
   /** 호스트 여부 */
   isHost?: boolean;
@@ -226,7 +226,7 @@ export interface Match {
   hostId?: string;
   /** 호스트 NTRP 레벨 */
   hostNtrp?: string;
-  /** 호스트 경력 */
+  /** 호스트 구력 */
   hostExperience?: string;
   /**
    * 매치 설명
@@ -314,12 +314,12 @@ export interface CreateMatchRequest {
    */
   recruit_ntrp_max?: number;
   /**
-   * 모집 최소 경력 (선택, 년 단위)
+   * 모집 최소 구력 (선택, 년 단위)
    * @minimum 0
    */
   recruit_experience_min?: number;
   /**
-   * 모집 최대 경력 (선택, 년 단위)
+   * 모집 최대 구력 (선택, 년 단위)
    * @minimum 0
    */
   recruit_experience_max?: number;
@@ -645,7 +645,7 @@ export interface UpdateProfileRequest {
    */
   ntrp?: number;
   /**
-   * 테니스 경력 (선택, 년 단위, 0-50)
+   * 테니스 구력 (선택, 년 단위, 0-50)
    * @minimum 0
    * @maximum 50
    */
@@ -752,12 +752,15 @@ export interface SubmitReviewRequest {
 export type ReviewMatch = {
   id?: string;
   title?: string;
-  date?: string;
+  match_date?: string;
 };
 
 export type ReviewReviewer = {
   id?: string;
+  nickname?: string;
   name?: string;
+  /** 프로필 이미지 URL */
+  profile_image_url?: string;
 };
 
 export interface Review {
@@ -772,9 +775,16 @@ export interface Review {
   /** 리뷰 내용 */
   comment?: string;
   /** 작성일시 */
-  createdAt?: string;
+  created_at?: string;
   match?: ReviewMatch;
   reviewer?: ReviewReviewer;
+}
+
+export interface UserReviewsResponse {
+  success?: boolean;
+  /** 사용자가 받은 리뷰 목록 */
+  data?: Review[];
+  pagination?: PaginationInfo;
 }
 
 export interface MatchBookmark {
@@ -1019,6 +1029,25 @@ export type ChatMessageSender = {
   profile_image_url?: string;
 };
 
+export type ChatMessageReplyMessageContentOneOfType =
+  (typeof ChatMessageReplyMessageContentOneOfType)[keyof typeof ChatMessageReplyMessageContentOneOfType];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const ChatMessageReplyMessageContentOneOfType = {
+  approve_request: "approve_request",
+  cancel_approval: "cancel_approval",
+} as const;
+
+export type ChatMessageReplyMessageContentOneOf = {
+  participantId: string;
+  participantName: string;
+  type: ChatMessageReplyMessageContentOneOfType;
+};
+
+export type ChatMessageReplyMessageContent =
+  | string
+  | ChatMessageReplyMessageContentOneOf;
+
 export type ChatMessageReplyMessageSender = {
   nickname?: string;
 };
@@ -1028,7 +1057,7 @@ export type ChatMessageReplyMessageSender = {
  */
 export type ChatMessageReplyMessage = {
   id?: string;
-  content?: string;
+  content?: ChatMessageReplyMessageContent;
   sender?: ChatMessageReplyMessageSender;
 };
 
@@ -1036,13 +1065,7 @@ export interface ChatMessage {
   /** 메시지 ID */
   id: string;
   /** 메시지 내용 */
-  content:
-    | string
-    | {
-        participantId: string;
-        participantName: string;
-        type: "approve_request" | "cancel_approval";
-      };
+  content: string;
   /** 메시지 유형 */
   message_type: ChatMessageMessageType;
   /** 메시지 생성일시 */
@@ -1169,6 +1192,17 @@ export type PostApiChatRooms201 = {
 export type GetApiChatRoomsChatRoomId200 = {
   success?: boolean;
   data?: ChatRoomDetail;
+};
+
+export type DeleteApiChatRoomsChatRoomId200Data = {
+  message?: string;
+  /** 삭제된 채팅방 ID */
+  roomId?: string;
+};
+
+export type DeleteApiChatRoomsChatRoomId200 = {
+  success?: boolean;
+  data?: DeleteApiChatRoomsChatRoomId200Data;
 };
 
 export type GetApiChatRoomsChatRoomIdMessagesParams = {
@@ -1372,12 +1406,12 @@ export type GetApiMatchesParams = {
    */
   ntrp_max?: number;
   /**
-   * 최소 경력 (년)
+   * 최소 구력 (년)
    * @minimum 0
    */
   experience_min?: number;
   /**
-   * 최대 경력 (년)
+   * 최대 구력 (년)
    * @minimum 0
    */
   experience_max?: number;
@@ -1686,6 +1720,26 @@ export type GetApiProfileMyReviewsParams = {
 };
 
 export type GetApiProfileMyReviews200 = {
+  success?: boolean;
+  data?: Review[];
+  pagination?: PaginationInfo;
+};
+
+export type GetApiProfileUsersUserIdReviewsParams = {
+  /**
+   * 페이지 번호
+   * @minimum 1
+   */
+  page?: number;
+  /**
+   * 페이지 크기
+   * @minimum 1
+   * @maximum 50
+   */
+  limit?: number;
+};
+
+export type GetApiProfileUsersUserIdReviews200 = {
   success?: boolean;
   data?: Review[];
   pagination?: PaginationInfo;
@@ -2079,6 +2133,20 @@ export const getWeHandTennisAPI = () => {
   ) => {
     return customAxiosInstance<GetApiChatRoomsChatRoomId200>(
       { url: `/api/chat/rooms/${chatRoomId}`, method: "GET" },
+      options
+    );
+  };
+
+  /**
+   * 채팅방을 삭제합니다. 매치 채팅방의 경우 호스트만 삭제 가능하고, 1:1 채팅방의 경우 참가자 모두 삭제 가능합니다. 실제로는 soft delete로 처리되며, 시스템 메시지가 추가됩니다.
+   * @summary 채팅방 삭제
+   */
+  const deleteApiChatRoomsChatRoomId = (
+    chatRoomId: string,
+    options?: SecondParameter<typeof customAxiosInstance>
+  ) => {
+    return customAxiosInstance<DeleteApiChatRoomsChatRoomId200>(
+      { url: `/api/chat/rooms/${chatRoomId}`, method: "DELETE" },
       options
     );
   };
@@ -2822,6 +2890,20 @@ export const getWeHandTennisAPI = () => {
   };
 
   /**
+   * @summary 특정 사용자가 받은 리뷰 조회
+   */
+  const getApiProfileUsersUserIdReviews = (
+    userId: string,
+    params?: GetApiProfileUsersUserIdReviewsParams,
+    options?: SecondParameter<typeof customAxiosInstance>
+  ) => {
+    return customAxiosInstance<GetApiProfileUsersUserIdReviews200>(
+      { url: `/api/profile/users/${userId}/reviews`, method: "GET", params },
+      options
+    );
+  };
+
+  /**
    * @summary 북마크한 매치 조회
    */
   const getApiProfileBookmarks = (
@@ -3093,6 +3175,7 @@ export const getWeHandTennisAPI = () => {
     getApiChatRooms,
     postApiChatRooms,
     getApiChatRoomsChatRoomId,
+    deleteApiChatRoomsChatRoomId,
     getApiChatRoomsChatRoomIdMessages,
     postApiChatRoomsChatRoomIdMessages,
     getApiChatRoomsChatRoomIdMessagesAll,
@@ -3136,6 +3219,7 @@ export const getWeHandTennisAPI = () => {
     getApiProfileUsersUserId,
     getApiProfileMyMatches,
     getApiProfileMyReviews,
+    getApiProfileUsersUserIdReviews,
     getApiProfileBookmarks,
     postApiPushSend,
     postApiPushChat,
@@ -3184,6 +3268,13 @@ export type GetApiChatRoomsChatRoomIdResult = NonNullable<
   Awaited<
     ReturnType<
       ReturnType<typeof getWeHandTennisAPI>["getApiChatRoomsChatRoomId"]
+    >
+  >
+>;
+export type DeleteApiChatRoomsChatRoomIdResult = NonNullable<
+  Awaited<
+    ReturnType<
+      ReturnType<typeof getWeHandTennisAPI>["deleteApiChatRoomsChatRoomId"]
     >
   >
 >;
@@ -3474,6 +3565,13 @@ export type GetApiProfileMyMatchesResult = NonNullable<
 export type GetApiProfileMyReviewsResult = NonNullable<
   Awaited<
     ReturnType<ReturnType<typeof getWeHandTennisAPI>["getApiProfileMyReviews"]>
+  >
+>;
+export type GetApiProfileUsersUserIdReviewsResult = NonNullable<
+  Awaited<
+    ReturnType<
+      ReturnType<typeof getWeHandTennisAPI>["getApiProfileUsersUserIdReviews"]
+    >
   >
 >;
 export type GetApiProfileBookmarksResult = NonNullable<

@@ -66,7 +66,7 @@ const Step2 = ({ formData, updateFormData }: any) => {
     return [];
   };
 
-  // 경력 초기값을 min/max에서 가져와서 범위로 변환
+  // 구력 초기값을 min/max에서 가져와서 범위로 변환
   const getExperienceRangeFromMinMax = () => {
     if (
       formData.recruit_experience_min !== undefined &&

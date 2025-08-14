@@ -21,6 +21,7 @@ import {
   NewMessageEvent,
   ParticipantApprovedEvent,
 } from "../types/socket";
+import ChatMessagesSkeleton from "../components/skeletons/ChatMessagesSkeleton";
 
 // 내부 채팅 메시지 타입
 interface ChatMessage {
@@ -595,147 +596,11 @@ const ChatRoomPage = () => {
 
       {/* Messages */}
       <div className="flex-1 overflow-y-auto px-4 py-4 space-y-4">
-        {/* 참가 신청 처리 중 스켈레톤 (일반 로딩과 동일) */}
-        {isPendingJoin && (
-          <div className="space-y-4">
-            {/* 받은 메시지 스켈레톤 */}
-            <div className="flex justify-start">
-              <div className="max-w-xs space-y-2">
-                <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 bg-gray-200 dark:bg-gray-700 rounded-full animate-pulse"></div>
-                  <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-16 animate-pulse"></div>
-                </div>
-                <div className="px-4 py-3 bg-gray-200 dark:bg-gray-700 rounded-2xl animate-pulse">
-                  <div className="h-4 bg-gray-300 dark:bg-gray-600 rounded w-40 mb-2"></div>
-                  <div className="h-4 bg-gray-300 dark:bg-gray-600 rounded w-32"></div>
-                </div>
-                <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-12 ml-3 animate-pulse"></div>
-              </div>
-            </div>
-
-            {/* 보낸 메시지 스켈레톤 */}
-            <div className="flex justify-end">
-              <div className="max-w-xs space-y-2">
-                <div className="px-4 py-3 bg-tennis-ball-200 dark:bg-tennis-ball-800 rounded-2xl animate-pulse">
-                  <div className="h-4 bg-tennis-ball-300 dark:bg-tennis-ball-700 rounded w-36 mb-2"></div>
-                  <div className="h-4 bg-tennis-ball-300 dark:bg-tennis-ball-700 rounded w-28"></div>
-                </div>
-                <div className="flex justify-end items-center gap-2 mr-3">
-                  <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-12 animate-pulse"></div>
-                  <div className="h-3 bg-tennis-ball-200 dark:bg-tennis-ball-700 rounded w-8 animate-pulse"></div>
-                </div>
-              </div>
-            </div>
-
-            {/* 시스템 메시지 스켈레톤 */}
-            <div className="flex justify-center">
-              <div className="px-3 py-1 bg-gray-200 dark:bg-gray-700 rounded-full animate-pulse">
-                <div className="h-3 bg-gray-300 dark:bg-gray-600 rounded w-32"></div>
-              </div>
-            </div>
-
-            {/* 확정 요청 카드 스켈레톤 */}
-            <div className="flex justify-center">
-              <div className="max-w-sm w-full p-4 bg-gray-100 dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 animate-pulse">
-                <div className="flex items-center gap-2 mb-3">
-                  <div className="w-5 h-5 bg-gray-300 dark:bg-gray-600 rounded-full"></div>
-                  <div className="h-4 bg-gray-300 dark:bg-gray-600 rounded w-24"></div>
-                </div>
-                <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-full mb-2"></div>
-                <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4 mb-3"></div>
-                <div className="h-10 bg-gray-300 dark:bg-gray-600 rounded-lg w-full"></div>
-              </div>
-            </div>
-
-            {/* 추가 메시지 스켈레톤들 */}
-            <div className="flex justify-start">
-              <div className="max-w-xs">
-                <div className="px-4 py-3 bg-gray-200 dark:bg-gray-700 rounded-2xl animate-pulse">
-                  <div className="h-4 bg-gray-300 dark:bg-gray-600 rounded w-48"></div>
-                </div>
-              </div>
-            </div>
-
-            <div className="flex justify-end">
-              <div className="max-w-xs">
-                <div className="px-4 py-3 bg-tennis-ball-200 dark:bg-tennis-ball-800 rounded-2xl animate-pulse">
-                  <div className="h-4 bg-tennis-ball-300 dark:bg-tennis-ball-700 rounded w-32"></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
+        {/* 참가 신청 처리 중 스켈레톤 */}
+        {isPendingJoin && <ChatMessagesSkeleton />}
 
         {/* 일반 로딩 스켈레톤 */}
-        {!isPendingJoin && isMessagesLoading && (
-          <div className="space-y-4">
-            {/* 받은 메시지 스켈레톤 */}
-            <div className="flex justify-start">
-              <div className="max-w-xs space-y-2">
-                <div className="flex items-center gap-2">
-                  <div className="w-8 h-8 bg-gray-200 dark:bg-gray-700 rounded-full animate-pulse"></div>
-                  <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-16 animate-pulse"></div>
-                </div>
-                <div className="px-4 py-3 bg-gray-200 dark:bg-gray-700 rounded-2xl animate-pulse">
-                  <div className="h-4 bg-gray-300 dark:bg-gray-600 rounded w-40 mb-2"></div>
-                  <div className="h-4 bg-gray-300 dark:bg-gray-600 rounded w-32"></div>
-                </div>
-                <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-12 ml-3 animate-pulse"></div>
-              </div>
-            </div>
-
-            {/* 보낸 메시지 스켈레톤 */}
-            <div className="flex justify-end">
-              <div className="max-w-xs space-y-2">
-                <div className="px-4 py-3 bg-tennis-ball-200 dark:bg-tennis-ball-800 rounded-2xl animate-pulse">
-                  <div className="h-4 bg-tennis-ball-300 dark:bg-tennis-ball-700 rounded w-36 mb-2"></div>
-                  <div className="h-4 bg-tennis-ball-300 dark:bg-tennis-ball-700 rounded w-28"></div>
-                </div>
-                <div className="flex justify-end items-center gap-2 mr-3">
-                  <div className="h-3 bg-gray-200 dark:bg-gray-700 rounded w-12 animate-pulse"></div>
-                  <div className="h-3 bg-tennis-ball-200 dark:bg-tennis-ball-700 rounded w-8 animate-pulse"></div>
-                </div>
-              </div>
-            </div>
-
-            {/* 시스템 메시지 스켈레톤 */}
-            <div className="flex justify-center">
-              <div className="px-3 py-1 bg-gray-200 dark:bg-gray-700 rounded-full animate-pulse">
-                <div className="h-3 bg-gray-300 dark:bg-gray-600 rounded w-32"></div>
-              </div>
-            </div>
-
-            {/* 확정 요청 카드 스켈레톤 */}
-            <div className="flex justify-center">
-              <div className="max-w-sm w-full p-4 bg-gray-100 dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700 animate-pulse">
-                <div className="flex items-center gap-2 mb-3">
-                  <div className="w-5 h-5 bg-gray-300 dark:bg-gray-600 rounded-full"></div>
-                  <div className="h-4 bg-gray-300 dark:bg-gray-600 rounded w-24"></div>
-                </div>
-                <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-full mb-2"></div>
-                <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4 mb-3"></div>
-                <div className="h-10 bg-gray-300 dark:bg-gray-600 rounded-lg w-full"></div>
-              </div>
-            </div>
-
-            {/* 추가 메시지 스켈레톤들 */}
-            <div className="flex justify-start">
-              <div className="max-w-xs">
-                <div className="px-4 py-3 bg-gray-200 dark:bg-gray-700 rounded-2xl animate-pulse">
-                  <div className="h-4 bg-gray-300 dark:bg-gray-600 rounded w-48"></div>
-                </div>
-              </div>
-            </div>
-
-            <div className="flex justify-end">
-              <div className="max-w-xs">
-                <div className="px-4 py-3 bg-tennis-ball-200 dark:bg-tennis-ball-800 rounded-2xl animate-pulse">
-                  <div className="h-4 bg-tennis-ball-300 dark:bg-tennis-ball-700 rounded w-32"></div>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
+        {!isPendingJoin && isMessagesLoading && <ChatMessagesSkeleton />}
 
         {!isMessagesLoading && !isPendingJoin && (
           <AnimatePresence>
@@ -872,43 +737,76 @@ const ChatRoomPage = () => {
                     <div
                       className={`max-w-xs ${
                         message.isOwn ? "items-end" : "items-start"
-                      } flex flex-col`}
+                      } flex ${message.isOwn ? "flex-col" : "flex-row gap-2"}`}
                     >
+                      {/* 상대방 메시지일 때 프로필 이미지 표시 */}
                       {!message.isOwn && message.sender && (
-                        <div
-                          className={`text-xs mb-1 ml-3 ${theme.text.secondary}`}
-                        >
-                          {message.sender.nickname}
+                        <div className="flex-shrink-0">
+                          {message.sender.profile_image ? (
+                            <img
+                              onClick={() => {
+                                if (message.sender?.id) {
+                                  navigate(`/profile/${message.sender.id}`);
+                                }
+                              }}
+                              src={message.sender.profile_image}
+                              alt={message.sender.nickname}
+                              className="w-8 h-8 rounded-full object-cover"
+                            />
+                          ) : (
+                            <div
+                              onClick={() => {
+                                if (message.sender?.id) {
+                                  navigate(`/profile/${message.sender.id}`);
+                                }
+                              }}
+                              className="w-8 h-8 bg-gradient-to-br from-tennis-court-400 to-tennis-ball-500 rounded-full flex items-center justify-center"
+                            >
+                              <span className="text-white text-xs font-medium">
+                                {message.sender.nickname.charAt(0)}
+                              </span>
+                            </div>
+                          )}
                         </div>
                       )}
-                      <div
-                        className={`px-4 py-2 rounded-2xl ${
-                          message.isOwn
-                            ? "bg-tennis-ball-500 text-white"
-                            : `${theme.surface.card} ${theme.text.primary}`
-                        }`}
-                      >
-                        <p className="text-sm">{message.content}</p>
-                      </div>
-                      <div
-                        className={`text-xs mt-1 flex items-center gap-1 ${
-                          message.isOwn ? "justify-end mr-3" : "ml-3"
-                        } ${theme.text.secondary}`}
-                      >
-                        <span>
-                          {new Date(message.timestamp).toLocaleTimeString(
-                            "ko-KR",
-                            {
-                              hour: "2-digit",
-                              minute: "2-digit",
-                            }
-                          )}
-                        </span>
-                        {message.isOwn && message.isRead && (
-                          <span className="text-tennis-ball-500 text-xs">
-                            읽음
-                          </span>
+
+                      <div className="flex flex-col">
+                        {!message.isOwn && message.sender && (
+                          <div
+                            className={`text-[10px] mb-1 ml-1 ${theme.text.secondary}`}
+                          >
+                            {message.sender.nickname}
+                          </div>
                         )}
+                        <div
+                          className={`px-4 py-2 rounded-2xl border ${
+                            message.isOwn
+                              ? "bg-tennis-ball-500 text-white border-tennis-ball-500"
+                              : `${theme.surface.card} ${theme.text.primary} ${theme.border.primary}`
+                          }`}
+                        >
+                          <p className="text-sm">{message.content}</p>
+                        </div>
+                        <div
+                          className={`text-xs mt-1 flex items-center gap-1 ${
+                            message.isOwn ? "justify-end mr-3" : "ml-1"
+                          } ${theme.text.secondary}`}
+                        >
+                          <span>
+                            {new Date(message.timestamp).toLocaleTimeString(
+                              "ko-KR",
+                              {
+                                hour: "2-digit",
+                                minute: "2-digit",
+                              }
+                            )}
+                          </span>
+                          {message.isOwn && message.isRead && (
+                            <span className="text-tennis-ball-500 text-xs">
+                              읽음
+                            </span>
+                          )}
+                        </div>
                       </div>
                     </div>
                   )}

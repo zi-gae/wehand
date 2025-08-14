@@ -82,7 +82,7 @@ export interface User {
    */
   ntrp?: number;
   /**
-   * 테니스 경력 (년)
+   * 테니스 구력 (년)
    * @minimum 0
    * @maximum 50
    */
@@ -124,30 +124,28 @@ export interface UserProfile {
 /**
  * 경기 유형
  */
-export type MatchGameType = typeof MatchGameType[keyof typeof MatchGameType];
-
+export type MatchGameType = (typeof MatchGameType)[keyof typeof MatchGameType];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const MatchGameType = {
-  단식: '단식',
-  남복: '남복',
-  여복: '여복',
-  혼복: '혼복',
+  단식: "단식",
+  남복: "남복",
+  여복: "여복",
+  혼복: "혼복",
 } as const;
 
 /**
  * 매치 상태 (recruiting: 모집중, full: 마감, confirmed: 확정, completed: 완료, cancelled: 취소)
  */
-export type MatchStatus = typeof MatchStatus[keyof typeof MatchStatus];
-
+export type MatchStatus = (typeof MatchStatus)[keyof typeof MatchStatus];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const MatchStatus = {
-  recruiting: 'recruiting',
-  full: 'full',
-  confirmed: 'confirmed',
-  completed: 'completed',
-  cancelled: 'cancelled',
+  recruiting: "recruiting",
+  full: "full",
+  confirmed: "confirmed",
+  completed: "completed",
+  cancelled: "cancelled",
 } as const;
 
 export interface Match {
@@ -190,7 +188,7 @@ export interface Match {
   hostName?: string;
   /** 호스트 NTRP 레벨 */
   hostNtrp?: string;
-  /** 호스트 경력 */
+  /** 호스트 구력 */
   hostExperience?: string;
   /**
    * 매치 설명
@@ -212,15 +210,15 @@ export interface Match {
 /**
  * 게임 유형 (필수) - singles: 단식, mens_doubles: 남복, womens_doubles: 여복, mixed_doubles: 혼복
  */
-export type CreateMatchRequestGameType = typeof CreateMatchRequestGameType[keyof typeof CreateMatchRequestGameType];
-
+export type CreateMatchRequestGameType =
+  (typeof CreateMatchRequestGameType)[keyof typeof CreateMatchRequestGameType];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const CreateMatchRequestGameType = {
-  singles: 'singles',
-  mens_doubles: 'mens_doubles',
-  womens_doubles: 'womens_doubles',
-  mixed_doubles: 'mixed_doubles',
+  singles: "singles",
+  mens_doubles: "mens_doubles",
+  womens_doubles: "womens_doubles",
+  mixed_doubles: "mixed_doubles",
 } as const;
 
 export interface CreateMatchRequest {
@@ -276,12 +274,12 @@ export interface CreateMatchRequest {
    */
   recruit_ntrp_max?: number;
   /**
-   * 모집 최소 경력 (선택, 년 단위)
+   * 모집 최소 구력 (선택, 년 단위)
    * @minimum 0
    */
   recruit_experience_min?: number;
   /**
-   * 모집 최대 경력 (선택, 년 단위)
+   * 모집 최대 구력 (선택, 년 단위)
    * @minimum 0
    */
   recruit_experience_max?: number;
@@ -367,20 +365,19 @@ export interface KakaoLoginRequest {
 /**
  * 지역 유형 (city: 시, province: 도, district: 구/군)
  */
-export type RegionType = typeof RegionType[keyof typeof RegionType];
-
+export type RegionType = (typeof RegionType)[keyof typeof RegionType];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const RegionType = {
-  city: 'city',
-  province: 'province',
-  district: 'district',
+  city: "city",
+  province: "province",
+  district: "district",
 } as const;
 
 /**
  * 하위 시/구 목록 (도의 경우)
  */
-export type RegionDistrictsOneOf = {[key: string]: string[]};
+export type RegionDistrictsOneOf = { [key: string]: string[] };
 
 export type RegionDistricts = string[] | RegionDistrictsOneOf;
 
@@ -397,7 +394,7 @@ export interface Region {
 /**
  * 운영 시간
  */
-export type VenueOperatingHours = {[key: string]: string};
+export type VenueOperatingHours = { [key: string]: string };
 
 export interface Venue {
   /** 테니스장 ID */
@@ -440,17 +437,16 @@ export interface HomeResponse {
 /**
  * 게시글 카테고리
  */
-export type PostCategory = typeof PostCategory[keyof typeof PostCategory];
-
+export type PostCategory = (typeof PostCategory)[keyof typeof PostCategory];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const PostCategory = {
-  free: 'free',
-  tips: 'tips',
-  equipment: 'equipment',
-  match: 'match',
-  question: 'question',
-  announcement: 'announcement',
+  free: "free",
+  tips: "tips",
+  equipment: "equipment",
+  match: "match",
+  question: "question",
+  announcement: "announcement",
 } as const;
 
 export type PostAuthor = {
@@ -491,17 +487,17 @@ export type PostDetail = Post & PostDetailAllOf;
 /**
  * 게시글 카테고리 (필수)
  */
-export type CreatePostRequestCategory = typeof CreatePostRequestCategory[keyof typeof CreatePostRequestCategory];
-
+export type CreatePostRequestCategory =
+  (typeof CreatePostRequestCategory)[keyof typeof CreatePostRequestCategory];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const CreatePostRequestCategory = {
-  free: 'free',
-  tips: 'tips',
-  equipment: 'equipment',
-  match: 'match',
-  question: 'question',
-  announcement: 'announcement',
+  free: "free",
+  tips: "tips",
+  equipment: "equipment",
+  match: "match",
+  question: "question",
+  announcement: "announcement",
 } as const;
 
 export interface CreatePostRequest {
@@ -609,7 +605,7 @@ export interface UpdateProfileRequest {
    */
   ntrp?: number;
   /**
-   * 테니스 경력 (선택, 년 단위, 0-50)
+   * 테니스 구력 (선택, 년 단위, 0-50)
    * @minimum 0
    * @maximum 50
    */
@@ -641,14 +637,14 @@ export interface UpdateProfileRequest {
 /**
  * 참가 상태
  */
-export type MatchParticipationStatus = typeof MatchParticipationStatus[keyof typeof MatchParticipationStatus];
-
+export type MatchParticipationStatus =
+  (typeof MatchParticipationStatus)[keyof typeof MatchParticipationStatus];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const MatchParticipationStatus = {
-  pending: 'pending',
-  confirmed: 'confirmed',
-  cancelled: 'cancelled',
+  pending: "pending",
+  confirmed: "confirmed",
+  cancelled: "cancelled",
 } as const;
 
 export interface MatchParticipation {
@@ -707,16 +703,16 @@ export interface MatchBookmark {
 /**
  * 알림 유형
  */
-export type NotificationType = typeof NotificationType[keyof typeof NotificationType];
-
+export type NotificationType =
+  (typeof NotificationType)[keyof typeof NotificationType];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const NotificationType = {
-  match: 'match',
-  chat: 'chat',
-  community: 'community',
-  system: 'system',
-  marketing: 'marketing',
+  match: "match",
+  chat: "chat",
+  community: "community",
+  system: "system",
+  marketing: "marketing",
 } as const;
 
 /**
@@ -744,14 +740,14 @@ export interface Notification {
 /**
  * 디바이스 유형 (필수)
  */
-export type UpdateFcmTokenRequestDeviceType = typeof UpdateFcmTokenRequestDeviceType[keyof typeof UpdateFcmTokenRequestDeviceType];
-
+export type UpdateFcmTokenRequestDeviceType =
+  (typeof UpdateFcmTokenRequestDeviceType)[keyof typeof UpdateFcmTokenRequestDeviceType];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const UpdateFcmTokenRequestDeviceType = {
-  ios: 'ios',
-  android: 'android',
-  web: 'web',
+  ios: "ios",
+  android: "android",
+  web: "web",
 } as const;
 
 export interface UpdateFcmTokenRequest {
@@ -798,13 +794,12 @@ export interface UpdateNotificationSettingsRequest {
 /**
  * 채팅방 유형
  */
-export type ChatRoomType = typeof ChatRoomType[keyof typeof ChatRoomType];
-
+export type ChatRoomType = (typeof ChatRoomType)[keyof typeof ChatRoomType];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const ChatRoomType = {
-  private: 'private',
-  match: 'match',
+  private: "private",
+  match: "match",
 } as const;
 
 /**
@@ -865,13 +860,13 @@ export type ChatRoomDetail = ChatRoom & ChatRoomDetailAllOf;
 /**
  * 채팅방 유형 (필수)
  */
-export type CreateChatRoomRequestType = typeof CreateChatRoomRequestType[keyof typeof CreateChatRoomRequestType];
-
+export type CreateChatRoomRequestType =
+  (typeof CreateChatRoomRequestType)[keyof typeof CreateChatRoomRequestType];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const CreateChatRoomRequestType = {
-  private: 'private',
-  match: 'match',
+  private: "private",
+  match: "match",
 } as const;
 
 export interface CreateChatRoomRequest {
@@ -894,14 +889,14 @@ export interface CreateChatRoomRequest {
 /**
  * 메시지 유형
  */
-export type ChatMessageMessageType = typeof ChatMessageMessageType[keyof typeof ChatMessageMessageType];
-
+export type ChatMessageMessageType =
+  (typeof ChatMessageMessageType)[keyof typeof ChatMessageMessageType];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const ChatMessageMessageType = {
-  text: 'text',
-  image: 'image',
-  system: 'system',
+  text: "text",
+  image: "image",
+  system: "system",
 } as const;
 
 /**
@@ -946,14 +941,14 @@ export interface ChatMessage {
 /**
  * 메시지 유형 (기본값: text)
  */
-export type SendMessageRequestMessageType = typeof SendMessageRequestMessageType[keyof typeof SendMessageRequestMessageType];
-
+export type SendMessageRequestMessageType =
+  (typeof SendMessageRequestMessageType)[keyof typeof SendMessageRequestMessageType];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const SendMessageRequestMessageType = {
-  text: 'text',
-  image: 'image',
-  system: 'system',
+  text: "text",
+  image: "image",
+  system: "system",
 } as const;
 
 export interface SendMessageRequest {
@@ -975,17 +970,17 @@ export type GetApiAuthMe200 = {
 };
 
 export type GetApiChatRoomsParams = {
-/**
- * 페이지 번호
- * @minimum 1
- */
-page?: number;
-/**
- * 페이지 크기
- * @minimum 1
- * @maximum 50
- */
-limit?: number;
+  /**
+   * 페이지 번호
+   * @minimum 1
+   */
+  page?: number;
+  /**
+   * 페이지 크기
+   * @minimum 1
+   * @maximum 50
+   */
+  limit?: number;
 };
 
 export type GetApiChatRooms200 = {
@@ -1010,21 +1005,21 @@ export type GetApiChatRoomsChatRoomId200 = {
 };
 
 export type GetApiChatRoomsChatRoomIdMessagesParams = {
-/**
- * 페이지 번호
- * @minimum 1
- */
-page?: number;
-/**
- * 페이지 크기
- * @minimum 1
- * @maximum 100
- */
-limit?: number;
-/**
- * 특정 메시지 ID 이전 메시지 조회 (무한 스크롤용)
- */
-before?: string;
+  /**
+   * 페이지 번호
+   * @minimum 1
+   */
+  page?: number;
+  /**
+   * 페이지 크기
+   * @minimum 1
+   * @maximum 100
+   */
+  limit?: number;
+  /**
+   * 특정 메시지 ID 이전 메시지 조회 (무한 스크롤용)
+   */
+  before?: string;
 };
 
 export type GetApiChatRoomsChatRoomIdMessages200 = {
@@ -1044,53 +1039,53 @@ export type PostApiChatRoomsChatRoomIdReadBody = {
 };
 
 export type GetApiCommunityPostsParams = {
-/**
- * 카테고리 필터 (all=전체, free=자유게시판, tips=팁/기술, equipment=장비, match=경기후기, question=질문, announcement=공지사항)
- */
-category?: GetApiCommunityPostsCategory;
-/**
- * 검색어 (제목, 내용 검색)
- */
-search?: string;
-/**
- * 정렬 방식
- */
-sort?: GetApiCommunityPostsSort;
-/**
- * 페이지 번호
- * @minimum 1
- */
-page?: number;
-/**
- * 페이지 크기
- * @minimum 1
- * @maximum 50
- */
-limit?: number;
+  /**
+   * 카테고리 필터 (all=전체, free=자유게시판, tips=팁/기술, equipment=장비, match=경기후기, question=질문, announcement=공지사항)
+   */
+  category?: GetApiCommunityPostsCategory;
+  /**
+   * 검색어 (제목, 내용 검색)
+   */
+  search?: string;
+  /**
+   * 정렬 방식
+   */
+  sort?: GetApiCommunityPostsSort;
+  /**
+   * 페이지 번호
+   * @minimum 1
+   */
+  page?: number;
+  /**
+   * 페이지 크기
+   * @minimum 1
+   * @maximum 50
+   */
+  limit?: number;
 };
 
-export type GetApiCommunityPostsCategory = typeof GetApiCommunityPostsCategory[keyof typeof GetApiCommunityPostsCategory];
-
+export type GetApiCommunityPostsCategory =
+  (typeof GetApiCommunityPostsCategory)[keyof typeof GetApiCommunityPostsCategory];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const GetApiCommunityPostsCategory = {
-  all: 'all',
-  free: 'free',
-  tips: 'tips',
-  equipment: 'equipment',
-  match: 'match',
-  question: 'question',
-  announcement: 'announcement',
+  all: "all",
+  free: "free",
+  tips: "tips",
+  equipment: "equipment",
+  match: "match",
+  question: "question",
+  announcement: "announcement",
 } as const;
 
-export type GetApiCommunityPostsSort = typeof GetApiCommunityPostsSort[keyof typeof GetApiCommunityPostsSort];
-
+export type GetApiCommunityPostsSort =
+  (typeof GetApiCommunityPostsSort)[keyof typeof GetApiCommunityPostsSort];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const GetApiCommunityPostsSort = {
-  latest: 'latest',
-  popular: 'popular',
-  comments: 'comments',
+  latest: "latest",
+  popular: "popular",
+  comments: "comments",
 } as const;
 
 export type GetApiCommunityPosts200 = {
@@ -1115,17 +1110,17 @@ export type GetApiCommunityPostsPostId200 = {
 };
 
 export type GetApiCommunityPostsPostIdCommentsParams = {
-/**
- * 페이지 번호
- * @minimum 1
- */
-page?: number;
-/**
- * 페이지 크기
- * @minimum 1
- * @maximum 100
- */
-limit?: number;
+  /**
+   * 페이지 번호
+   * @minimum 1
+   */
+  page?: number;
+  /**
+   * 페이지 크기
+   * @minimum 1
+   * @maximum 100
+   */
+  limit?: number;
 };
 
 export type GetApiCommunityPostsPostIdComments200 = {
@@ -1150,92 +1145,92 @@ export type GetApiHome200 = {
 };
 
 export type GetApiMatchesParams = {
-/**
- * 검색어
- */
-search?: string;
-/**
- * 지역 필터
- */
-region?: string;
-/**
- * 게임 유형
- */
-game_type?: GetApiMatchesGameType;
-/**
- * 날짜 (YYYY-MM-DD)
- */
-date?: string;
-/**
- * 최소 NTRP 레벨
- * @minimum 1
- * @maximum 7
- */
-ntrp_min?: number;
-/**
- * 최대 NTRP 레벨
- * @minimum 1
- * @maximum 7
- */
-ntrp_max?: number;
-/**
- * 최소 경력 (년)
- * @minimum 0
- */
-experience_min?: number;
-/**
- * 최대 경력 (년)
- * @minimum 0
- */
-experience_max?: number;
-/**
- * 정렬 기준 (latest=최신순, distance=거리순, price=가격순)
- */
-sort?: GetApiMatchesSort;
-/**
- * 사용자 위도 (거리순 정렬 시 필수)
- * @minimum -90
- * @maximum 90
- */
-user_lat?: number;
-/**
- * 사용자 경도 (거리순 정렬 시 필수)
- * @minimum -180
- * @maximum 180
- */
-user_lng?: number;
-/**
- * 페이지 번호
- * @minimum 1
- */
-page?: number;
-/**
- * 페이지 크기
- * @minimum 1
- * @maximum 100
- */
-limit?: number;
+  /**
+   * 검색어
+   */
+  search?: string;
+  /**
+   * 지역 필터
+   */
+  region?: string;
+  /**
+   * 게임 유형
+   */
+  game_type?: GetApiMatchesGameType;
+  /**
+   * 날짜 (YYYY-MM-DD)
+   */
+  date?: string;
+  /**
+   * 최소 NTRP 레벨
+   * @minimum 1
+   * @maximum 7
+   */
+  ntrp_min?: number;
+  /**
+   * 최대 NTRP 레벨
+   * @minimum 1
+   * @maximum 7
+   */
+  ntrp_max?: number;
+  /**
+   * 최소 구력 (년)
+   * @minimum 0
+   */
+  experience_min?: number;
+  /**
+   * 최대 구력 (년)
+   * @minimum 0
+   */
+  experience_max?: number;
+  /**
+   * 정렬 기준 (latest=최신순, distance=거리순, price=가격순)
+   */
+  sort?: GetApiMatchesSort;
+  /**
+   * 사용자 위도 (거리순 정렬 시 필수)
+   * @minimum -90
+   * @maximum 90
+   */
+  user_lat?: number;
+  /**
+   * 사용자 경도 (거리순 정렬 시 필수)
+   * @minimum -180
+   * @maximum 180
+   */
+  user_lng?: number;
+  /**
+   * 페이지 번호
+   * @minimum 1
+   */
+  page?: number;
+  /**
+   * 페이지 크기
+   * @minimum 1
+   * @maximum 100
+   */
+  limit?: number;
 };
 
-export type GetApiMatchesGameType = typeof GetApiMatchesGameType[keyof typeof GetApiMatchesGameType];
-
+export type GetApiMatchesGameType =
+  (typeof GetApiMatchesGameType)[keyof typeof GetApiMatchesGameType];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const GetApiMatchesGameType = {
-  singles: 'singles',
-  mens_doubles: 'mens_doubles',
-  womens_doubles: 'womens_doubles',
-  mixed_doubles: 'mixed_doubles',
+  singles: "singles",
+  mens_doubles: "mens_doubles",
+  womens_doubles: "womens_doubles",
+  mixed_doubles: "mixed_doubles",
 } as const;
 
-export type GetApiMatchesSort = typeof GetApiMatchesSort[keyof typeof GetApiMatchesSort];
-
+export type GetApiMatchesSort =
+  (typeof GetApiMatchesSort)[keyof typeof GetApiMatchesSort];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const GetApiMatchesSort = {
-  latest: 'latest',
-  distance: 'distance',
-  price: 'price',
+  latest: "latest",
+  distance: "distance",
+  price: "price",
 } as const;
 
 export type GetApiMatches200DataItem = {
@@ -1304,41 +1299,41 @@ export type PostApiMatchesMatchIdChat201 = {
 };
 
 export type GetApiNotificationsParams = {
-/**
- * 알림 타입 필터
- */
-type?: GetApiNotificationsType;
-/**
- * 읽지 않은 알림만 조회
- */
-unread_only?: GetApiNotificationsUnreadOnly;
-/**
- * 페이지 번호
- * @minimum 1
- */
-page?: number;
-/**
- * 페이지 크기
- * @minimum 1
- * @maximum 100
- */
-limit?: number;
+  /**
+   * 알림 타입 필터
+   */
+  type?: GetApiNotificationsType;
+  /**
+   * 읽지 않은 알림만 조회
+   */
+  unread_only?: GetApiNotificationsUnreadOnly;
+  /**
+   * 페이지 번호
+   * @minimum 1
+   */
+  page?: number;
+  /**
+   * 페이지 크기
+   * @minimum 1
+   * @maximum 100
+   */
+  limit?: number;
 };
 
-export type GetApiNotificationsType = typeof GetApiNotificationsType[keyof typeof GetApiNotificationsType];
-
+export type GetApiNotificationsType =
+  (typeof GetApiNotificationsType)[keyof typeof GetApiNotificationsType];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const GetApiNotificationsType = {
-  all: 'all',
-  match: 'match',
-  chat: 'chat',
-  community: 'community',
-  system: 'system',
+  all: "all",
+  match: "match",
+  chat: "chat",
+  community: "community",
+  system: "system",
 } as const;
 
-export type GetApiNotificationsUnreadOnly = typeof GetApiNotificationsUnreadOnly[keyof typeof GetApiNotificationsUnreadOnly];
-
+export type GetApiNotificationsUnreadOnly =
+  (typeof GetApiNotificationsUnreadOnly)[keyof typeof GetApiNotificationsUnreadOnly];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const GetApiNotificationsUnreadOnly = {
@@ -1378,46 +1373,46 @@ export type GetApiProfileUsersUserId200 = {
 };
 
 export type GetApiProfileMyMatchesParams = {
-/**
- * 매치 상태 필터
- */
-status?: GetApiProfileMyMatchesStatus;
-/**
- * 매치 시점 필터
- */
-type?: GetApiProfileMyMatchesType;
-/**
- * 페이지 번호
- * @minimum 1
- */
-page?: number;
-/**
- * 페이지 크기
- * @minimum 1
- * @maximum 50
- */
-limit?: number;
+  /**
+   * 매치 상태 필터
+   */
+  status?: GetApiProfileMyMatchesStatus;
+  /**
+   * 매치 시점 필터
+   */
+  type?: GetApiProfileMyMatchesType;
+  /**
+   * 페이지 번호
+   * @minimum 1
+   */
+  page?: number;
+  /**
+   * 페이지 크기
+   * @minimum 1
+   * @maximum 50
+   */
+  limit?: number;
 };
 
-export type GetApiProfileMyMatchesStatus = typeof GetApiProfileMyMatchesStatus[keyof typeof GetApiProfileMyMatchesStatus];
-
+export type GetApiProfileMyMatchesStatus =
+  (typeof GetApiProfileMyMatchesStatus)[keyof typeof GetApiProfileMyMatchesStatus];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const GetApiProfileMyMatchesStatus = {
-  all: 'all',
-  pending: 'pending',
-  confirmed: 'confirmed',
-  cancelled: 'cancelled',
+  all: "all",
+  pending: "pending",
+  confirmed: "confirmed",
+  cancelled: "cancelled",
 } as const;
 
-export type GetApiProfileMyMatchesType = typeof GetApiProfileMyMatchesType[keyof typeof GetApiProfileMyMatchesType];
-
+export type GetApiProfileMyMatchesType =
+  (typeof GetApiProfileMyMatchesType)[keyof typeof GetApiProfileMyMatchesType];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const GetApiProfileMyMatchesType = {
-  all: 'all',
-  upcoming: 'upcoming',
-  past: 'past',
+  all: "all",
+  upcoming: "upcoming",
+  past: "past",
 } as const;
 
 export type GetApiProfileMyMatches200 = {
@@ -1427,17 +1422,17 @@ export type GetApiProfileMyMatches200 = {
 };
 
 export type GetApiProfileMyReviewsParams = {
-/**
- * 페이지 번호
- * @minimum 1
- */
-page?: number;
-/**
- * 페이지 크기
- * @minimum 1
- * @maximum 50
- */
-limit?: number;
+  /**
+   * 페이지 번호
+   * @minimum 1
+   */
+  page?: number;
+  /**
+   * 페이지 크기
+   * @minimum 1
+   * @maximum 50
+   */
+  limit?: number;
 };
 
 export type GetApiProfileMyReviews200 = {
@@ -1447,17 +1442,17 @@ export type GetApiProfileMyReviews200 = {
 };
 
 export type GetApiProfileBookmarksParams = {
-/**
- * 페이지 번호
- * @minimum 1
- */
-page?: number;
-/**
- * 페이지 크기
- * @minimum 1
- * @maximum 50
- */
-limit?: number;
+  /**
+   * 페이지 번호
+   * @minimum 1
+   */
+  page?: number;
+  /**
+   * 페이지 크기
+   * @minimum 1
+   * @maximum 50
+   */
+  limit?: number;
 };
 
 export type GetApiProfileBookmarks200 = {
@@ -1466,7 +1461,7 @@ export type GetApiProfileBookmarks200 = {
   pagination?: PaginationInfo;
 };
 
-export type GetApiRegions200DataRegions = {[key: string]: Region};
+export type GetApiRegions200DataRegions = { [key: string]: Region };
 
 export type GetApiRegions200Data = {
   regions?: GetApiRegions200DataRegions;
@@ -1478,29 +1473,29 @@ export type GetApiRegions200 = {
 };
 
 export type GetApiVenuesParams = {
-/**
- * 검색 키워드 (테니스장 이름, 주소)
- */
-keyword?: string;
-/**
- * 지역 필터
- */
-region?: string;
-/**
- * 구/군 필터
- */
-district?: string;
-/**
- * 페이지 번호
- * @minimum 1
- */
-page?: number;
-/**
- * 페이지 크기
- * @minimum 1
- * @maximum 100
- */
-limit?: number;
+  /**
+   * 검색 키워드 (테니스장 이름, 주소)
+   */
+  keyword?: string;
+  /**
+   * 지역 필터
+   */
+  region?: string;
+  /**
+   * 구/군 필터
+   */
+  district?: string;
+  /**
+   * 페이지 번호
+   * @minimum 1
+   */
+  page?: number;
+  /**
+   * 페이지 크기
+   * @minimum 1
+   * @maximum 100
+   */
+  limit?: number;
 };
 
 export type GetApiVenues200 = {
@@ -1510,17 +1505,17 @@ export type GetApiVenues200 = {
 };
 
 export type GetApiVenuesAllParams = {
-/**
- * 페이지 번호
- * @minimum 1
- */
-page?: number;
-/**
- * 페이지 크기
- * @minimum 1
- * @maximum 100
- */
-limit?: number;
+  /**
+   * 페이지 번호
+   * @minimum 1
+   */
+  page?: number;
+  /**
+   * 페이지 크기
+   * @minimum 1
+   * @maximum 100
+   */
+  limit?: number;
 };
 
 export type GetApiVenuesAll200Data = {
@@ -1534,26 +1529,26 @@ export type GetApiVenuesAll200 = {
 };
 
 export type GetApiVenuesNearbyParams = {
-/**
- * 위도
- */
-latitude: number;
-/**
- * 경도
- */
-longitude: number;
-/**
- * 반경 (km)
- * @minimum 1
- * @maximum 50
- */
-radius?: number;
-/**
- * 최대 결과 수
- * @minimum 1
- * @maximum 100
- */
-limit?: number;
+  /**
+   * 위도
+   */
+  latitude: number;
+  /**
+   * 경도
+   */
+  longitude: number;
+  /**
+   * 반경 (km)
+   * @minimum 1
+   * @maximum 50
+   */
+  radius?: number;
+  /**
+   * 최대 결과 수
+   * @minimum 1
+   * @maximum 100
+   */
+  limit?: number;
 };
 
 export type GetApiVenuesNearby200DataItemAllOf = {
@@ -1561,7 +1556,8 @@ export type GetApiVenuesNearby200DataItemAllOf = {
   distance?: string;
 };
 
-export type GetApiVenuesNearby200DataItem = Venue & GetApiVenuesNearby200DataItemAllOf;
+export type GetApiVenuesNearby200DataItem = Venue &
+  GetApiVenuesNearby200DataItemAllOf;
 
 export type GetApiVenuesNearby200 = {
   success?: boolean;
@@ -1575,10 +1571,10 @@ export type GetApiVenuesVenueId200DataAllOf = {
   totalMatches?: number;
 };
 
-export type GetApiVenuesVenueId200Data = Venue & GetApiVenuesVenueId200DataAllOf;
+export type GetApiVenuesVenueId200Data = Venue &
+  GetApiVenuesVenueId200DataAllOf;
 
 export type GetApiVenuesVenueId200 = {
   success?: boolean;
   data?: GetApiVenuesVenueId200Data;
 };
-

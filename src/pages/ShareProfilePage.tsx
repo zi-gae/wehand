@@ -1,40 +1,29 @@
 import { motion } from "framer-motion";
-import { useState } from "react";
 import {
   MdArrowBack,
   MdEdit,
-  MdHelp,
-  MdHistory,
-  MdLogout,
-  MdNotifications,
   MdRateReview,
   MdSportsTennis,
   MdThumbDown,
   MdThumbUp,
-  MdDescription,
-  MdSecurity,
-  MdSettings,
 } from "react-icons/md";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import ThemeToggle from "../components/ThemeToggle";
-import { useLogout } from "../hooks";
-import { useMyReviews, useProfile } from "../hooks/useProfile";
+import { useUserProfile, useUserReviews } from "../hooks/useProfile";
 import { getThemeClasses, tennisGradients } from "../lib/theme";
-import { supabase } from "@/lib/supabase/client";
 
 const ProfilePageContent = () => {
   const navigate = useNavigate();
+  const { userId = "" } = useParams();
   const theme = getThemeClasses();
-  const [showLogoutModal, setShowLogoutModal] = useState(false);
 
-  // API 훅
-  const logoutMutation = useLogout();
   const {
     data: userData,
     isLoading: profileLoading,
     error: profileError,
-  } = useProfile();
-  const { data: reviewsData, isLoading: reviewsLoading } = useMyReviews();
+  } = useUserProfile(userId);
+  const { data: reviewsData, isLoading: reviewsLoading } =
+    useUserReviews(userId);
 
   // 사용자 정보 처리
   const userInfo = {
@@ -57,75 +46,6 @@ const ProfilePageContent = () => {
     reviewNtrp: userData?.userInfo?.review_ntrp ?? 0,
   };
 
-  const menuItems = [
-    {
-      id: 1,
-      icon: MdEdit,
-      title: "프로필 수정",
-      description: "개인정보 및 테니스 정보 수정",
-      color:
-        "text-accent-600 bg-accent-100 dark:text-accent-400 dark:bg-accent-900/20",
-    },
-    {
-      id: 2,
-      icon: MdHistory,
-      title: "경기 기록",
-      description: "나의 모든 매치 기록 확인",
-      color:
-        "text-primary-600 bg-primary-100 dark:text-primary-400 dark:bg-primary-900/20",
-    },
-    {
-      id: 3,
-      icon: MdSettings,
-      title: "설정",
-      description: "알림, 테마 및 기타 설정",
-      color: "text-gray-600 bg-gray-100 dark:text-gray-400 dark:bg-gray-900/20",
-    },
-    {
-      id: 4,
-      icon: MdNotifications,
-      title: "알림 설정",
-      description: "푸시 알림 및 이메일 설정",
-      color: "text-purple-600 bg-purple-100",
-    },
-    {
-      id: 7,
-      icon: MdHelp,
-      title: "고객 지원",
-      description: "문의사항 및 자주 묻는 질문",
-      color: "text-orange-600 bg-orange-100",
-    },
-  ];
-
-  const handleMenuClick = (menuId: number) => {
-    switch (menuId) {
-      case 1:
-        navigate("/profile/edit");
-        break;
-      case 2:
-        break;
-      case 3:
-        navigate("/settings");
-        break;
-      case 5:
-        navigate("/terms");
-        break;
-      case 6:
-        navigate("/privacy");
-        break;
-      default:
-        break;
-    }
-  };
-
-  const handleLogoutClick = () => setShowLogoutModal(true);
-  const handleLogoutConfirm = async () => {
-    await supabase.auth.signOut();
-    setShowLogoutModal(false);
-    navigate("/signup", { replace: true });
-  };
-  const handleLogoutCancel = () => setShowLogoutModal(false);
-
   if (profileLoading) {
     return (
       <div
@@ -135,8 +55,15 @@ const ProfilePageContent = () => {
         <div
           className={`${theme.background.glass} shadow-sm sticky top-0 z-40`}
         >
-          <div className="flex items-center justify-between px-6 py-4">
-            <div className="w-10 h-10 bg-gray-200 dark:bg-gray-700 rounded-full animate-pulse" />
+          <div className="flex items-center justify-between px-4 py-3">
+            <motion.button
+              className="p-2.5 rounded-2xl bg-white/10 dark:bg-gray-800/50 backdrop-blur-sm"
+              onClick={() => navigate(-1)}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              <MdArrowBack className={`w-5 h-5 ${theme.text.primary}`} />
+            </motion.button>
             <div className="w-20 h-6 bg-gray-200 dark:bg-gray-700 rounded animate-pulse" />
             <div className="w-10 h-10 bg-gray-200 dark:bg-gray-700 rounded-full animate-pulse" />
           </div>
@@ -254,7 +181,14 @@ const ProfilePageContent = () => {
         transition={{ delay: 0.1 }}
       >
         <div className="flex items-center justify-between px-4 py-3">
-          <div></div>
+          <motion.button
+            className="p-2.5 rounded-2xl bg-white/10 dark:bg-gray-800/50 backdrop-blur-sm"
+            onClick={() => navigate(-1)}
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+          >
+            <MdArrowBack className={`w-5 h-5 ${theme.text.primary}`} />
+          </motion.button>
 
           <motion.h1
             className={`text-lg font-bold ${theme.text.primary}`}
@@ -297,14 +231,6 @@ const ProfilePageContent = () => {
                   </span>
                 </div>
               )}
-              <motion.button
-                className={`absolute -bottom-1 -right-1 w-8 h-8 rounded-full shadow-lg flex items-center justify-center ${theme.surface.card}`}
-                onClick={() => navigate("/profile/edit")}
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-              >
-                <MdEdit className="w-4 h-4 text-tennis-court-600 dark:text-tennis-court-400" />
-              </motion.button>
             </div>
             <div className="flex-1 min-w-0">
               <h2 className={`text-xl font-bold mb-1 ${theme.text.primary}`}>
@@ -312,9 +238,6 @@ const ProfilePageContent = () => {
               </h2>
               <p className="text-tennis-court-600 dark:text-tennis-court-400 font-medium mb-2">
                 @{userInfo.nickname}
-              </p>
-              <p className={`text-sm leading-relaxed ${theme.text.primary}`}>
-                {userInfo.bio}
               </p>
             </div>
           </div>
@@ -554,139 +477,14 @@ const ProfilePageContent = () => {
             </>
           )}
         </motion.div>
-
-        {/* Menu Items */}
-        <motion.div
-          className={`rounded-2xl shadow-sm border mb-4 ${theme.surface.card} ${theme.border.primary}`}
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.6 }}
-        >
-          <div className={`divide-y ${theme.border.primary}`}>
-            {menuItems.map((item, index) => (
-              <motion.button
-                key={item.id}
-                className={`w-full flex items-center gap-4 p-4 hover:bg-tennis-court-50 dark:hover:bg-tennis-court-900/10 transition-colors first:rounded-t-2xl last:rounded-b-2xl`}
-                onClick={() => handleMenuClick(item.id)}
-                initial={{ x: -20, opacity: 0 }}
-                animate={{ x: 0, opacity: 1 }}
-                transition={{ delay: 0.7 + index * 0.05 }}
-                whileHover={{ x: 4 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                <div
-                  className={`w-10 h-10 rounded-full flex items-center justify-center ${item.color}`}
-                >
-                  <item.icon className="w-5 h-5" />
-                </div>
-                <div className="flex-1 text-left">
-                  <h4 className={`font-semibold ${theme.text.primary}`}>
-                    {item.title}
-                  </h4>
-                  <p className={`text-sm ${theme.text.secondary}`}>
-                    {item.description}
-                  </p>
-                </div>
-                <div className={theme.text.secondary}>
-                  <svg
-                    className="w-5 h-5"
-                    fill="currentColor"
-                    viewBox="0 0 20 20"
-                  >
-                    <path
-                      fillRule="evenodd"
-                      d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                </div>
-              </motion.button>
-            ))}
-          </div>
-        </motion.div>
-
-        {/* Logout Button */}
-        <motion.div
-          className={`rounded-2xl shadow-sm border ${theme.surface.card} ${theme.border.primary}`}
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ delay: 0.8 }}
-        >
-          <motion.button
-            className="w-full flex items-center justify-center gap-3 p-4 text-status-error-600 dark:text-status-error-400 hover:bg-status-error-50 dark:hover:bg-status-error-900/10 transition-colors rounded-2xl"
-            onClick={handleLogoutClick}
-            disabled={logoutMutation.isPending}
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-          >
-            <MdLogout className="w-5 h-5" />
-            <span className="font-semibold">
-              {logoutMutation.isPending ? "로그아웃 중..." : "로그아웃"}
-            </span>
-          </motion.button>
-        </motion.div>
       </div>
-
-      {/* 로그아웃 확인 모달 */}
-      {showLogoutModal && (
-        <motion.div
-          className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 px-4"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-        >
-          <motion.div
-            className={`w-full max-w-sm rounded-2xl p-6 ${theme.surface.card} ${theme.border.primary} border shadow-xl`}
-            initial={{ scale: 0.9, opacity: 0 }}
-            animate={{ scale: 1, opacity: 1 }}
-            exit={{ scale: 0.9, opacity: 0 }}
-            transition={{ type: "spring", damping: 20, stiffness: 300 }}
-          >
-            <div className="text-center mb-6">
-              <div className="w-16 h-16 bg-status-error-100 dark:bg-status-error-900/20 rounded-full flex items-center justify-center mx-auto mb-4">
-                <MdLogout className="w-8 h-8 text-status-error-600 dark:text-status-error-400" />
-              </div>
-              <h3 className={`text-lg font-bold mb-2 ${theme.text.primary}`}>
-                로그아웃 하시겠습니까?
-              </h3>
-              <p className={`text-sm ${theme.text.secondary}`}>
-                로그아웃하면 다시 로그인해야 합니다.
-              </p>
-            </div>
-            <div className="flex gap-3">
-              <motion.button
-                className={`flex-1 py-3 px-4 rounded-xl font-medium ${theme.surface.card} ${theme.text.primary} border ${theme.border.primary} transition-colors`}
-                onClick={handleLogoutCancel}
-                disabled={logoutMutation.isPending}
-                whileHover={{ scale: 1.02 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                취소
-              </motion.button>
-              <motion.button
-                className={`flex-1 py-3 px-4 rounded-xl font-medium text-white transition-colors ${
-                  logoutMutation.isPending
-                    ? "bg-gray-400 cursor-not-allowed"
-                    : "bg-status-error-500 hover:bg-status-error-600"
-                }`}
-                onClick={handleLogoutConfirm}
-                disabled={logoutMutation.isPending}
-                whileHover={!logoutMutation.isPending ? { scale: 1.02 } : {}}
-                whileTap={!logoutMutation.isPending ? { scale: 0.98 } : {}}
-              >
-                {logoutMutation.isPending ? "로그아웃 중..." : "로그아웃"}
-              </motion.button>
-            </div>
-          </motion.div>
-        </motion.div>
-      )}
     </motion.div>
   );
 };
 
 // 메인 ProfilePage 컴포넌트 (Suspense 제거)
-const ProfilePage = () => {
+const ShareProfilePage = () => {
   return <ProfilePageContent />;
 };
 
-export default ProfilePage;
+export default ShareProfilePage;

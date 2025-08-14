@@ -54,7 +54,6 @@ export const useMatchHistory = (params?: {
           type: params?.type as any,
         })
         .then((response) => response.data),
-    staleTime: 5 * 60 * 1000,
   });
 };
 
@@ -66,7 +65,19 @@ export const useMyReviews = (params?: { page?: number; limit?: number }) => {
     queryKey: [...profileQueryKeys.all, "reviews", params || {}],
     queryFn: () =>
       api.getApiProfileMyReviews(params).then((response) => response.data),
-    staleTime: 5 * 60 * 1000,
+  });
+};
+
+// 내가 받은 리뷰 조회 훅
+export const useUserReviews = (userId: string) => {
+  const api = getWeHandTennisAPI();
+
+  return useQuery({
+    queryKey: [...profileQueryKeys.all, "user", userId, "reviews"],
+    queryFn: () =>
+      api
+        .getApiProfileUsersUserIdReviews(userId)
+        .then((response) => response.data),
   });
 };
 
@@ -78,7 +89,6 @@ export const useBookmarks = (params?: { page?: number; limit?: number }) => {
     queryKey: [...profileQueryKeys.all, "bookmarks", params || {}],
     queryFn: () =>
       api.getApiProfileBookmarks(params).then((response) => response.data),
-    staleTime: 5 * 60 * 1000,
   });
 };
 

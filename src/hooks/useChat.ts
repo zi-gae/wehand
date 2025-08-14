@@ -32,7 +32,10 @@ export const useChatRooms = (params?: { page?: number; limit?: number }) => {
 };
 
 // 특정 채팅방 조회 훅
-export const useChatRoom = (roomId: string, options?: { enabled?: boolean }) => {
+export const useChatRoom = (
+  roomId: string,
+  options?: { enabled?: boolean }
+) => {
   const api = getWeHandTennisAPI();
 
   return useQuery({
@@ -261,5 +264,21 @@ export const useSuspenseUnreadMessageCount = () => {
       }),
     staleTime: 1 * 60 * 1000, // 1분
     refetchInterval: 30 * 1000, // 30초마다 자동 리패치
+  });
+};
+
+export const useDeleteChatRoom = () => {
+  const queryClient = useQueryClient();
+  const api = getWeHandTennisAPI();
+
+  return useMutation({
+    mutationFn: (roomId: string) =>
+      api.deleteApiChatRoomsChatRoomId(roomId).then((response) => response),
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: chatQueryKeys.rooms(),
+      });
+      queryClient.invalidateQueries({ queryKey: chatQueryKeys.rooms() });
+    },
   });
 };

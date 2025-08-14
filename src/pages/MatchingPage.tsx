@@ -99,7 +99,7 @@ const MatchingPageContentSuspense = ({
       params.ntrpMin = appliedFilters.ntrpMin;
       params.ntrpMax = appliedFilters.ntrpMax;
     }
-    // 경력 기본값이 아닌 경우만 추가
+    // 구력 기본값이 아닌 경우만 추가
     if (
       appliedFilters.experienceMin !== 0 ||
       appliedFilters.experienceMax !== 10
@@ -1294,7 +1294,7 @@ const MatchingPage = () => {
                         {tempFilters.experienceMin}년
                       </span>
                       <span className={`text-xs ${theme.text.secondary}`}>
-                        경력
+                        구력
                       </span>
                       <span className="text-sm font-medium text-tennis-ball-600 dark:text-tennis-ball-400">
                         {tempFilters.experienceMax === 10

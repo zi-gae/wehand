@@ -89,7 +89,7 @@ GET /matches?search={query}&region={region}&gameType={gameType}&date={date}&time
 - date: 날짜 (YYYY-MM-DD)
 - timeSlots: 시간대 (comma separated)
 - ntrpMin, ntrpMax: NTRP 레벨 범위
-- experienceMin, experienceMax: 경력 범위 (년)
+- experienceMin, experienceMax: 구력 범위 (년)
 - sort: 정렬 (latest, distance, price)
 
 **Response:**
@@ -220,11 +220,13 @@ DELETE /matches/{matchId}/bookmark
 ```
 
 ### 3.4 매치 단체 채팅방 생성
+
 ```
 POST /matches/{matchId}/chat
 ```
 
 **Request Body:**
+
 ```json
 {
   "type": "group",
@@ -234,6 +236,7 @@ POST /matches/{matchId}/chat
 ```
 
 **Response:**
+
 ```json
 {
   "chatRoomId": 123,
@@ -250,6 +253,7 @@ POST /matches/{matchId}/chat
 ```
 
 **Error Response:**
+
 ```json
 {
   "success": false,
