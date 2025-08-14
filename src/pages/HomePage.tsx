@@ -244,9 +244,9 @@ const HomePage = () => {
       >
         <div className="flex items-center justify-between mb-4">
           <h2
-            className={`text-xl font-bold ${theme.text.primary} flex items-center gap-2`}
+            className={`text-lg font-bold ${theme.text.primary} flex items-center gap-2`}
           >
-            <MdSchedule className={`w-6 h-6 ${theme.text.tennis}`} />
+            <MdSchedule className={`w-5 h-5 ${theme.text.tennis}`} />
             다가오는 매치
           </h2>
           {/* <motion.button
