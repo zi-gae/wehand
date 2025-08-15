@@ -59,7 +59,7 @@ export default defineConfig({
         edge_side_panel: {
           preferred_width: 480
         },
-        start_url: '/',
+        start_url: '/?source=pwa',
         scope: '/',
         orientation: 'portrait-primary',
         categories: ['sports', 'social', 'health'],

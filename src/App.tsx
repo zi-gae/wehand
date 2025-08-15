@@ -82,6 +82,12 @@ const AppContent = () => {
       return isIOSWebView || isAndroidWebView || isInAppBrowser;
     };
 
+    // PWA로 실행 중인지 확인 (start_url 파라미터로 확인)
+    const isPWA = () => {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get('source') === 'pwa' || isStandalone;
+    };
+
     // Edge 사이드 패널 감지 (너비가 500px 이하이고 높이가 충분히 큰 경우)
     const checkSidePanel = () => {
       const isSidePanel = window.innerWidth <= 500 && window.innerHeight > 600;
@@ -98,12 +104,6 @@ const AppContent = () => {
     // 개발 환경에서는 항상 스플래시 표시
     const isDev = import.meta.env.DEV;
 
-    // 웹뷰, PWA, 개발 환경에서는 항상 커스텀 스플래시 화면 표시
-    // 일반 브라우저에서도 스플래시를 표시하므로 주석 처리
-    // if (!isStandalone && !isDev && !isWebView()) {
-    //   setIsAppReady(true);
-    // }
-
     // 웹뷰 환경에서 PWA 기본 스플래시 비활성화를 위한 설정
     if (isWebView()) {
       // 웹뷰에서 실행 중임을 body에 클래스로 표시
@@ -117,7 +117,16 @@ const AppContent = () => {
       if (viewport) {
         viewport.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover');
       }
+
+      // 웹뷰에서는 항상 커스텀 스플래시 표시
+      console.log('[WeHand] 웹뷰 환경 감지 - 커스텀 스플래시 화면 사용');
+    } else if (isPWA()) {
+      document.body.classList.add("in-pwa");
+      console.log('[WeHand] PWA 환경 감지 - 커스텀 스플래시 화면 사용');
     }
+
+    // 모든 환경에서 커스텀 스플래시 화면 표시
+    // 웹뷰, PWA, 일반 브라우저 모두 동일한 스플래시 경험 제공
 
     return () => {
       window.removeEventListener("resize", checkSidePanel);
