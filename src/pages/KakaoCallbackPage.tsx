@@ -22,14 +22,20 @@ const KakaoCallbackPage = () => {
 
   const handleOAuthCallback = useCallback(async (): Promise<void> => {
     // Prevent rerun on DEV mode (React StrictMode 대응)
+
+    logger.auth("KakaoCallbackPage mounted");
+
     if (executedRef.current) {
       return;
     }
+
+    logger.auth("KakaoCallbackPage callback handler started");
 
     executedRef.current = true;
 
     try {
       console.log("OAuth 콜백 처리 시작...");
+      logger.auth("OAuth 콜백 처리 시작...");
 
       const hash = window.location.hash || "#";
       const hashParams = new URLSearchParams(hash.split("#")[1]);
@@ -111,7 +117,13 @@ const KakaoCallbackPage = () => {
       console.log("Supabase 세션 정보:", {
         user: session.user,
         provider: session.user.app_metadata.provider,
-        access_token: session.access_token ? "존재" : "없음",
+        access_token: session.access_token ?? "없음",
+      });
+      logger.auth("Supabase 세션 정보:", {
+        user: session.user,
+        provider: session.user.app_metadata.provider,
+        access_token: session.access_token ?? "없음",
+        refresh_token: session.refresh_token ?? "없음",
       });
 
       const user = session.user;
