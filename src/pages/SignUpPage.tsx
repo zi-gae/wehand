@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { getThemeClasses } from "../lib/theme";
 import { supabase } from "../lib/supabase/client";
 import { getOAuthRedirectUrl } from "../constants/env";
+import { logger } from "@/lib/logger";
 
 // 카카오 로고 SVG 컴포넌트
 const KakaoLogo = () => (
@@ -58,27 +59,32 @@ const SignUpPage = () => {
   }, []);
 
   const handleKakaoLogin = async () => {
+    logger.auth("카카오 로그인 시도");
     setIsLoading(true);
+
     try {
       console.log("카카오 로그인 시작...");
 
       const { error } = await supabase.auth.signInWithOAuth({
         provider: "kakao",
         options: {
-          redirectTo: getOAuthRedirectUrl('/auth/kakao/callback'),
+          redirectTo: getOAuthRedirectUrl("/auth/kakao/callback"),
         },
       });
 
       if (error) {
+        logger.auth("카카오 로그인 실패:", error);
         console.error("카카오 로그인 실패:", error);
         alert("카카오 로그인에 실패했습니다. 다시 시도해 주세요.");
       }
 
       // OAuth는 자동으로 리다이렉트되므로 별도 처리 불필요
     } catch (error) {
+      logger.auth("카카오 로그인 중 에러 발생:", error);
       console.error("카카오 로그인 실패:", error);
       alert("카카오 로그인에 실패했습니다. 다시 시도해 주세요.");
     } finally {
+      logger.auth("카카오 로그인 완료");
       setIsLoading(false);
     }
   };
@@ -91,7 +97,7 @@ const SignUpPage = () => {
       const { error } = await supabase.auth.signInWithOAuth({
         provider: "apple",
         options: {
-          redirectTo: getOAuthRedirectUrl('/auth/apple/callback'),
+          redirectTo: getOAuthRedirectUrl("/auth/apple/callback"),
         },
       });
 

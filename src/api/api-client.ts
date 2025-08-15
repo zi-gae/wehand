@@ -17,16 +17,17 @@ export const apiClient = axios.create({
 apiClient.interceptors.request.use(
   (config) => {
     // 로깅 API 호출은 인터셉터 로깅 건너뛰기 (무한 루프 방지)
-    const isLoggingCall = config.url?.includes('/logs/client');
-    
+    const isLoggingCall = config.url?.includes("/logs/client");
+
     const key = `sb-cylkhqezhacwheqlstvf-auth-token`;
     const storage = localStorage.getItem(key);
 
     // 로깅 API가 아닌 경우에만 로그 기록
     if (!isLoggingCall) {
-      logger.webview("웹뷰: API 요청 인터셉터", { 
+      logger.webview("웹뷰: API 요청 인터셉터", {
         url: config.url,
-        hasToken: !!storage 
+        pathname: window.location.pathname,
+        hasToken: !!storage,
       });
     }
 
