@@ -7,6 +7,8 @@ import {
   Routes,
   useLocation,
 } from "react-router-dom";
+import { Capacitor } from "@capacitor/core";
+import { SplashScreen } from "@capacitor/splash-screen";
 import AuthGuard from "./components/AuthGuard";
 import BottomNavigation from "./components/BottomNavigation";
 import PWAUpdatePrompt, { usePWAUpdate } from "./components/PWAUpdatePrompt";
@@ -45,8 +47,14 @@ const AppContent = () => {
   const { updateAvailable, updateApp, dismissUpdate } = usePWAUpdate();
   const { isAuthenticated } = useAuth();
 
-  const handleSplashComplete = () => {
+  const handleSplashComplete = async () => {
     setIsAppReady(true);
+    
+    // Capacitor 환경에서 네이티브 스플래시 화면 숨기기
+    if (Capacitor.isNativePlatform()) {
+      await SplashScreen.hide();
+    }
+    
     // 인증된 사용자만 secondary 데이터 prefetch
     if (isAuthenticated) {
       setTimeout(() => {
@@ -64,6 +72,9 @@ const AppContent = () => {
 
   // PWA 설치 체크 및 사이드 패널 감지
   useEffect(() => {
+    // Capacitor 네이티브 환경 체크
+    const isNative = Capacitor.isNativePlatform();
+    
     // PWA가 이미 설치되어 있거나 standalone 모드에서 실행 중인지 확인
     const isStandalone =
       window.matchMedia("(display-mode: standalone)").matches ||
@@ -104,8 +115,16 @@ const AppContent = () => {
     // 개발 환경에서는 항상 스플래시 표시
     const isDev = import.meta.env.DEV;
 
+    // Capacitor 네이티브 환경
+    if (isNative) {
+      document.body.classList.add("in-capacitor");
+      console.log('[WeHand] Capacitor 네이티브 환경 감지 - 커스텀 스플래시 화면 사용');
+      
+      // Capacitor 환경에서는 네이티브 스플래시를 즉시 숨김 (launchShowDuration: 0 설정됨)
+      // 커스텀 스플래시 화면이 준비되면 handleSplashComplete에서 처리
+    }
     // 웹뷰 환경에서 PWA 기본 스플래시 비활성화를 위한 설정
-    if (isWebView()) {
+    else if (isWebView()) {
       // 웹뷰에서 실행 중임을 body에 클래스로 표시
       document.body.classList.add("in-webview");
       

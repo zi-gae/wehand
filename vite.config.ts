@@ -53,7 +53,7 @@ export default defineConfig({
         short_name: 'WeHand',
         description: '테니스 매칭과 커뮤니티를 한 번에! 함께 치는 테니스',
         theme_color: '#059669', // 테니스 코트 그린
-        background_color: '#ffffff',
+        background_color: '#059669', // 배경색도 테마색과 동일하게 설정하여 스플래시 최소화
         display: 'standalone',
         display_override: ['window-controls-overlay', 'standalone'],
         edge_side_panel: {
