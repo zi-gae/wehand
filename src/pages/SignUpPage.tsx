@@ -64,11 +64,28 @@ const SignUpPage = () => {
 
     try {
       console.log("카카오 로그인 시작...");
+      
+      // 웹뷰 환경 감지
+      const isWebView = /iPhone|iPad|iPod/.test(navigator.userAgent) && 
+                       !(window.navigator as any).standalone &&
+                       (window as any).webkit?.messageHandlers;
+      
+      // 리다이렉트 URL 생성
+      const redirectUrl = getOAuthRedirectUrl("/auth/kakao/callback");
+      
+      logger.auth("OAuth 환경 정보", {
+        isWebView,
+        redirectUrl,
+        userAgent: navigator.userAgent,
+        protocol: window.location.protocol,
+        hostname: window.location.hostname
+      });
 
-      const { error } = await supabase.auth.signInWithOAuth({
+      const { data, error } = await supabase.auth.signInWithOAuth({
         provider: "kakao",
         options: {
-          redirectTo: getOAuthRedirectUrl("/auth/kakao/callback"),
+          redirectTo: redirectUrl,
+          skipBrowserRedirect: false, // 브라우저 리다이렉트 강제 실행
         },
       });
 
@@ -76,6 +93,14 @@ const SignUpPage = () => {
         logger.auth("카카오 로그인 실패:", error);
         console.error("카카오 로그인 실패:", error);
         alert("카카오 로그인에 실패했습니다. 다시 시도해 주세요.");
+      } else if (data?.url) {
+        // 웹뷰에서 수동으로 리다이렉트
+        logger.auth("OAuth URL 생성됨", { url: data.url });
+        
+        if (isWebView) {
+          // iOS 웹뷰에서는 location.href로 직접 이동
+          window.location.href = data.url;
+        }
       }
 
       // OAuth는 자동으로 리다이렉트되므로 별도 처리 불필요
@@ -84,34 +109,74 @@ const SignUpPage = () => {
       console.error("카카오 로그인 실패:", error);
       alert("카카오 로그인에 실패했습니다. 다시 시도해 주세요.");
     } finally {
+      // 웹뷰가 아닌 경우에만 로딩 상태 해제
+      const isWebView = /iPhone|iPad|iPod/.test(navigator.userAgent) && 
+                       !(window.navigator as any).standalone;
+      if (!isWebView) {
+        setIsLoading(false);
+      }
       logger.auth("카카오 로그인 완료");
-      setIsLoading(false);
     }
   };
 
   const handleAppleLogin = async () => {
+    logger.auth("Apple 로그인 시도");
     setIsLoading(true);
+    
     try {
       console.log("Apple 로그인 시작...");
+      
+      // 웹뷰 환경 감지
+      const isWebView = /iPhone|iPad|iPod/.test(navigator.userAgent) && 
+                       !(window.navigator as any).standalone &&
+                       (window as any).webkit?.messageHandlers;
+      
+      // 리다이렉트 URL 생성
+      const redirectUrl = getOAuthRedirectUrl("/auth/apple/callback");
+      
+      logger.auth("Apple OAuth 환경 정보", {
+        isWebView,
+        redirectUrl,
+        userAgent: navigator.userAgent,
+        protocol: window.location.protocol,
+        hostname: window.location.hostname
+      });
 
-      const { error } = await supabase.auth.signInWithOAuth({
+      const { data, error } = await supabase.auth.signInWithOAuth({
         provider: "apple",
         options: {
-          redirectTo: getOAuthRedirectUrl("/auth/apple/callback"),
+          redirectTo: redirectUrl,
+          skipBrowserRedirect: false, // 브라우저 리다이렉트 강제 실행
         },
       });
 
       if (error) {
+        logger.auth("Apple 로그인 실패:", error);
         console.error("Apple 로그인 실패:", error);
         alert("Apple 로그인에 실패했습니다. 다시 시도해 주세요.");
+      } else if (data?.url) {
+        // 웹뷰에서 수동으로 리다이렉트
+        logger.auth("Apple OAuth URL 생성됨", { url: data.url });
+        
+        if (isWebView) {
+          // iOS 웹뷰에서는 location.href로 직접 이동
+          window.location.href = data.url;
+        }
       }
 
       // OAuth는 자동으로 리다이렉트되므로 별도 처리 불필요
     } catch (error) {
+      logger.auth("Apple 로그인 중 에러 발생:", error);
       console.error("Apple 로그인 실패:", error);
       alert("Apple 로그인에 실패했습니다. 다시 시도해 주세요.");
     } finally {
-      setIsLoading(false);
+      // 웹뷰가 아닌 경우에만 로딩 상태 해제
+      const isWebView = /iPhone|iPad|iPod/.test(navigator.userAgent) && 
+                       !(window.navigator as any).standalone;
+      if (!isWebView) {
+        setIsLoading(false);
+      }
+      logger.auth("Apple 로그인 완료");
     }
   };
 

@@ -85,7 +85,7 @@ const SplashScreen: React.FC<SplashScreenProps> = ({ onComplete, prefetchData, i
   }, [onComplete, prefetchData, isAuthenticated]);
 
   return (
-    <div className={`fixed inset-0 z-50 flex items-center justify-center ${theme.background.tennis}`}>
+    <div id="splash-screen" className={`fixed inset-0 z-50 flex items-center justify-center ${theme.background.tennis}`}>
       {/* 배경 애니메이션 */}
       <div className="absolute inset-0 overflow-hidden">
         <motion.div

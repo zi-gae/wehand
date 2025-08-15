@@ -69,6 +69,19 @@ const AppContent = () => {
       window.matchMedia("(display-mode: standalone)").matches ||
       (window.navigator as any)?.standalone;
 
+    // 웹뷰 환경 감지
+    const isWebView = () => {
+      const userAgent = window.navigator.userAgent.toLowerCase();
+      // iOS 웹뷰 감지
+      const isIOSWebView = /(iPhone|iPod|iPad).*AppleWebKit(?!.*Safari)/i.test(userAgent);
+      // Android 웹뷰 감지
+      const isAndroidWebView = /wv|Android.*Version\/[\d\.]+/.test(userAgent) && /Version\/[\d\.]+/.test(userAgent);
+      // 일반적인 웹뷰 감지 (Instagram, Facebook, KakaoTalk 등)
+      const isInAppBrowser = /FBAN|FBAV|Instagram|KAKAOTALK|Line\/|Naver|SamsungBrowser/i.test(userAgent);
+      
+      return isIOSWebView || isAndroidWebView || isInAppBrowser;
+    };
+
     // Edge 사이드 패널 감지 (너비가 500px 이하이고 높이가 충분히 큰 경우)
     const checkSidePanel = () => {
       const isSidePanel = window.innerWidth <= 500 && window.innerHeight > 600;
@@ -85,10 +98,25 @@ const AppContent = () => {
     // 개발 환경에서는 항상 스플래시 표시
     const isDev = import.meta.env.DEV;
 
-    // PWA나 개발 환경이 아닌 경우 스플래시 스킵 (선택적)
-    if (!isStandalone && !isDev) {
-      // 브라우저에서 실행 중인 경우에도 스플래시 표시하려면 이 조건문 제거
-      // setIsAppReady(true);
+    // 웹뷰, PWA, 개발 환경에서는 항상 커스텀 스플래시 화면 표시
+    // 일반 브라우저에서도 스플래시를 표시하므로 주석 처리
+    // if (!isStandalone && !isDev && !isWebView()) {
+    //   setIsAppReady(true);
+    // }
+
+    // 웹뷰 환경에서 PWA 기본 스플래시 비활성화를 위한 설정
+    if (isWebView()) {
+      // 웹뷰에서 실행 중임을 body에 클래스로 표시
+      document.body.classList.add("in-webview");
+      
+      // iOS 웹뷰에서 바운스 효과 비활성화
+      document.body.style.overscrollBehavior = 'none';
+      
+      // viewport 메타 태그 업데이트 (웹뷰 최적화)
+      const viewport = document.querySelector('meta[name="viewport"]');
+      if (viewport) {
+        viewport.setAttribute('content', 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover');
+      }
     }
 
     return () => {
