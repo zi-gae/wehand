@@ -1,4 +1,5 @@
 import { BASE_URL } from "@/constants/env";
+import { logger } from "@/lib/logger";
 import axios, { AxiosRequestConfig } from "axios";
 
 // API 베이스 URL 설정 - 환경변수로만 관리
@@ -17,6 +18,9 @@ apiClient.interceptors.request.use(
   (config) => {
     const key = `sb-cylkhqezhacwheqlstvf-auth-token`;
     const storage = localStorage.getItem(key);
+
+    logger.webview("웹뷰: API 요청 인터셉터", { storage });
+
     if (storage) {
       try {
         const parsedToken = JSON.parse(storage);

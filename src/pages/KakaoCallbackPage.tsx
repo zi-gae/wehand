@@ -5,6 +5,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { getWeHandTennisAPI } from "../api";
 import { supabase } from "../lib/supabase/client";
 import { getThemeClasses } from "../lib/theme";
+import { logger } from "@/lib/logger";
 
 const KakaoCallbackPage = () => {
   const navigate = useNavigate();
@@ -37,6 +38,8 @@ const KakaoCallbackPage = () => {
       console.log(`OAuth callback from provider: ${providerParam}`);
       console.log("URL hash:", hash);
       console.log("Search params:", searchParams.toString());
+      logger.auth(`OAuth callback from provider: ${providerParam}`);
+      logger.auth("URL hash:", hash);
 
       // 에러 체크
       if (hashParams.get("error")) {
@@ -64,6 +67,8 @@ const KakaoCallbackPage = () => {
               refresh_token: refreshToken,
             });
 
+          logger.auth("세션 설정 결과:", sessionData);
+
           if (setSessionError) {
             console.error("세션 설정 에러:", setSessionError);
             throw new Error("세션 설정 중 오류가 발생했습니다.");
@@ -77,6 +82,7 @@ const KakaoCallbackPage = () => {
       if (!session) {
         const { data } = await supabaseClient.auth.getSession();
         session = data.session;
+        logger.auth("현재 세션 정보:", session);
       }
 
       if (!session) {
