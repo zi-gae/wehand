@@ -46,31 +46,60 @@ const KakaoCallbackPage = () => {
         );
       }
 
-      // 세션 가져오기
-      const { data } = await supabaseClient.auth.getSession();
-      const session = data.session;
+      // OAuth 인증 코드로 세션 교환 (카카오는 hash에 토큰이 직접 옴)
+      let session = null;
+      let accessToken = null;
+      let refreshToken = null;
+
+      // hash에서 직접 토큰 추출 시도
+      if (hashParams.get("access_token")) {
+        accessToken = hashParams.get("access_token");
+        refreshToken = hashParams.get("refresh_token");
+
+        if (accessToken && refreshToken) {
+          // 토큰으로 세션 설정
+          const { data: sessionData, error: setSessionError } =
+            await supabaseClient.auth.setSession({
+              access_token: accessToken,
+              refresh_token: refreshToken,
+            });
+
+          if (setSessionError) {
+            console.error("세션 설정 에러:", setSessionError);
+            throw new Error("세션 설정 중 오류가 발생했습니다.");
+          }
+
+          session = sessionData.session;
+        }
+      }
+
+      // 세션이 없으면 기존 세션 확인
+      if (!session) {
+        const { data } = await supabaseClient.auth.getSession();
+        session = data.session;
+      }
 
       if (!session) {
         console.error("유효한 세션을 찾을 수 없습니다.");
         throw new Error("로그인 세션을 찾을 수 없습니다.");
       }
 
-      const accessToken = session.access_token;
-      const refreshToken = session.refresh_token;
+      accessToken = session.access_token;
+      refreshToken = session.refresh_token;
 
       if (!accessToken || !refreshToken) {
-        throw new Error("Access token 또는 refresh token이 없습니다.");
-      }
+        // 토큰이 없으면 토큰 갱신 시도
+        console.log("토큰이 없어서 갱신 시도...");
+        const { data: refreshData, error: refreshError } =
+          await supabaseClient.auth.refreshSession();
 
-      // 세션 재설정
-      const { error: setSessionError } = await supabaseClient.auth.setSession({
-        access_token: accessToken,
-        refresh_token: refreshToken,
-      });
-
-      if (setSessionError) {
-        console.error("세션 설정 에러:", setSessionError);
-        throw new Error("세션 설정 중 오류가 발생했습니다.");
+        if (!refreshError && refreshData?.session) {
+          session = refreshData.session;
+          accessToken = session.access_token;
+          refreshToken = session.refresh_token;
+        } else {
+          throw new Error("Access token 또는 refresh token이 없습니다.");
+        }
       }
 
       console.log("Supabase 세션 정보:", {
@@ -110,16 +139,19 @@ const KakaoCallbackPage = () => {
 
       // 성공 시 리다이렉트 처리
       const redirectTo = searchParams.get("next") || "/";
-      
+
       // iOS 앱에서 웹으로 콜백 받은 경우, 다시 앱으로 리다이렉트
-      const isWebCallback = window.location.protocol === 'https:' && 
-                           (window.location.hostname === 'wehand.zigae.com' || 
-                            window.location.hostname === 'wehand.tennis');
-      
+      const isWebCallback =
+        window.location.protocol === "https:" &&
+        (window.location.hostname === "wehand.zigae.com" ||
+          window.location.hostname === "wehand.tennis");
+
       if (isWebCallback) {
         // 세션 토큰을 URL 파라미터로 전달하여 앱으로 리다이렉트
-        const deepLinkUrl = `wehand://auth/callback?access_token=${accessToken}&refresh_token=${refreshToken}&next=${encodeURIComponent(redirectTo)}`;
-        
+        const deepLinkUrl = `wehand://auth/callback?access_token=${accessToken}&refresh_token=${refreshToken}&next=${encodeURIComponent(
+          redirectTo
+        )}`;
+
         // Android와 iOS 모두 지원
         try {
           window.location.href = deepLinkUrl;

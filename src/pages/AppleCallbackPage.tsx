@@ -78,45 +78,65 @@ const AppleCallbackPage = () => {
         throw new Error(errorDescription || "OAuth 인증 실패");
       }
 
-      // Supabase 세션 처리 - exchangeCodeForSession 사용
-      const { data: sessionData, error: exchangeError } =
-        await supabaseClient.auth.exchangeCodeForSession(window.location.href);
+      // Supabase 세션 처리
+      let session = null;
 
-      if (exchangeError) {
-        console.error("Code exchange 실패:", exchangeError);
+      // URL에 code가 있는 경우 exchangeCodeForSession 사용
+      const urlParams = new URLSearchParams(window.location.search);
+      const code = urlParams.get("code");
 
-        // 이미 처리된 경우 세션 확인
+      if (code) {
+        // Apple은 authorization code를 사용
+        try {
+          const { data: sessionData, error: exchangeError } =
+            await supabaseClient.auth.exchangeCodeForSession(
+              window.location.href
+            );
+
+          if (!exchangeError && sessionData?.session) {
+            session = sessionData.session;
+          } else if (exchangeError) {
+            console.error("Code exchange 실패:", exchangeError);
+          }
+        } catch (error) {
+          console.error("Code exchange 중 오류:", error);
+        }
+      }
+
+      // 세션이 없으면 기존 세션 확인
+      if (!session) {
         const { data, error: sessionError } =
           await supabaseClient.auth.getSession();
 
-        if (sessionError) {
+        if (!sessionError && data?.session) {
+          session = data.session;
+        } else if (sessionError) {
           console.error("세션 가져오기 실패:", sessionError);
           throw new Error(sessionError.message);
         }
-
-        const session = data.session;
-
-        if (!session) {
-          console.error("유효한 세션을 찾을 수 없습니다.");
-          throw new Error("로그인 세션을 찾을 수 없습니다.");
-        }
-
-        // 기존 세션이 있으면 사용
-        sessionData.session = session;
       }
-
-      const session = sessionData?.session;
 
       if (!session) {
         console.error("유효한 세션을 찾을 수 없습니다.");
         throw new Error("로그인 세션을 찾을 수 없습니다.");
       }
 
-      const accessToken = session.access_token;
-      const refreshToken = session.refresh_token;
+      let accessToken = session.access_token;
+      let refreshToken = session.refresh_token;
 
       if (!accessToken || !refreshToken) {
-        throw new Error("Access token 또는 refresh token이 없습니다.");
+        // 토큰이 없으면 토큰 갱신 시도
+        console.log("토큰이 없어서 갱신 시도...");
+        const { data: refreshData, error: refreshError } =
+          await supabaseClient.auth.refreshSession();
+
+        if (!refreshError && refreshData?.session) {
+          session = refreshData.session;
+          accessToken = session.access_token;
+          refreshToken = session.refresh_token;
+        } else {
+          throw new Error("Access token 또는 refresh token이 없습니다.");
+        }
       }
 
       console.log("Supabase 세션 정보:", {
@@ -163,16 +183,19 @@ const AppleCallbackPage = () => {
 
       // 성공 시 리다이렉트 처리
       const redirectTo = searchParams.get("next") || "/";
-      
+
       // iOS 앱에서 웹으로 콜백 받은 경우, 다시 앱으로 리다이렉트
-      const isWebCallback = window.location.protocol === 'https:' && 
-                           (window.location.hostname === 'wehand.zigae.com' || 
-                            window.location.hostname === 'wehand.tennis');
-      
+      const isWebCallback =
+        window.location.protocol === "https:" &&
+        (window.location.hostname === "wehand.zigae.com" ||
+          window.location.hostname === "wehand.tennis");
+
       if (isWebCallback) {
         // 세션 토큰을 URL 파라미터로 전달하여 앱으로 리다이렉트
-        const deepLinkUrl = `wehand://auth/callback?access_token=${accessToken}&refresh_token=${refreshToken}&next=${encodeURIComponent(redirectTo)}`;
-        
+        const deepLinkUrl = `wehand://auth/callback?access_token=${accessToken}&refresh_token=${refreshToken}&next=${encodeURIComponent(
+          redirectTo
+        )}`;
+
         // Android와 iOS 모두 지원
         try {
           window.location.href = deepLinkUrl;
