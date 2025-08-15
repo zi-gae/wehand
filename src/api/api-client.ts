@@ -16,10 +16,19 @@ export const apiClient = axios.create({
 // Request 인터셉터 - 인증 토큰 추가
 apiClient.interceptors.request.use(
   (config) => {
+    // 로깅 API 호출은 인터셉터 로깅 건너뛰기 (무한 루프 방지)
+    const isLoggingCall = config.url?.includes('/logs/client');
+    
     const key = `sb-cylkhqezhacwheqlstvf-auth-token`;
     const storage = localStorage.getItem(key);
 
-    logger.webview("웹뷰: API 요청 인터셉터", { storage });
+    // 로깅 API가 아닌 경우에만 로그 기록
+    if (!isLoggingCall) {
+      logger.webview("웹뷰: API 요청 인터셉터", { 
+        url: config.url,
+        hasToken: !!storage 
+      });
+    }
 
     if (storage) {
       try {
