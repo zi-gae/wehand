@@ -36,6 +36,7 @@ import SignUpPage from "./pages/SignUpPage";
 import TermsPage from "./pages/TermsPage";
 import { ScrollToTop } from "./components/ScrollToTop";
 import ShareProfilePage from "./pages/ShareProfilePage";
+import AuthDeepLinkPage from "./pages/AuthDeepLinkPage";
 
 // Main App Content Component
 const AppContent = () => {
@@ -135,6 +136,10 @@ const AppContent = () => {
                 <Route
                   path="/auth/apple/callback"
                   element={<AppleCallbackPage />}
+                />
+                <Route
+                  path="/auth/callback"
+                  element={<AuthDeepLinkPage />}
                 />
                 <Route path="/terms" element={<TermsPage />} />
                 <Route path="/privacy" element={<PrivacyPage />} />

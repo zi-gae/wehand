@@ -6,7 +6,7 @@ interface AuthGuardProps {
 }
 
 // 인증이 필요없는 페이지들
-const PUBLIC_ROUTES = ["/signup", "/auth/kakao/callback", "/auth/apple/callback", "/auth/apple/test-callback", "/terms", "/privacy"];
+const PUBLIC_ROUTES = ["/signup", "/auth/kakao/callback", "/auth/apple/callback", "/auth/apple/test-callback", "/auth/callback", "/terms", "/privacy"];
 
 const AuthGuard = ({ children }: AuthGuardProps) => {
   const navigate = useNavigate();

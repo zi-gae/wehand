@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 import { getThemeClasses } from "../lib/theme";
 import { supabase } from "../lib/supabase/client";
+import { getOAuthRedirectUrl } from "../constants/env";
 
 // 카카오 로고 SVG 컴포넌트
 const KakaoLogo = () => (
@@ -64,7 +65,7 @@ const SignUpPage = () => {
       const { error } = await supabase.auth.signInWithOAuth({
         provider: "kakao",
         options: {
-          redirectTo: `${window.location.origin}/auth/kakao/callback`,
+          redirectTo: getOAuthRedirectUrl('/auth/kakao/callback'),
         },
       });
 
@@ -90,7 +91,7 @@ const SignUpPage = () => {
       const { error } = await supabase.auth.signInWithOAuth({
         provider: "apple",
         options: {
-          redirectTo: `${window.location.origin}/auth/apple/callback`,
+          redirectTo: getOAuthRedirectUrl('/auth/apple/callback'),
         },
       });
 

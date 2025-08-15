@@ -108,9 +108,30 @@ const KakaoCallbackPage = () => {
 
       setStatus("success");
 
-      // 성공 시 메인 페이지로 리다이렉트
+      // 성공 시 리다이렉트 처리
       const redirectTo = searchParams.get("next") || "/";
-      setTimeout(() => navigate(redirectTo), 2000);
+      
+      // iOS 앱에서 웹으로 콜백 받은 경우, 다시 앱으로 리다이렉트
+      const isWebCallback = window.location.protocol === 'https:' && 
+                           (window.location.hostname === 'wehand.zigae.com' || 
+                            window.location.hostname === 'wehand.tennis');
+      
+      if (isWebCallback) {
+        // 세션 토큰을 URL 파라미터로 전달하여 앱으로 리다이렉트
+        const deepLinkUrl = `wehand://auth/callback?access_token=${accessToken}&refresh_token=${refreshToken}&next=${encodeURIComponent(redirectTo)}`;
+        
+        // Android와 iOS 모두 지원
+        try {
+          window.location.href = deepLinkUrl;
+        } catch (error) {
+          // 딥링크 실패 시 폴백
+          console.warn("딥링크 실패, 폴백 처리:", error);
+          setTimeout(() => navigate(redirectTo), 2000);
+        }
+      } else {
+        // 일반 웹에서는 기존 로직 유지
+        setTimeout(() => navigate(redirectTo), 2000);
+      }
     } catch (error: any) {
       console.error("OAuth 로그인 실패:", error);
       setStatus("error");
